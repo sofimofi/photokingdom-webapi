@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.ComponentModel.DataAnnotations;
+
+namespace PhotoKingdomAPI.Controllers
+{
+    public class ContinentPhotowarPhotorequestAdd
+    {
+        public ContinentPhotowarPhotorequestAdd()
+        {
+            RequestDate = DateTime.Now;
+            AcceptanceDate = DateTime.Now.AddDays(5);
+            DenialDate = DateTime.Now;
+        }
+
+        [Required]
+        public DateTime RequestDate { get; set; }
+
+        public DateTime AcceptanceDate { get; set; }
+
+        public DateTime DenialDate { get; set; }
+
+        [Required]
+        public int ContinentPhotowarId { get; set; }
+
+        [Required]
+        public int RequestingResidentId { get; set; }
+
+        [Required]
+        public int RecipientResidentId { get; set; }
+    }
+
+    public class ContinentPhotowarPhotorequestBase : ContinentPhotowarPhotorequestAdd
+    {
+        public int Id { get; set; }
+    }
+}
