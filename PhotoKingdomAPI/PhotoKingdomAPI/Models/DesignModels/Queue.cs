@@ -14,9 +14,11 @@ namespace PhotoKingdomAPI.Models
         public DateTime QueueDate { get; set; }
 
         [Required]
-        public int AttractionId { get; set; }
+        //public int AttractionId { get; set; }
+        public Attraction Attraction { get; set; }
 
         [Required]
-        public int AttractionPhotowarUploadId { get; set; }
+        //public int AttractionPhotowarUploadId { get; set; }
+        public AttractionPhotowarUpload AttractionPhotowarUpload { get; set; }
     }
 }

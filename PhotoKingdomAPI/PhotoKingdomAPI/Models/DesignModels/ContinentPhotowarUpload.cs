@@ -15,9 +15,14 @@ namespace PhotoKingdomAPI.Models
         public int IsLoser { get; set; }
 
         [Required]
-        public int PhotoId { get; set; }
-
+        //public int PhotoId { get; set; }
+        public Photo Photo { get; set; }
+        
         [Required]
-        public int ContinentPhotowarId { get; set; }
+        //public int ContinentPhotowarId { get; set; }
+        public ContinentPhotowar ContinentPhotowar { get; set; }
+
+        // Votes
+        public ICollection<Resident> ResidentVote { get; set; }
     }
 }

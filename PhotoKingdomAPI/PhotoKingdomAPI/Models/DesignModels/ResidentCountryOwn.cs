@@ -20,9 +20,11 @@ namespace PhotoKingdomAPI.Models
         public string Title { get; set; }
 
         [Required]
-        public int ResidentId { get; set; }
+        //public int ResidentId { get; set; }
+        public Resident Resident { get; set; }
 
         [Required]
-        public int CountryId { get; set; }
+        //public int CountryId { get; set; }
+        public Country Country { get; set; }
     }
 }

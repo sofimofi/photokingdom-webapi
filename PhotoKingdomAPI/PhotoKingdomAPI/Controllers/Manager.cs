@@ -48,8 +48,8 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Controllers.CountryPhotowarAdd, Models.CountryPhotowar>();
                 cfg.CreateMap<Models.CountryPhotowarPhotorequest, Controllers.CountryPhotowarPhotorequestBase>();
                 cfg.CreateMap<Controllers.CountryPhotowarPhotorequestAdd, Models.CountryPhotowarPhotorequest>();
-                cfg.CreateMap<Models.CountryPhotowarRequestdphotoUpload, Controllers.CountryPhotowarRequestdphotoUploadBase>();
-                cfg.CreateMap<Controllers.CountryPhotowarRequestdphotoUploadAdd, Models.CountryPhotowarRequestdphotoUpload>();
+                cfg.CreateMap<Models.CountryPhotowarRequestedphotoUpload, Controllers.CountryPhotowarRequestdphotoUploadBase>();
+                cfg.CreateMap<Controllers.CountryPhotowarRequestdphotoUploadAdd, Models.CountryPhotowarRequestedphotoUpload>();
                 cfg.CreateMap<Models.CountryPhotowarUpload, Controllers.CountryPhotowarUploadBase>();
                 cfg.CreateMap<Controllers.CountryPhotowarUploadAdd, Models.CountryPhotowarUpload>();
                 cfg.CreateMap<Models.CountryProfile, Controllers.CountryProfileBase>();
@@ -74,12 +74,12 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Controllers.ResidentCountryOwnAdd, Models.ResidentCountryOwn>();
                 cfg.CreateMap<Models.ResidentProvinceOwn, Controllers.ResidentProvinceOwnBase>();
                 cfg.CreateMap<Controllers.ResidentProvinceOwnAdd, Models.ResidentProvinceOwn>();
-                cfg.CreateMap<Models.VoteAttractionPhotowarUpload, Controllers.VoteAttractionPhotowarUploadBase>();
-                cfg.CreateMap<Controllers.VoteAttractionPhotowarUploadAdd, Models.VoteAttractionPhotowarUpload>();
-                cfg.CreateMap<Models.VoteContinentPhotowarUpload, Controllers.VoteContinentPhotowarUploadBase>();
-                cfg.CreateMap<Controllers.VoteContinentPhotowarUploadAdd, Models.VoteContinentPhotowarUpload>();
-                cfg.CreateMap<Models.VoteCountryPhotowarUpload, Controllers.VoteCountryPhotowarUploadBase>();
-                cfg.CreateMap< Controllers.VoteCountryPhotowarUploadAdd, Models.VoteCountryPhotowarUpload >();
+                //cfg.CreateMap<Models.VoteAttractionPhotowarUpload, Controllers.VoteAttractionPhotowarUploadBase>();
+                //cfg.CreateMap<Controllers.VoteAttractionPhotowarUploadAdd, Models.VoteAttractionPhotowarUpload>();
+                //cfg.CreateMap<Models.VoteContinentPhotowarUpload, Controllers.VoteContinentPhotowarUploadBase>();
+                //cfg.CreateMap<Controllers.VoteContinentPhotowarUploadAdd, Models.VoteContinentPhotowarUpload>();
+                //cfg.CreateMap<Models.VoteCountryPhotowarUpload, Controllers.VoteCountryPhotowarUploadBase>();
+                //cfg.CreateMap< Controllers.VoteCountryPhotowarUploadAdd, Models.VoteCountryPhotowarUpload >();
             });
 
             mapper = config.CreateMapper();
@@ -97,5 +97,18 @@ namespace PhotoKingdomAPI.Controllers
         }
 
         // TODO: Need to implement CRUD methods
+
+
+        // **************************************************************
+        //                          Attraction
+        // **************************************************************
+
+        public IEnumerable<AttractionBase> AttractionGetAll()
+        {
+            return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionBase>>(ds.Attractions);
+        }
+
+        
+
     }
 }

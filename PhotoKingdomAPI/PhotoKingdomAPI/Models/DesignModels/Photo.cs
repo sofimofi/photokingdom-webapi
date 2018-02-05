@@ -20,6 +20,8 @@ namespace PhotoKingdomAPI.Models
         [Required]
         public float Lng { get; set; }
 
-        public int ResidentId { get; set; }
+        [Required]
+        //public int ResidentId { get; set; }
+        public Resident Resident { get; set; }
     }
 }

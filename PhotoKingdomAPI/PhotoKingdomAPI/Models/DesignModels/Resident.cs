@@ -33,6 +33,12 @@ namespace PhotoKingdomAPI.Models
         public string AvatarImagePath { get; set; }
 
         [Required]
-        public int CityId { get; set; }
+        //public int CityId { get; set; }
+        public City City { get; set; }
+
+        // Votes
+        public ICollection<AttractionPhotowarUpload> AttractionPhotowarVote { get; set; }
+        public ICollection<CountryPhotowarUpload> CountryPhotowarVote { get; set; }
+        public ICollection<ContinentPhotowarUpload> ContinentPhotowarVote { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace PhotoKingdomAPI.Models
         public DateTime EndDate { get; set; }
 
         [Required]
-        public int AttractionId { get; set; }
+        //public int AttractionId { get; set; }
+        public Attraction Attraction { get; set; }
     }
 }

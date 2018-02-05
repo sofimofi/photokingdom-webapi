@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,4 +15,4 @@ namespace PhotoKingdomAPI.Models
         [Key, Column(Order = 1)]
         public int ContinentPhotowarUploadId { get; set; }
     }
-}
+}*/

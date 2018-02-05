@@ -26,11 +26,13 @@ namespace PhotoKingdomAPI.Models
         public int IsCancelled { get; set; }
 
         [Required]
-        [ForeignKey("CountryProfile")]
-        public int DeclaringCountryId { get; set; }
+        /*[ForeignKey("CountryProfile")]
+        public int DeclaringCountryId { get; set; }*/
+        public CountryProfile DeclaringCountry { get; set; }
 
         [Required]
-        [ForeignKey("CountryProfile")]
-        public int RecipentCountryId { get; set; }
+        /*[ForeignKey("CountryProfile")]
+        public int RecipentCountryId { get; set; }*/
+        public CountryProfile RecipientCountry { get; set; }
     }
 }

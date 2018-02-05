@@ -15,9 +15,10 @@ namespace PhotoKingdomAPI.Models
         public string Name { get; set; }
 
         [Required]
-        public int CountryId { get; set; }
+        //public int CountryId { get; set; }
+        public Country Country { get; set; }
 
-        [Required]
-        public int ProvinceId { get; set; }
+        //public int ProvinceId { get; set; }
+        public Province Province { get; set; }
     }
 }
