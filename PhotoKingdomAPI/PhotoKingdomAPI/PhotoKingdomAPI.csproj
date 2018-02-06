@@ -223,7 +223,7 @@
     <Compile Include="Controllers\ViewModels\ContinentProfile_vm.cs" />
     <Compile Include="Controllers\ViewModels\Continent_vm.cs" />
     <Compile Include="Controllers\ViewModels\CountryPhotowarPhotorequest_vm.cs" />
-    <Compile Include="Controllers\ViewModels\CountryPhotowarRequestdphotoUpload_vm.cs" />
+    <Compile Include="Controllers\ViewModels\CountryPhotowarRequestedphotoUpload_vm.cs" />
     <Compile Include="Controllers\ViewModels\CountryPhotowarUpload_vm.cs" />
     <Compile Include="Controllers\ViewModels\CountryPhotowar_vm.cs" />
     <Compile Include="Controllers\ViewModels\CountryProfile_vm.cs" />

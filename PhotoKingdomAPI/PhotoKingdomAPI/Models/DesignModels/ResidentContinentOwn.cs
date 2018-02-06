@@ -24,5 +24,9 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int ContinentId { get; set; }
+
+        // navigations
+        public Resident Resident { get; set; }
+        public Continent Continent { get; set; }
     }
 }

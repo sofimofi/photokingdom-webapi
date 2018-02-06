@@ -18,5 +18,11 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int AttractionPhotowarUploadId { get; set; }
+
+        // navigations
+
+        public Attraction Attraction { get; set; }
+        // the photo uploaded
+        public AttractionPhotowarUpload AttractionPhotowarUpload { get; set; }
     }
 }

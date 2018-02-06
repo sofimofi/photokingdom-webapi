@@ -24,5 +24,9 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int CountryId { get; set; }
+
+        // navigations
+        public Resident Resident { get; set; }
+        public Country Country { get; set; }
     }
 }

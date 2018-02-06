@@ -39,7 +39,7 @@ namespace PhotoKingdomAPI.Models
         public DbSet<Country> Countries { get; set; }
         public DbSet<CountryPhotowar> CountryPhotowars { get; set; }
         public DbSet<CountryPhotowarPhotorequest> CountryPhotowarPhotorequests { get; set; }
-        public DbSet<CountryPhotowarRequestdphotoUpload> CountryPhotowarRequestdphotoUploads { get; set; }
+        public DbSet<CountryPhotowarRequestedphotoUpload> CountryPhotowarRequestdphotoUploads { get; set; }
         public DbSet<CountryPhotowarUpload> CountryPhotowarUploads { get; set; }
         public DbSet<CountryProfile> CountryProfiles { get; set; }
         public DbSet<Photo> Photos { get; set; }
@@ -52,9 +52,9 @@ namespace PhotoKingdomAPI.Models
         public DbSet<ResidentContinentOwn> ResidentContinentOwns { get; set; }
         public DbSet<ResidentCountryOwn> ResidentCountryOwns { get; set; }
         public DbSet<ResidentProvinceOwn> ResidentProvinceOwns { get; set; }
-        public DbSet<VoteAttractionPhotowarUpload> VoteAttractionPhotowarUploads { get; set; }
-        public DbSet<VoteContinentPhotowarUpload> VoteContinentPhotowarUploads { get; set; }
-        public DbSet<VoteCountryPhotowarUpload> VoteCountryPhotowarUploads { get; set; }
+        //public DbSet<VoteAttractionPhotowarUpload> VoteAttractionPhotowarUploads { get; set; }
+        //public DbSet<VoteContinentPhotowarUpload> VoteContinentPhotowarUploads { get; set; }
+        //public DbSet<VoteCountryPhotowarUpload> VoteCountryPhotowarUploads { get; set; }
 
         public static ApplicationDbContext Create()
         {

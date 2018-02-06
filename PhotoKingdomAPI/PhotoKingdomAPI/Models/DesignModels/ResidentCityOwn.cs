@@ -24,5 +24,9 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int CityId { get; set; }
+
+        // navigations
+        public Resident Resident { get; set; }
+        public City City { get; set; }
     }
 }

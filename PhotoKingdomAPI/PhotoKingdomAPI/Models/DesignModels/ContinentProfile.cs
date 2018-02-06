@@ -12,8 +12,12 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int ContinentId { get; set; }
-
+        
         [Required]
         public int PhotoId { get; set; }
+
+        // navigations
+        public Continent Continent { get; set; }
+        public Photo Photo { get; set; }
     }
 }

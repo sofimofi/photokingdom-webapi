@@ -21,5 +21,9 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int AttractionId { get; set; }
+
+        // navigations
+        public Resident Resident { get; set; }
+        public Attraction Attraction { get; set; }
     }
 }

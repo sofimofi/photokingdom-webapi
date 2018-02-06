@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PhotoKingdomAPI.Models
 {
-    public class CountryPhotowarRequestdphotoUpload
+    public class CountryPhotowarRequestedphotoUpload
     {
         public int Id { get; set; }
 
@@ -18,5 +18,9 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int CountryPhotowarPhotorequestId { get; set; }
+
+        // navigations
+        public Photo Photo { get; set; }
+        public CountryPhotowarPhotorequest CountryPhotowarPhotorequest { get; set; }
     }
 }

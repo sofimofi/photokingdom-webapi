@@ -24,9 +24,14 @@ namespace PhotoKingdomAPI.Models
         [Required]
         [ForeignKey("Resident")]
         public int RequestingResidentId { get; set; }
-
+        
         [Required]
         [ForeignKey("Resident")]
         public int RecipientResidentId { get; set; }
+
+        // navigations
+        public ContinentPhotowar ContinentPhotoWar { get; set; }
+        public Resident RequestingResident { get; set; }
+        public Resident RecipientResident { get; set; }
     }
 }

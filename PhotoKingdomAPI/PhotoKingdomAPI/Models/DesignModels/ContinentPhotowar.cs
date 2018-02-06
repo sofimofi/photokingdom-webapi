@@ -9,6 +9,11 @@ namespace PhotoKingdomAPI.Models
 {
     public class ContinentPhotowar
     {
+        public ContinentPhotowar()
+        {
+            ContinentPhotowarUploads = new List<ContinentPhotowarUpload>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -32,5 +37,12 @@ namespace PhotoKingdomAPI.Models
         [Required]
         [ForeignKey("ContinentProfile")]
         public int RecipentContinentId { get; set; }
+
+        // navigations
+
+        public ContinentProfile DeclaringContinent { get; set; }
+        public ContinentProfile RecipientContinent { get; set; }
+        // the two photos uploaded for this photowar
+        public ICollection<ContinentPhotowarUpload> ContinentPhotowarUploads { get; set; }
     }
 }

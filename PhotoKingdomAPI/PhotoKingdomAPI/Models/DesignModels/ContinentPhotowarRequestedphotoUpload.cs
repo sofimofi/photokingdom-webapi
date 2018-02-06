@@ -18,5 +18,9 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int ContinentPhotowarPhotorequestId { get; set; }
+
+        // navigations
+        public Photo Photo { get; set; }
+        public ContinentPhotowarPhotorequest ContinentPhotoWarPhotorequest { get; set; }
     }
 }

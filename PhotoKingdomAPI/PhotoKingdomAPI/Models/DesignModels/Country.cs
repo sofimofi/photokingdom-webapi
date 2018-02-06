@@ -8,6 +8,11 @@ namespace PhotoKingdomAPI.Models
 {
     public class Country
     {
+        public Country()
+        {
+            Owners = new List<ResidentCountryOwn>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -16,5 +21,11 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int ContinentId { get; set; }
+
+        // navigation
+
+        public Continent Continent { get; set; }
+        // all the residents that owned this country
+        public ICollection<ResidentCountryOwn> Owners { get; set; }
     }
 }

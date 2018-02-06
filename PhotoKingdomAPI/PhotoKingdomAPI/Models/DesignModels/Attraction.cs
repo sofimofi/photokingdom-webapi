@@ -8,6 +8,13 @@ namespace PhotoKingdomAPI.Models
 {
     public class Attraction
     {
+        public Attraction()
+        {
+            QueuedUploads = new List<Queue>();
+            AttractionPhotowars = new List<AttractionPhotowar>();
+            Owners = new List<ResidentAttractionOwn>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -25,5 +32,15 @@ namespace PhotoKingdomAPI.Models
 
         [Required]
         public int CityId { get; set; }
+
+        // navigations
+
+        public City City { get; set; }
+        // the queued photo uploads for this Attraction
+        public ICollection<Queue> QueuedUploads { get; set; }
+        // all the AttractionPhotowars for this Attraction
+        public ICollection<AttractionPhotowar> AttractionPhotowars { get; set; }
+        // all the residents that owned this Attraction
+        public ICollection<ResidentAttractionOwn> Owners { get; set; }
     }
 }
