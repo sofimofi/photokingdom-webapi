@@ -48,8 +48,8 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Controllers.CountryPhotowarAdd, Models.CountryPhotowar>();
                 cfg.CreateMap<Models.CountryPhotowarPhotorequest, Controllers.CountryPhotowarPhotorequestBase>();
                 cfg.CreateMap<Controllers.CountryPhotowarPhotorequestAdd, Models.CountryPhotowarPhotorequest>();
-                cfg.CreateMap<Models.CountryPhotowarRequestedphotoUpload, Controllers.CountryPhotowarRequestdphotoUploadBase>();
-                cfg.CreateMap<Controllers.CountryPhotowarRequestdphotoUploadAdd, Models.CountryPhotowarRequestedphotoUpload>();
+                cfg.CreateMap<Models.CountryPhotowarRequestedphotoUpload, Controllers.CountryPhotowarRequestedphotoUploadBase>();
+                cfg.CreateMap<Controllers.CountryPhotowarRequestedphotoUploadAdd, Models.CountryPhotowarRequestedphotoUpload>();
                 cfg.CreateMap<Models.CountryPhotowarUpload, Controllers.CountryPhotowarUploadBase>();
                 cfg.CreateMap<Controllers.CountryPhotowarUploadAdd, Models.CountryPhotowarUpload>();
                 cfg.CreateMap<Models.CountryProfile, Controllers.CountryProfileBase>();
@@ -108,7 +108,7 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionBase>>(ds.Attractions);
         }
 
-        
+
 
     }
 }
