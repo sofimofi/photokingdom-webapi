@@ -259,7 +259,7 @@
     <Compile Include="Models\DesignModels\Country.cs" />
     <Compile Include="Models\DesignModels\CountryPhotowar.cs" />
     <Compile Include="Models\DesignModels\CountryPhotowarPhotorequest.cs" />
-    <Compile Include="Models\DesignModels\CountryPhotowarRequestdphotoUpload.cs" />
+    <Compile Include="Models\DesignModels\CountryPhotowarRequestedphotoUpload.cs" />
     <Compile Include="Models\DesignModels\CountryPhotowarUpload.cs" />
     <Compile Include="Models\DesignModels\CountryProfile.cs" />
     <Compile Include="Models\DesignModels\Photo.cs" />
