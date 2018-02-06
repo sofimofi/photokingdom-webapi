@@ -39,7 +39,7 @@ namespace PhotoKingdomAPI.Models
         public DbSet<Country> Countries { get; set; }
         public DbSet<CountryPhotowar> CountryPhotowars { get; set; }
         public DbSet<CountryPhotowarPhotorequest> CountryPhotowarPhotorequests { get; set; }
-        public DbSet<CountryPhotowarRequestedphotoUpload> CountryPhotowarRequestdphotoUploads { get; set; }
+        public DbSet<CountryPhotowarRequestedphotoUpload> CountryPhotowarRequestedphotoUploads { get; set; }
         public DbSet<CountryPhotowarUpload> CountryPhotowarUploads { get; set; }
         public DbSet<CountryProfile> CountryProfiles { get; set; }
         public DbSet<Photo> Photos { get; set; }
