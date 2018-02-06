@@ -19,17 +19,19 @@ namespace PhotoKingdomAPI.Models
         public DateTime DenialDate { get; set; }
 
         [Required]
-        //public int CountryPhotowarId { get; set; }
+        public int CountryPhotowarId { get; set; }
+
+        [Required]
+        [ForeignKey("Resident")]
+        public int RequestingResidentId { get; set; }
+
+        [Required]
+        [ForeignKey("Resident")]
+        public int RecipientResidentId { get; set; }
+
+        // navigations
         public CountryPhotowar CountryPhotowar { get; set; }
-
-        [Required]
-        /*[ForeignKey("Resident")]
-        public int RequestingResidentId { get; set; }*/
         public Resident RequestingResident { get; set; }
-
-        [Required]
-        /*[ForeignKey("Resident")]
-        public int RecipientResidentId { get; set; }*/
         public Resident RecipientResident { get; set; }
     }
 }

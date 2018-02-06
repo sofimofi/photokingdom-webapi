@@ -14,11 +14,13 @@ namespace PhotoKingdomAPI.Models
         public int IsChosenCompetitor { get; set; }
 
         [Required]
-        //public int PhotoId { get; set; }
-        public Photo Photo { get; set; }
+        public int PhotoId { get; set; }
 
         [Required]
-        //public int CountryPhotowarPhotorequestId { get; set; }
+        public int CountryPhotowarPhotorequestId { get; set; }
+
+        // navigations
+        public Photo Photo { get; set; }
         public CountryPhotowarPhotorequest CountryPhotowarPhotorequest { get; set; }
     }
 }

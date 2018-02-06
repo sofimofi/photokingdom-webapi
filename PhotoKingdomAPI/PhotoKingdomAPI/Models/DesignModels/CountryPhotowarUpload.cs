@@ -8,6 +8,11 @@ namespace PhotoKingdomAPI.Models
 {
     public class CountryPhotowarUpload
     {
+        public CountryPhotowarUpload()
+        {
+            ResidentVotes = new List<Resident>();
+        }
+
         public int Id { get; set; }
 
         public int IsWinner { get; set; }
@@ -15,15 +20,16 @@ namespace PhotoKingdomAPI.Models
         public int IsLoser { get; set; }
 
         [Required]
-        //public int PhotoId { get; set; }
-        public Photo Photo { get; set; }
+        public int PhotoId { get; set; }
 
         [Required]
-        //public int CountryPhotowarId { get; set; }
-        public CountryPhotowar CountryPhotowar { get; set; }
+        public int CountryPhotowarId { get; set; }
 
-        // Votes
-        public ICollection<Resident> ResidentVote { get; set; }
+        // navigations
+        public Photo Photo { get; set; }
+        public CountryPhotowar CountryPhotowar { get; set; }
+        // Votes for this CountryPhotowarUpload
+        public ICollection<Resident> ResidentVotes { get; set; }
 
     }
 }

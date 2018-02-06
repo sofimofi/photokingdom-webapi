@@ -8,6 +8,11 @@ namespace PhotoKingdomAPI.Models
 {
     public class AttractionPhotowar
     {
+        public AttractionPhotowar()
+        {
+            AttractionPhotowarUploads = new List<AttractionPhotowarUpload>();
+        }
+
         public int Id { get; set; }
 
         [Required]
@@ -17,7 +22,12 @@ namespace PhotoKingdomAPI.Models
         public DateTime EndDate { get; set; }
 
         [Required]
-        //public int AttractionId { get; set; }
+        public int AttractionId { get; set; }
+
+        // navigations
+
         public Attraction Attraction { get; set; }
+        // the two photos uploaded for this PhotoWar
+        public ICollection<AttractionPhotowarUpload> AttractionPhotowarUploads { get; set; }
     }
 }

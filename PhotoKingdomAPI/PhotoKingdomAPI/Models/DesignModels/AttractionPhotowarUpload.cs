@@ -8,6 +8,11 @@ namespace PhotoKingdomAPI.Models
 {
     public class AttractionPhotowarUpload
     {
+        public AttractionPhotowarUpload()
+        {
+            ResidentVotes = new List<Resident>();
+        }
+
         public int Id { get; set; }
 
         public int IsWinner { get; set; }
@@ -15,14 +20,16 @@ namespace PhotoKingdomAPI.Models
         public int IsLoser { get; set; }
 
         [Required]
-        //public int PhotoId { get; set; }
-        public Photo Photo { get; set; }
+        public int PhotoId { get; set; }
         
         [Required]
-        //public int AttractionPhotowarId { get; set; }
-        public AttractionPhotowar AttractionPhotoWar { get; set; }
+        public int AttractionPhotowarId { get; set; }
 
-        // Votes
-        public ICollection<Resident> ResidentVote { get; set; }
+        // navigations
+
+        public Photo Photo { get; set; }
+        public AttractionPhotowar AttractionPhotoWar { get; set; }
+        // all the votes for this Photo
+        public ICollection<Resident> ResidentVotes { get; set; }
     }
 }
