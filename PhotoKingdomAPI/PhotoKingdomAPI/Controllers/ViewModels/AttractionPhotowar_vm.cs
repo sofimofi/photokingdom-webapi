@@ -28,4 +28,15 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class AttractionPhotowarWithDetails : AttractionPhotowarBase
+	{
+		public AttractionPhotowarWithDetails()
+		{
+			AttractionPhotowarUploads = new List<AttractionPhotowarUploadBase>();
+		}
+		public AttractionBase Attraction { get; set; }
+		// the two photos uploaded for this PhotoWar
+		public IEnumerable<AttractionPhotowarUploadBase> AttractionPhotowarUploads { get; set; }
+	}
 }

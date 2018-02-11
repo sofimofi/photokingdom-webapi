@@ -29,4 +29,24 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class AttractionWithDetails : AttractionBase
+	{
+		public AttractionWithDetails()
+		{
+			QueuedUploads = new List<QueueBase>();
+			AttractionPhotowars = new List<AttractionPhotowarBase>();
+			Owners = new List<ResidentAttractionOwnBase>();
+		}
+
+		public String CityName { get; set; }
+		public String CityCountryName { get; set; }
+
+		// the queued photo uploads for this Attraction
+		public IEnumerable<QueueBase> QueuedUploads { get; set; }
+		// all the AttractionPhotowars for this Attraction
+		public IEnumerable<AttractionPhotowarBase> AttractionPhotowars { get; set; }
+		// all the residents that owned this Attraction
+		public IEnumerable<ResidentAttractionOwnBase> Owners { get; set; }
+	}
 }

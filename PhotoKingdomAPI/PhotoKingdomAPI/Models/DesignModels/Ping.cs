@@ -8,6 +8,12 @@ namespace PhotoKingdomAPI.Models
 {
     public class Ping
     {
+		public Ping()
+		{
+			PingDate = DateTime.Now;
+			ExpiryDate = DateTime.Now.AddDays(7);
+		}
+
         public int Id { get; set; }
 
         [Required]

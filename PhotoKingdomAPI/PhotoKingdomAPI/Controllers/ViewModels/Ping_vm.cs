@@ -31,4 +31,10 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class PingWithDetails : PingBase
+	{
+		public ResidentBase Resident { get; set; }
+		public AttractionBase Attraction { get; set; }
+	}
 }

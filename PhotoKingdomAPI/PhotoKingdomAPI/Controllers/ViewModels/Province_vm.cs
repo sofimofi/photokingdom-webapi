@@ -20,4 +20,15 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class ProvinceWithDetails : ProvinceBase
+	{
+		public ProvinceWithDetails()
+		{
+			Owners = new List<ResidentProvinceOwnBase>();
+		}
+		public String CountryName { get; set; }
+		// all the residents that owned this province
+		public IEnumerable<ResidentProvinceOwnBase> Owners { get; set; }
+	}
 }

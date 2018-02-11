@@ -13,8 +13,8 @@ namespace PhotoKingdomAPI.Models
         [Required]
         public int ContinentId { get; set; }
         
-        [Required]
-        public int PhotoId { get; set; }
+        //[Required] // removed constraint because EF warning multiple cascade paths on delete
+        public int? PhotoId { get; set; }
 
         // navigations
         public Continent Continent { get; set; }

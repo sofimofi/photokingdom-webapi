@@ -108,7 +108,36 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionBase>>(ds.Attractions);
         }
 
+		public int loadData(){
+			int count = 0;
+			if (ds.Continents.Count() == 0)
+			{
+				ds.Continents.Add(new Continent { Name = "North America" });
+				ds.Continents.Add(new Continent { Name = "South America" });
+				ds.Continents.Add(new Continent { Name = "Europe" });
+				ds.Continents.Add(new Continent { Name = "Africa" });
+				ds.Continents.Add(new Continent { Name = "Middle East" });
+				ds.Continents.Add(new Continent { Name = "Asia" });
+				ds.Continents.Add(new Continent { Name = "Australia" });
+				ds.SaveChanges();
+				count++;
+			}
 
+			if (ds.Countries.Count() == 0)
+			{
+				var northAmerica = ds.Continents.SingleOrDefault(o => o.Name == "North America");
+				if (northAmerica != null)
+				{
+					var canada = ds.Countries.Add(new Country { Name = "Canada" });
+					canada.Continent = northAmerica;
+					var usa = ds.Countries.Add(new Country { Name = "United States of America" });
+					usa.Continent = northAmerica;
+					ds.SaveChanges();
+					count++;
+				}
+			}
+			return count;
+		}
 
     }
 }
