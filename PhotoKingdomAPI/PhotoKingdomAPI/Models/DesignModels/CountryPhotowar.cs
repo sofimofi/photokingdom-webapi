@@ -12,6 +12,7 @@ namespace PhotoKingdomAPI.Models
         public CountryPhotowar()
         {
             CountryPhotowarUploads = new List<CountryPhotowarUpload>();
+			DeclarationDate = DateTime.Now;
         }
 
         public int Id { get; set; }
@@ -19,23 +20,23 @@ namespace PhotoKingdomAPI.Models
         [Required]
         public DateTime DeclarationDate { get; set; }
 
-        public DateTime AcceptanceDate { get; set; }
+        public DateTime? AcceptanceDate { get; set; }
 
-        public DateTime SurrenderDate { get; set; }
+        public DateTime? SurrenderDate { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Required]
         public int IsCancelled { get; set; }
 
         [Required]
-        [ForeignKey("CountryProfile")]
+        [ForeignKey("DeclaringCountry")]
         public int DeclaringCountryId { get; set; }
 
         [Required]
-        [ForeignKey("CountryProfile")]
+        [ForeignKey("RecipientCountry")]
         public int RecipentCountryId { get; set; }
 
         // navigations

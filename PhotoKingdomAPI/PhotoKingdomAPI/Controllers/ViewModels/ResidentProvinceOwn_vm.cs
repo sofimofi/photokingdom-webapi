@@ -11,13 +11,12 @@ namespace PhotoKingdomAPI.Controllers
         public ResidentProvinceOwnAdd()
         {
             StartOfOwn = DateTime.Now;
-            EndOfOwn = DateTime.Now;
         }
 
         [Required]
         public DateTime StartOfOwn { get; set; }
 
-        public DateTime EndOfOwn { get; set; }
+        public DateTime? EndOfOwn { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -34,4 +33,10 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class ResidentProvinceOwnWithDetails : ResidentProvinceOwnBase
+	{
+		public ResidentBase Resident { get; set; }
+		public ProvinceBase Province { get; set; }
+	}
 }

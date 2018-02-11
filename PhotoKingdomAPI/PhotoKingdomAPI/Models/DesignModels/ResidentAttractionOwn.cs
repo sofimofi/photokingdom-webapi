@@ -8,12 +8,16 @@ namespace PhotoKingdomAPI.Models
 {
     public class ResidentAttractionOwn
     {
+		public ResidentAttractionOwn()
+		{
+			StartOfOwn = DateTime.Now;
+		}
         public int Id { get; set; }
 
         [Required]
         public DateTime StartOfOwn { get; set; }
 
-        public DateTime EndOfOwn { get; set; }
+        public DateTime? EndOfOwn { get; set; }
 
         [Required]
         [StringLength(50)]

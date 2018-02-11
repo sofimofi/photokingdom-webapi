@@ -19,4 +19,10 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class ContinentProfileWithDetails : ContinentProfileBase
+	{
+		public ContinentBase Continent { get; set; }
+		public PhotoBase Photo { get; set; }
+	}
 }

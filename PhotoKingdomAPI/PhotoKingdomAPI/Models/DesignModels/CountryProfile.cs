@@ -13,8 +13,8 @@ namespace PhotoKingdomAPI.Models
         [Required]
         public int CountryId { get; set; }
 
-        [Required]
-        public int PhotoId { get; set; }
+        //[Required] // removed constraint because EF warns of multiple cascade paths on delete
+        public int? PhotoId { get; set; }
 
         // navigations
         public Country Country { get; set; }

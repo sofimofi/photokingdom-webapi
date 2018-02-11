@@ -22,4 +22,10 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class ContinentPhotowarRequestedphotoUploadWithDetails : ContinentPhotowarRequestedphotoUploadBase
+	{
+		public PhotoBase Photo { get; set; }
+		public CountryPhotowarPhotorequestBase CountryPhotowarPhotorequest { get; set; }
+	}
 }

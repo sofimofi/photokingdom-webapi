@@ -23,4 +23,16 @@ namespace PhotoKingdomAPI.Controllers
     {
         public int Id { get; set; }
     }
+
+	public class ContinentPhotowarUploadWithDetails : ContinentPhotowarRequestedphotoUploadBase
+	{
+		public ContinentPhotowarUploadWithDetails()
+		{
+			ResidentVotes = new List<ResidentBase>();
+		}
+		public PhotoBase Photo { get; set; }
+		public ContinentPhotowarBase ContinentPhotowar { get; set; }
+		// Votes for this ContinentPhotowar
+		public IEnumerable<ResidentBase> ResidentVotes { get; set; }
+	}
 }

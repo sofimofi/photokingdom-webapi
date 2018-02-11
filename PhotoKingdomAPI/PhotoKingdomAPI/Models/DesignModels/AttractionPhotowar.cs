@@ -11,11 +11,13 @@ namespace PhotoKingdomAPI.Models
         public AttractionPhotowar()
         {
             AttractionPhotowarUploads = new List<AttractionPhotowarUpload>();
+			StartDate = DateTime.Now;
+			EndDate = DateTime.Now.AddDays(3);
         }
 
         public int Id { get; set; }
 
-        [Required]
+        [Required]	
         public DateTime StartDate { get; set; }
 
         [Required]

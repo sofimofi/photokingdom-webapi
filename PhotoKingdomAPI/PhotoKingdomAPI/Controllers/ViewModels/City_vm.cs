@@ -15,12 +15,24 @@ namespace PhotoKingdomAPI.Controllers
         [Required]
         public int CountryId { get; set; }
 
-        [Required]
-        public int ProvinceId { get; set; }
+        public int? ProvinceId { get; set; }
     }
 
     public class CityBase : CityAdd
     {
         public int Id { get; set; }
     }
+
+	public class CityWithDetails : CityBase
+	{
+		public CityWithDetails()
+		{
+			Owners = new List<ResidentCityOwnBase>();
+		}
+		public String CountryName { get; set; }
+		public String ProvinceName { get; set; }
+
+		// all the residents that owned this City
+		public IEnumerable<ResidentCityOwnBase> Owners { get; set; }
+	}
 }
