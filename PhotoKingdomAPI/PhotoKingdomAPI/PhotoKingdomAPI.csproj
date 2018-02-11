@@ -211,6 +211,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoadDataController.cs" />
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\ViewModels\AttractionPhotowarUpload_vm.cs" />
     <Compile Include="Controllers\ViewModels\AttractionPhotowar_vm.cs" />
@@ -244,6 +245,15 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802110442364_init.cs" />
+    <Compile Include="Migrations\201802110442364_init.Designer.cs">
+      <DependentUpon>201802110442364_init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802110508246_remove-cascade-cycles.cs" />
+    <Compile Include="Migrations\201802110508246_remove-cascade-cycles.Designer.cs">
+      <DependentUpon>201802110508246_remove-cascade-cycles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\DesignModels\Attraction.cs" />
@@ -335,6 +345,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\LoadData\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -346,6 +357,14 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201802110442364_init.resx">
+      <DependentUpon>201802110442364_init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802110508246_remove-cascade-cycles.resx">
+      <DependentUpon>201802110508246_remove-cascade-cycles.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
