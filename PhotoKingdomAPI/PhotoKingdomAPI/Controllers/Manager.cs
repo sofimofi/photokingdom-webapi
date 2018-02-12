@@ -21,6 +21,8 @@ namespace PhotoKingdomAPI.Controllers
             // Configure AutoMapper...
             config = new MapperConfiguration(cfg =>
             {
+                #region Define the mappings
+
                 // Define the mappings
                 cfg.CreateMap<Models.Attraction, Controllers.AttractionBase>();
                 cfg.CreateMap<Controllers.AttractionAdd, Models.Attraction>();
@@ -80,6 +82,8 @@ namespace PhotoKingdomAPI.Controllers
                 //cfg.CreateMap<Controllers.VoteContinentPhotowarUploadAdd, Models.VoteContinentPhotowarUpload>();
                 //cfg.CreateMap<Models.VoteCountryPhotowarUpload, Controllers.VoteCountryPhotowarUploadBase>();
                 //cfg.CreateMap< Controllers.VoteCountryPhotowarUploadAdd, Models.VoteCountryPhotowarUpload >();
+
+                #endregion Define the mappings
             });
 
             mapper = config.CreateMapper();
@@ -139,5 +143,174 @@ namespace PhotoKingdomAPI.Controllers
 			return count;
 		}
 
+        #region Resident
+        // **************************************************************
+        //                          Resident
+        // **************************************************************
+        public IEnumerable<ResidentBase> ResidentGetAll()
+        {
+            var c = ds.Residents.OrderBy(r => r.Id);
+            return mapper.Map<IEnumerable<ResidentBase>>(c);
+        }
+
+        public ResidentBase ResidentGetById(int id)
+        {
+            var o = ds.Residents.Find(id);
+            return (o == null) ? null : mapper.Map<ResidentBase>(o);
+        }
+
+        public ResidentBase ResidentAdd(ResidentAdd newItem)
+        {
+            if (newItem == null)
+            {
+                return null;
+            }
+            else
+            {
+                var addedItem = mapper.Map<Resident>(newItem);
+
+                ds.Residents.Add(addedItem);
+                ds.SaveChanges();
+
+                return mapper.Map<ResidentBase>(addedItem);
+            }
+        }
+        #endregion Resident
+
+        #region City
+        // **************************************************************
+        //                          City
+        // **************************************************************
+        public IEnumerable<CityBase> CityGetAll()
+        {
+            var c = ds.Cities.OrderBy(r => r.Id);
+            return mapper.Map<IEnumerable<CityBase>>(c);
+        }
+
+        public CityBase CityGetById(int id)
+        {
+            var o = ds.Cities.Find(id);
+            return (o == null) ? null : mapper.Map<CityBase>(o);
+        }
+
+        public CityBase CityAdd(CityAdd newItem)
+        {
+            if (newItem == null)
+            {
+                return null;
+            }
+            else
+            {
+                var addedItem = mapper.Map<City>(newItem);
+
+                ds.Cities.Add(addedItem);
+                ds.SaveChanges();
+
+                return mapper.Map<CityBase>(addedItem);
+            }
+        }
+        #endregion City
+
+        #region Country
+        // **************************************************************
+        //                          Country
+        // **************************************************************
+        public IEnumerable<CountryBase> CountryGetAll()
+        {
+            var c = ds.Countries.OrderBy(r => r.Id);
+            return mapper.Map<IEnumerable<CountryBase>>(c);
+        }
+
+        public CountryBase CountryGetById(int id)
+        {
+            var o = ds.Countries.Find(id);
+            return (o == null) ? null : mapper.Map<CountryBase>(o);
+        }
+
+        public CountryBase CountryAdd(CountryAdd newItem)
+        {
+            if (newItem == null)
+            {
+                return null;
+            }
+            else
+            {
+                var addedItem = mapper.Map<Country>(newItem);
+
+                ds.Countries.Add(addedItem);
+                ds.SaveChanges();
+
+                return mapper.Map<CountryBase>(addedItem);
+            }
+        }
+        #endregion Country
+
+        #region Province
+        // **************************************************************
+        //                          Province
+        // **************************************************************
+        public IEnumerable<ProvinceBase> ProvinceGetAll()
+        {
+            var c = ds.Provinces.OrderBy(r => r.Id);
+            return mapper.Map<IEnumerable<ProvinceBase>>(c);
+        }
+
+        public ProvinceBase ProvinceGetById(int id)
+        {
+            var o = ds.Provinces.Find(id);
+            return (o == null) ? null : mapper.Map<ProvinceBase>(o);
+        }
+
+        public ProvinceBase ProvinceAdd(ProvinceAdd newItem)
+        {
+            if (newItem == null)
+            {
+                return null;
+            }
+            else
+            {
+                var addedItem = mapper.Map<Province>(newItem);
+
+                ds.Provinces.Add(addedItem);
+                ds.SaveChanges();
+
+                return mapper.Map<ProvinceBase>(addedItem);
+            }
+        }
+        #endregion Province
+
+        #region Continent
+        // **************************************************************
+        //                          Continent
+        // **************************************************************
+        public IEnumerable<ContinentBase> ContinentGetAll()
+        {
+            var c = ds.Continents.OrderBy(r => r.Id);
+            return mapper.Map<IEnumerable<ContinentBase>>(c);
+        }
+
+        public ContinentBase ContinentGetById(int id)
+        {
+            var o = ds.Continents.Find(id);
+            return (o == null) ? null : mapper.Map<ContinentBase>(o);
+        }
+
+        public ContinentBase ContinentAdd(ContinentAdd newItem)
+        {
+            if (newItem == null)
+            {
+                return null;
+            }
+            else
+            {
+                var addedItem = mapper.Map<Continent>(newItem);
+
+                ds.Continents.Add(addedItem);
+                ds.SaveChanges();
+
+                return mapper.Map<ContinentBase>(addedItem);
+            }
+        }
+        #endregion Continent
     }
 }
