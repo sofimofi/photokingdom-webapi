@@ -10,13 +10,14 @@ namespace PhotoKingdomAPI.Models
     {
         public Country()
         {
+            Provinces = new List<Province>();
             Owners = new List<ResidentCountryOwn>();
         }
 
         public int Id { get; set; }
 
         [Required]
-        [StringLength(30)]
+        [StringLength(150)]
         public string Name { get; set; }
 
         [Required]
@@ -25,6 +26,10 @@ namespace PhotoKingdomAPI.Models
         // navigation
 
         public Continent Continent { get; set; }
+
+        // All provinces in this country
+        public ICollection<Province> Provinces { get; set; }
+
         // all the residents that owned this country
         public ICollection<ResidentCountryOwn> Owners { get; set; }
     }

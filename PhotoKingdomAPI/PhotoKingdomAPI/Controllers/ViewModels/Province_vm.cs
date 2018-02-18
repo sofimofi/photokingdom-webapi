@@ -21,7 +21,18 @@ namespace PhotoKingdomAPI.Controllers
         public int Id { get; set; }
     }
 
-	public class ProvinceWithDetails : ProvinceBase
+    public class ProvinceWithCities : ProvinceBase
+    {
+        public ProvinceWithCities()
+        {
+            Cities = new List<CityBase>();
+        }
+
+        // All cities in this province
+        public IEnumerable<CityBase> Cities { get; set; }
+    }
+
+    public class ProvinceWithDetails : ProvinceBase
 	{
 		public ProvinceWithDetails()
 		{

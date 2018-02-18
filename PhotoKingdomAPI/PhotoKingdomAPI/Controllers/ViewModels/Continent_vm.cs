@@ -18,7 +18,18 @@ namespace PhotoKingdomAPI.Controllers
         public int Id { get; set; }
     }
 
-	public class ContinentWithOwners : ContinentBase
+    public class ContinentWithCountries : ContinentBase
+    {
+        public ContinentWithCountries()
+        {
+            Countries = new List<CountryBase>();
+        }
+
+        // All countries in this continent
+        public IEnumerable<CountryBase> Countries { get; set; }
+    }
+
+    public class ContinentWithOwners : ContinentBase
 	{
 		public ContinentWithOwners()
 		{

@@ -10,6 +10,7 @@ namespace PhotoKingdomAPI.Models
     {
         public Continent()
         {
+            Countries = new List<Country>();
             Owners = new List<ResidentContinentOwn>();
         }
 
@@ -20,6 +21,9 @@ namespace PhotoKingdomAPI.Models
         public string Name { get; set; }
 
         // navigation
+        // All countries in this continent
+        public ICollection<Country> Countries { get; set; }
+
         // all the residents that owned this Continent
         public ICollection<ResidentContinentOwn> Owners { get; set; }
     }

@@ -10,6 +10,7 @@ namespace PhotoKingdomAPI.Models
     {
         public Province()
         {
+            Cities = new List<City>();
             Owners = new List<ResidentProvinceOwn>();
         }
 
@@ -25,6 +26,10 @@ namespace PhotoKingdomAPI.Models
         // navigation
 
         public Country Country { get; set; }
+
+        // All cities in this province
+        public ICollection<City> Cities { get; set; }
+
         // all the residents that owned this province
         public ICollection<ResidentProvinceOwn> Owners { get; set; }
     }
