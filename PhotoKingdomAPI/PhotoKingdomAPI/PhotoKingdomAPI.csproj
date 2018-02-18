@@ -230,6 +230,8 @@
     <Compile Include="Controllers\ProvincesController.cs" />
     <Compile Include="Controllers\QueuesController.cs" />
     <Compile Include="Controllers\ResidentsController.cs" />
+    <Compile Include="Controllers\UploadImageController.cs" />
+    <Compile Include="Controllers\UploadManager.cs" />
     <Compile Include="Controllers\ViewModels\AttractionPhotowarUpload_vm.cs" />
     <Compile Include="Controllers\ViewModels\AttractionPhotowar_vm.cs" />
     <Compile Include="Controllers\ViewModels\Attraction_vm.cs" />
@@ -371,6 +373,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="img\avatars\" />
+    <Folder Include="img\photos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
