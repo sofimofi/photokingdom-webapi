@@ -270,6 +270,10 @@
     <Compile Include="Migrations\201802110508246_remove-cascade-cycles.Designer.cs">
       <DependentUpon>201802110508246_remove-cascade-cycles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802181932429_remove-countryid-in-city.cs" />
+    <Compile Include="Migrations\201802181932429_remove-countryid-in-city.Designer.cs">
+      <DependentUpon>201802181932429_remove-countryid-in-city.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -382,6 +386,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802110508246_remove-cascade-cycles.resx">
       <DependentUpon>201802110508246_remove-cascade-cycles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802181932429_remove-countryid-in-city.resx">
+      <DependentUpon>201802181932429_remove-countryid-in-city.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
