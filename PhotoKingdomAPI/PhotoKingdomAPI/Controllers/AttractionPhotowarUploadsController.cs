@@ -7,24 +7,26 @@ using System.Web.Http;
 
 namespace PhotoKingdomAPI.Controllers
 {
-    public class CitiesController : ApiController
+    [RoutePrefix("api/AttractionPhotowarUploads")]
+    public class AttractionPhotowarUploadsController : ApiController
     {
         private Manager m = new Manager();
 
-        // GET: api/Cities
+        // GET: api/AttractionPhotowarUploads
         public IHttpActionResult Get()
         {
-            return Ok(m.CityGetAll());
+            return Ok(m.AttractionPhotowarUploadGetAll());
         }
 
-        // GET: api/Cities/5
-        public IHttpActionResult Get(int? id)
+        // GET: api/AttractionPhotowarUploads/5
+        [Route("{id:int}")]
+        public IHttpActionResult GetAttractionPhotowarUpload(int? id)
         {
             // Determine whether we can continue
             if (!id.HasValue) { return NotFound(); }
 
             // Fetch the object, so that we can inspect its value
-            var o = m.CityGetById(id.Value);
+            var o = m.AttractionPhotowarUploadGetById(id.Value);
 
             if (o == null)
             {
@@ -36,8 +38,28 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
-        // POST: api/Cities
-        public IHttpActionResult Post([FromBody]CityAdd newItem)
+        // GET: api/AttractionPhotowarUploads/5/details
+        [Route("{id:int}/details")]
+        public IHttpActionResult GetAttractionPhotowarUploadWithDetails(int? id)
+        {
+            // Determine whether we can continue
+            if (!id.HasValue) { return NotFound(); }
+
+            // Fetch the object, so that we can inspect its value
+            var o = m.AttractionPhotowarUploadGetByIdWithDetails(id.Value);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
+        // POST: api/AttractionPhotowarUploads
+        public IHttpActionResult Post([FromBody]AttractionPhotowarUploadAdd newItem)
         {
             // Ensure that the URI is clean (and does not have an id parameter)
             if (Request.GetRouteData().Values["id"] != null)
@@ -55,7 +77,7 @@ namespace PhotoKingdomAPI.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to add the new object
-                var addedItem = m.CityAdd(newItem);
+                var addedItem = m.AttractionPhotowarUploadAdd(newItem);
 
                 // Notice the ApiController convenience methods
                 if (addedItem == null)
@@ -69,7 +91,7 @@ namespace PhotoKingdomAPI.Controllers
                     // Notice how to create the URI for the Location header
 
                     var uri = Url.Link("DefaultApi", new { id = addedItem.Id });
-                    return Created<CityBase>(uri, addedItem);
+                    return Created<AttractionPhotowarUploadBase>(uri, addedItem);
                 }
             }
             else
@@ -78,16 +100,5 @@ namespace PhotoKingdomAPI.Controllers
                 return BadRequest(ModelState);
             }
         }
-        /*
-        // PUT: api/Cities/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Cities/5
-        public void Delete(int id)
-        {
-        }
-        */
     }
 }

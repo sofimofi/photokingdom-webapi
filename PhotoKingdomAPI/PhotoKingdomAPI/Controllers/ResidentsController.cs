@@ -7,6 +7,7 @@ using System.Web.Http;
 
 namespace PhotoKingdomAPI.Controllers
 {
+    [RoutePrefix("api/Residents")]
     public class ResidentsController : ApiController
     {
         private Manager m = new Manager();
@@ -18,6 +19,7 @@ namespace PhotoKingdomAPI.Controllers
         }
 
         // GET: api/Residents/5
+        [Route("{id:int}")]
         public IHttpActionResult Get(int? id)
         {
             // Determine whether we can continue
@@ -35,6 +37,49 @@ namespace PhotoKingdomAPI.Controllers
                 return Ok(o);
             }
         }
+
+        // Get all photos for a resident
+        // GET: api/Residents/5/photos
+        [Route("{id:int}/photos")]
+        public IHttpActionResult GetResidentPhotos(int? id)
+        {
+            // Determine whether we can continue
+            if (!id.HasValue) { return NotFound(); }
+
+            // Fetch the object, so that we can inspect its value
+            var o = m.PhotoGetAllForResident(id.Value);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
+        // Get all pings for a resident
+        // GET: api/Residents/5/pings
+        [Route("{id:int}/pings")]
+        public IHttpActionResult GetResidentPings(int? id)
+        {
+            // Determine whether we can continue
+            if (!id.HasValue) { return NotFound(); }
+
+            // Fetch the object, so that we can inspect its value
+            var o = m.PingGetAllForResident(id.Value);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
 
         // POST: api/Residents
         public IHttpActionResult Post([FromBody]ResidentAdd newItem)

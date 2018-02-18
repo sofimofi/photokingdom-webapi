@@ -18,6 +18,7 @@ namespace PhotoKingdomAPI.Controllers
         [Required]
         public float Lng { get; set; }
 
+        [Required]
         public int ResidentId { get; set; }
     }
 
