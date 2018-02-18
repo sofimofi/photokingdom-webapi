@@ -19,15 +19,13 @@ namespace PhotoKingdomAPI.Models
         [StringLength(40)]
         public string Name { get; set; }
 
+        // Required a province without a country
         [Required]
-        public int CountryId { get; set; }
-
-        public int? ProvinceId { get; set; } // province is optional
+        public int ProvinceId { get; set; }
 
         // navigations
-
-        public Country Country { get; set; }
         public Province Province { get; set; }
+
         // all the residents that owned this City
         public ICollection<ResidentCityOwn> Owners { get; set; }
     }

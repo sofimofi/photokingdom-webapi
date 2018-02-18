@@ -80,3 +80,5 @@ E:\Projects\PRJ666\photokingdom-webapi\PhotoKingdomAPI\PhotoKingdomAPI\bin\AutoM
 E:\Projects\PRJ666\photokingdom-webapi\PhotoKingdomAPI\PhotoKingdomAPI\obj\Debug\PhotoKingdomAPI.Migrations.init.resources
 E:\Projects\PRJ666\photokingdom-webapi\PhotoKingdomAPI\PhotoKingdomAPI\obj\Debug\PhotoKingdomAPI.Migrations.removecascadecycles.resources
 E:\Projects\PRJ666\photokingdom-webapi\PhotoKingdomAPI\PhotoKingdomAPI\obj\Debug\PhotoKingdomAPI.csproj.GenerateResource.Cache
+E:\Projects\PRJ666\photokingdom-webapi\PhotoKingdomAPI\PhotoKingdomAPI\bin\Excel.dll
+E:\Projects\PRJ666\photokingdom-webapi\PhotoKingdomAPI\PhotoKingdomAPI\obj\Debug\PhotoKingdomAPI.Migrations.removecountryidincity.resources

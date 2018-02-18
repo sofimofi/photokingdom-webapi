@@ -49,6 +49,10 @@
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Excel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
       <Private>True</Private>
@@ -213,7 +217,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AttractionPhotowarsController.cs" />
     <Compile Include="Controllers\AttractionPhotowarUploadsController.cs" />
-    <Compile Include="Controllers\AttractionPhotowarUploadWithDetailsController.cs" />
     <Compile Include="Controllers\AttractionsController.cs" />
     <Compile Include="Controllers\CitiesController.cs" />
     <Compile Include="Controllers\ContinentsController.cs" />
@@ -227,6 +230,8 @@
     <Compile Include="Controllers\ProvincesController.cs" />
     <Compile Include="Controllers\QueuesController.cs" />
     <Compile Include="Controllers\ResidentsController.cs" />
+    <Compile Include="Controllers\UploadImageController.cs" />
+    <Compile Include="Controllers\UploadManager.cs" />
     <Compile Include="Controllers\ViewModels\AttractionPhotowarUpload_vm.cs" />
     <Compile Include="Controllers\ViewModels\AttractionPhotowar_vm.cs" />
     <Compile Include="Controllers\ViewModels\Attraction_vm.cs" />
@@ -267,6 +272,10 @@
     <Compile Include="Migrations\201802110508246_remove-cascade-cycles.Designer.cs">
       <DependentUpon>201802110508246_remove-cascade-cycles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802181932429_remove-countryid-in-city.cs" />
+    <Compile Include="Migrations\201802181932429_remove-countryid-in-city.Designer.cs">
+      <DependentUpon>201802181932429_remove-countryid-in-city.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -296,9 +305,6 @@
     <Compile Include="Models\DesignModels\ResidentContinentOwn.cs" />
     <Compile Include="Models\DesignModels\ResidentCountryOwn.cs" />
     <Compile Include="Models\DesignModels\ResidentProvinceOwn.cs" />
-    <Compile Include="Models\DesignModels\VoteAttractionPhotowarUpload.cs" />
-    <Compile Include="Models\DesignModels\VoteContinentPhotowarUpload.cs" />
-    <Compile Include="Models\DesignModels\VoteCountryPhotowarUpload.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
@@ -312,6 +318,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="References\Excel.dll" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Areas\HelpPage\Views\Web.config" />
@@ -333,6 +340,7 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
+    <Content Include="App_Data\WorldData.xlsx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -362,7 +370,8 @@
     <Content Include="Views\LoadData\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="img\avatars\" />
+    <Folder Include="img\photos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -378,6 +387,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802110508246_remove-cascade-cycles.resx">
       <DependentUpon>201802110508246_remove-cascade-cycles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802181932429_remove-countryid-in-city.resx">
+      <DependentUpon>201802181932429_remove-countryid-in-city.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

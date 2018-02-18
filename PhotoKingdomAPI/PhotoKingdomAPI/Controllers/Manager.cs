@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using PhotoKingdomAPI.Models;
 using AutoMapper;
+using Excel;
 
 namespace PhotoKingdomAPI.Controllers
 {
@@ -34,9 +35,8 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadWithDetails>();
                 cfg.CreateMap<Controllers.AttractionPhotowarUploadAdd, Models.AttractionPhotowarUpload>();
                 cfg.CreateMap<Models.City, Controllers.CityBase>();
-                cfg.CreateMap<Controllers.CityAdd, Models.City>();
                 cfg.CreateMap<Models.Continent, Controllers.ContinentBase>();
-                cfg.CreateMap<Controllers.ContinentAdd, Models.Continent>();
+                cfg.CreateMap<Models.Continent, Controllers.ContinentWithCountries>();
                 cfg.CreateMap<Models.ContinentPhotowar, Controllers.ContinentPhotowarBase>();
                 cfg.CreateMap<Controllers.ContinentPhotowarAdd, Models.ContinentPhotowar>();
                 cfg.CreateMap<Models.ContinentPhotowarPhotorequest, Controllers.ContinentPhotowarPhotorequestBase>();
@@ -48,7 +48,7 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.ContinentProfile, Controllers.ContinentProfileBase>();
                 cfg.CreateMap<Controllers.ContinentProfileAdd, Models.ContinentProfile>();
                 cfg.CreateMap<Models.Country, Controllers.CountryBase>();
-                cfg.CreateMap<Controllers.CountryAdd, Models.Country>();
+                cfg.CreateMap<Models.Country, Controllers.CountryWithProvinces>();
                 cfg.CreateMap<Models.CountryPhotowar, Controllers.CountryPhotowarBase>();
                 cfg.CreateMap<Controllers.CountryPhotowarAdd, Models.CountryPhotowar>();
                 cfg.CreateMap<Models.CountryPhotowarPhotorequest, Controllers.CountryPhotowarPhotorequestBase>();
@@ -66,7 +66,7 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.Ping, Controllers.PingWithDetails>();
                 cfg.CreateMap<Controllers.PingAdd, Models.Ping>();
                 cfg.CreateMap<Models.Province, Controllers.ProvinceBase>();
-                cfg.CreateMap<Controllers.ProvinceAdd, Models.Province>();
+                cfg.CreateMap<Models.Province, Controllers.ProvinceWithCities>();
                 cfg.CreateMap<Models.Queue, Controllers.QueueBase>();
                 cfg.CreateMap<Models.Queue, Controllers.QueueWithDetails>();
                 cfg.CreateMap<Controllers.QueueAdd, Models.Queue>();
@@ -87,12 +87,6 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.ResidentProvinceOwn, Controllers.ResidentProvinceOwnBase>();
                 cfg.CreateMap<Models.ResidentProvinceOwn, Controllers.ResidentProvinceOwnWithDetails>();
                 cfg.CreateMap<Controllers.ResidentProvinceOwnAdd, Models.ResidentProvinceOwn>();
-                //cfg.CreateMap<Models.VoteAttractionPhotowarUpload, Controllers.VoteAttractionPhotowarUploadBase>();
-                //cfg.CreateMap<Controllers.VoteAttractionPhotowarUploadAdd, Models.VoteAttractionPhotowarUpload>();
-                //cfg.CreateMap<Models.VoteContinentPhotowarUpload, Controllers.VoteContinentPhotowarUploadBase>();
-                //cfg.CreateMap<Controllers.VoteContinentPhotowarUploadAdd, Models.VoteContinentPhotowarUpload>();
-                //cfg.CreateMap<Models.VoteCountryPhotowarUpload, Controllers.VoteCountryPhotowarUploadBase>();
-                //cfg.CreateMap< Controllers.VoteCountryPhotowarUploadAdd, Models.VoteCountryPhotowarUpload >();
 
                 #endregion Define the mappings
             });
@@ -113,9 +107,10 @@ namespace PhotoKingdomAPI.Controllers
 
         // Programmatically load seed data for testing
 
-		public int loadData(){
-			int count = 0;
-
+        public int loadData()
+        {
+            int count = 0;
+            /*
             // continents
 			if (ds.Continents.Count() == 0)
 			{
@@ -175,12 +170,20 @@ namespace PhotoKingdomAPI.Controllers
                     count++;
                 }
             }
+            */
+
+            // Load world data for testing
+            // If this is for loading all data, call this method with "false" parameter
+            LoadWorldData(true);
 
             // attractions
-            if(ds.Attractions.Count() == 0)
+            if (ds.Attractions.Count() == 0)
             {
-                var toronto = ds.Cities.SingleOrDefault(o => o.Name == "Toronto" && o.Country.Name == "Canada");
-                var hamilton = ds.Cities.SingleOrDefault(o => o.Name == "Hamilton" && o.Country.Name == "Canada");
+                // Remove country and add province
+                //var toronto = ds.Cities.SingleOrDefault(o => o.Name == "Toronto" && o.Country.Name == "Canada");
+                //var hamilton = ds.Cities.SingleOrDefault(o => o.Name == "Hamilton" && o.Country.Name == "Canada");
+                var toronto = ds.Cities.SingleOrDefault(o => o.Name == "Toronto" && o.Province.Name == "Ontario");
+                var hamilton = ds.Cities.SingleOrDefault(o => o.Name == "Hamilton" && o.Province.Name == "Ontario");
                 if (toronto != null && hamilton != null)
                 {
                     var cnTower = ds.Attractions.Add(new Attraction
@@ -215,10 +218,12 @@ namespace PhotoKingdomAPI.Controllers
             }
 
             // residents
-            if(ds.Residents.Count() == 0)
+            if (ds.Residents.Count() == 0)
             {
-                var toronto = ds.Cities.SingleOrDefault(o => o.Name == "Toronto" && o.Country.Name == "Canada");
-                var hamilton = ds.Cities.SingleOrDefault(o => o.Name == "Hamilton" && o.Country.Name == "Canada");
+                //var toronto = ds.Cities.SingleOrDefault(o => o.Name == "Toronto" && o.Country.Name == "Canada");
+                //var hamilton = ds.Cities.SingleOrDefault(o => o.Name == "Hamilton" && o.Country.Name == "Canada");
+                var toronto = ds.Cities.SingleOrDefault(o => o.Name == "Toronto" && o.Province.Name == "Ontario");
+                var hamilton = ds.Cities.SingleOrDefault(o => o.Name == "Hamilton" && o.Province.Name == "Ontario");
                 if (toronto != null && hamilton != null)
                 {
                     var sofia = ds.Residents.Add(new Resident
@@ -254,7 +259,7 @@ namespace PhotoKingdomAPI.Controllers
             }
 
             // attractionphotowars & attractionphotowaruploads & photos
-            if(ds.AttractionPhotowars.Count() == 0)
+            if (ds.AttractionPhotowars.Count() == 0)
             {
                 var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
                 var casaloma = ds.Attractions.SingleOrDefault(o => o.Name == "Casa Loma" && o.City.Name == "Toronto");
@@ -326,21 +331,22 @@ namespace PhotoKingdomAPI.Controllers
                     });
                     ds.SaveChanges();
                     count++;
-                } else
+                }
+                else
                 {
                     throw new Exception("Seed data problem!");
                 }
             }
 
             // pings
-            if(ds.Pings.Count() == 0)
+            if (ds.Pings.Count() == 0)
             {
                 var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
                 var albionfalls = ds.Attractions.SingleOrDefault(o => o.Name == "Albion Falls" && o.City.Name == "Hamilton");
                 var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
                 var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
                 var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
-                if(cntower != null && albionfalls != null && sofia != null && wonho != null && zhihao != null)
+                if (cntower != null && albionfalls != null && sofia != null && wonho != null && zhihao != null)
                 {
                     ds.Pings.Add(new Ping
                     {
@@ -369,14 +375,151 @@ namespace PhotoKingdomAPI.Controllers
                     });
                     ds.SaveChanges();
                     count++;
-                } else
+                }
+                else
                 {
                     throw new Exception("Seed data problem!");
                 }
             }
 
-			return count;
-		}
+            return count;
+        }
+
+        /// <summary>
+        /// This code (loding data from Excel) is from INT422 (BTI420) class
+        /// https://github.com/peteratseneca/bti420winter2017/blob/master/Week_04/AssocOneToMany/AssocOneToMany/Controllers/Manager.cs#LC235
+        /// I created "WorldData.xlsx" based on data from:
+        /// 
+        /// Continents and Countries
+        /// https://gist.github.com/kamermans/1441495
+        /// 
+        /// Countries, States, Cities
+        /// https://github.com/hiiamrohit/Countries-States-Cities-database
+        /// </summary>
+        public void LoadWorldData(bool isTesting)
+        {
+            // File system path to the data file (in this project's App_Data folder)
+            string path = HttpContext.Current.Server.MapPath("~/App_Data/WorldData.xlsx");
+
+            // Get or open the workbook
+            var wb = Workbook.Worksheets(path);
+
+            // Go through all the worksheets in the workbook
+            for (int i = 0; i < wb.Count(); i++)
+            {
+                // Get a reference to the current worksheet
+                var ws = wb.ElementAt(i);
+
+                // Worksheets can't be referenced by worksheet (tab) name
+                // Therefore, we'll have to go by index                
+
+                // Continents
+                if (i == 0)
+                {
+                    for (int j = 1; j < ws.Rows.Count(); j++)
+                    {
+                        // Get a reference to the cell collection
+                        // This just makes the syntax that follows easier to work with
+                        var c = ws.Rows[j].Cells;
+
+                        // Add a new continents
+                        ds.Continents.Add(new Continent
+                        {
+                            Name = c[1].Text
+                        });
+                    }
+
+                    // Save the continents
+                    ds.SaveChanges();
+                }
+
+                // Countries
+                if (i == 1)
+                {
+                    for (int j = 1; j < ws.Rows.Count(); j++)
+                    {
+                        var c = ws.Rows[j].Cells;
+
+                        // Add a new countries
+                        ds.Countries.Add(new Country
+                        {
+                            Name = c[1].Text,
+                            ContinentId = (int)c[2].Amount,
+                        });
+                    }
+
+                    // Save the countries
+                    ds.SaveChanges();
+                }
+
+                // Provinces
+                if (i == 2)
+                {
+                    for (int j = 1; j < ws.Rows.Count(); j++)
+                    {
+                        var c = ws.Rows[j].Cells;
+
+                        // Add a new provinces
+                        ds.Provinces.Add(new Province
+                        {
+                            Name = c[1].Text,
+                            CountryId = (int)c[2].Amount
+                        });
+
+                        if (j % 1000 == 0)
+                        {
+                            // Save every 1000 provinces
+                            ds.SaveChanges();
+                        }
+                    }
+
+                    // Save the provinces
+                    ds.SaveChanges();
+                }
+
+                // Cities
+                if (i == 3)
+                {
+                    int lastProvinceId = 0;
+                    int curProvinceId;
+                    for (uint j = 1; j < ws.Rows.Count(); j++)
+                    {
+                        var c = ws.Rows[j].Cells;
+
+                        // isTesting: for testing data
+                        // j > 2: always insert "Toronto" and "Hamilton" in "Ontario"
+                        if (isTesting && j > 2)
+                        {
+                            // Add only 1 row in each province to reduce time
+                            // Be careful add all sample data for testing
+                            // It could take more than 30 minutes
+                            curProvinceId = (int)c[2].Amount;
+                            if (curProvinceId == lastProvinceId)
+                            {
+                                continue;
+                            }
+                            lastProvinceId = curProvinceId;
+                        }
+
+                        // Add a new cities
+                        ds.Cities.Add(new City
+                        {
+                            Name = c[1].Text,
+                            ProvinceId = (int)c[2].Amount
+                        });
+
+                        if (j % 1000 == 0)
+                        {
+                            // Save every 1000 cities
+                            ds.SaveChanges();
+                        }
+                    }
+
+                    // Save the cities
+                    ds.SaveChanges();
+                }
+            }
+        }
 
         #region Attraction
         // **************************************************************
@@ -420,10 +563,11 @@ namespace PhotoKingdomAPI.Controllers
 
         public AttractionPhotowarBase AttractionPhotowarAdd(AttractionPhotowarAdd newItem)
         {
-            if(newItem == null)
+            if (newItem == null)
             {
                 return null;
-            } else
+            }
+            else
             {
                 var addedItem = mapper.Map<AttractionPhotowar>(newItem);
                 ds.AttractionPhotowars.Add(addedItem);
@@ -528,22 +672,6 @@ namespace PhotoKingdomAPI.Controllers
             return (o == null) ? null : mapper.Map<CityBase>(o);
         }
 
-        public CityBase CityAdd(CityAdd newItem)
-        {
-            if (newItem == null)
-            {
-                return null;
-            }
-            else
-            {
-                var addedItem = mapper.Map<City>(newItem);
-
-                ds.Cities.Add(addedItem);
-                ds.SaveChanges();
-
-                return mapper.Map<CityBase>(addedItem);
-            }
-        }
         #endregion City
 
         #region Country
@@ -562,22 +690,15 @@ namespace PhotoKingdomAPI.Controllers
             return (o == null) ? null : mapper.Map<CountryBase>(o);
         }
 
-        public CountryBase CountryAdd(CountryAdd newItem)
+        public CountryWithProvinces CountryGetByIdWithProvinces(int id)
         {
-            if (newItem == null)
-            {
-                return null;
-            }
-            else
-            {
-                var addedItem = mapper.Map<Country>(newItem);
+            var c = ds.Countries
+                .Include("Provinces")
+                .SingleOrDefault(country => country.Id == id);
 
-                ds.Countries.Add(addedItem);
-                ds.SaveChanges();
-
-                return mapper.Map<CountryBase>(addedItem);
-            }
+            return mapper.Map<CountryWithProvinces>(c);
         }
+
         #endregion Country
 
         #region Province
@@ -596,22 +717,15 @@ namespace PhotoKingdomAPI.Controllers
             return (o == null) ? null : mapper.Map<ProvinceBase>(o);
         }
 
-        public ProvinceBase ProvinceAdd(ProvinceAdd newItem)
+        public ProvinceWithCities ProvinceGetByIdWithCities(int id)
         {
-            if (newItem == null)
-            {
-                return null;
-            }
-            else
-            {
-                var addedItem = mapper.Map<Province>(newItem);
+            var o = ds.Provinces
+                .Include("Cities")
+                .SingleOrDefault(p => p.Id == id);
 
-                ds.Provinces.Add(addedItem);
-                ds.SaveChanges();
-
-                return mapper.Map<ProvinceBase>(addedItem);
-            }
+            return (o == null) ? null : mapper.Map<ProvinceWithCities>(o);
         }
+
         #endregion Province
 
         #region Continent
@@ -630,22 +744,15 @@ namespace PhotoKingdomAPI.Controllers
             return (o == null) ? null : mapper.Map<ContinentBase>(o);
         }
 
-        public ContinentBase ContinentAdd(ContinentAdd newItem)
+        public ContinentWithCountries ContinentGetByIdWithCountries(int id)
         {
-            if (newItem == null)
-            {
-                return null;
-            }
-            else
-            {
-                var addedItem = mapper.Map<Continent>(newItem);
+            var o = ds.Continents
+                .Include("Countries")
+                .SingleOrDefault(c => c.Id == id);
 
-                ds.Continents.Add(addedItem);
-                ds.SaveChanges();
-
-                return mapper.Map<ContinentBase>(addedItem);
-            }
+            return (o == null) ? null : mapper.Map<ContinentWithCountries>(o);
         }
+
         #endregion Continent
 
         #region Photo
