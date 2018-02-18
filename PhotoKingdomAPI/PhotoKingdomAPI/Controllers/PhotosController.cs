@@ -7,24 +7,19 @@ using System.Web.Http;
 
 namespace PhotoKingdomAPI.Controllers
 {
-    public class CitiesController : ApiController
+    public class PhotosController : ApiController
     {
         private Manager m = new Manager();
 
-        // GET: api/Cities
-        public IHttpActionResult Get()
-        {
-            return Ok(m.CityGetAll());
-        }
-
-        // GET: api/Cities/5
+        // Get photo by Id
+        // GET: api/Photos/5
         public IHttpActionResult Get(int? id)
         {
             // Determine whether we can continue
             if (!id.HasValue) { return NotFound(); }
 
             // Fetch the object, so that we can inspect its value
-            var o = m.CityGetById(id.Value);
+            var o = m.PhotoGetByIdWithDetails(id.Value);
 
             if (o == null)
             {
@@ -36,8 +31,8 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
-        // POST: api/Cities
-        public IHttpActionResult Post([FromBody]CityAdd newItem)
+        // POST: api/Photos
+        public IHttpActionResult Post([FromBody]PhotoAdd newItem)
         {
             // Ensure that the URI is clean (and does not have an id parameter)
             if (Request.GetRouteData().Values["id"] != null)
@@ -55,7 +50,7 @@ namespace PhotoKingdomAPI.Controllers
             if (ModelState.IsValid)
             {
                 // Attempt to add the new object
-                var addedItem = m.CityAdd(newItem);
+                var addedItem = m.PhotoAdd(newItem);
 
                 // Notice the ApiController convenience methods
                 if (addedItem == null)
@@ -69,7 +64,7 @@ namespace PhotoKingdomAPI.Controllers
                     // Notice how to create the URI for the Location header
 
                     var uri = Url.Link("DefaultApi", new { id = addedItem.Id });
-                    return Created<CityBase>(uri, addedItem);
+                    return Created<PhotoAdd>(uri, addedItem);
                 }
             }
             else
@@ -78,16 +73,5 @@ namespace PhotoKingdomAPI.Controllers
                 return BadRequest(ModelState);
             }
         }
-        /*
-        // PUT: api/Cities/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE: api/Cities/5
-        public void Delete(int id)
-        {
-        }
-        */
     }
 }
