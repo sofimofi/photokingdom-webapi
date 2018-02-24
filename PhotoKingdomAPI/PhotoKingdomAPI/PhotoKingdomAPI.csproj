@@ -318,6 +318,8 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="img\avatars\README.txt" />
+    <Content Include="img\photos\README.txt" />
     <Content Include="References\Excel.dll" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -340,7 +342,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include="App_Data\WorldData.xlsx" />
+    <Content Include="SampleData\WorldData_Simple.xlsx" />
+    <Content Include="SampleData\WorldData.xlsx" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -370,8 +373,7 @@
     <Content Include="Views\LoadData\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="img\avatars\" />
-    <Folder Include="img\photos\" />
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
