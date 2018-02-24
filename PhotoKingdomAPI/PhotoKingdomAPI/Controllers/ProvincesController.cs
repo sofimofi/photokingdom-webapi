@@ -24,7 +24,7 @@ namespace PhotoKingdomAPI.Controllers
             if (!id.HasValue) { return NotFound(); }
 
             // Fetch the object, so that we can inspect its value
-            var o = m.ProvinceGetById(id.Value);
+            var o = m.ProvinceGetByIdWithCities(id.Value);
 
             if (o == null)
             {

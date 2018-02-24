@@ -174,7 +174,10 @@ namespace PhotoKingdomAPI.Controllers
 
             // Load world data for testing
             // If this is for loading all data, call this method with "false" parameter
-            LoadWorldData(true);
+            if (ds.Continents.Count() == 0)
+            {
+                LoadWorldData(true);
+            }
 
             // attractions
             if (ds.Attractions.Count() == 0)
@@ -399,7 +402,8 @@ namespace PhotoKingdomAPI.Controllers
         public void LoadWorldData(bool isTesting)
         {
             // File system path to the data file (in this project's App_Data folder)
-            string path = HttpContext.Current.Server.MapPath("~/App_Data/WorldData.xlsx");
+            string path = HttpContext.Current.Server.MapPath(
+                isTesting == true ? "~/SampleData/WorldData_Simple.xlsx" : "~/SampleData/WorldData.xlsx");
 
             // Get or open the workbook
             var wb = Workbook.Worksheets(path);
@@ -444,7 +448,7 @@ namespace PhotoKingdomAPI.Controllers
                         ds.Countries.Add(new Country
                         {
                             Name = c[1].Text,
-                            ContinentId = (int)c[2].Amount,
+                            ContinentId = (int)c[2].Amount
                         });
                     }
 
@@ -488,7 +492,7 @@ namespace PhotoKingdomAPI.Controllers
 
                         // isTesting: for testing data
                         // j > 2: always insert "Toronto" and "Hamilton" in "Ontario"
-                        if (isTesting && j > 2)
+                        if (!isTesting && j > 2)
                         {
                             // Add only 1 row in each province to reduce time
                             // Be careful add all sample data for testing
