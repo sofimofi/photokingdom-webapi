@@ -24,6 +24,7 @@ namespace PhotoKingdomAPI.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer<ApplicationDbContext>(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
         }
 
         public DbSet<Attraction> Attractions { get; set; }
@@ -59,6 +60,36 @@ namespace PhotoKingdomAPI.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // composite keys
+            modelBuilder.Entity<City>()
+                .HasIndex(e => new { e.Name, e.ProvinceId }).IsUnique();
+
+            modelBuilder.Entity<Province>()
+                .HasIndex(e => new { e.Name, e.CountryId }).IsUnique();
+
+            modelBuilder.Entity<Attraction>()
+                .HasIndex(e => new { e.Lat, e.Lng }).IsUnique();
+
+            modelBuilder.Entity<Attraction>()
+                .HasIndex(e => new { e.Name, e.CityId }).IsUnique();
+
+            // single unique keys
+            modelBuilder.Entity<Continent>().HasIndex(e => e.Name ).IsUnique();
+
+            modelBuilder.Entity<Country>().HasIndex(e => e.Name).IsUnique();
+
+            modelBuilder.Entity<Resident>().HasIndex(e => e.UserName).IsUnique();
+            modelBuilder.Entity<Resident>().HasIndex(e => e.Email).IsUnique();
+
+            modelBuilder.Entity<ContinentProfile>().HasIndex(e => e.ContinentId).IsUnique();
+
+            modelBuilder.Entity<CountryProfile>().HasIndex(e => e.CountryId).IsUnique();
         }
     }
 }
