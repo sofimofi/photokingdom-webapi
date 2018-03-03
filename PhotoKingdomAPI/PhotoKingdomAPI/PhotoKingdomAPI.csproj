@@ -276,6 +276,10 @@
     <Compile Include="Migrations\201802181932429_remove-countryid-in-city.Designer.cs">
       <DependentUpon>201802181932429_remove-countryid-in-city.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201802252118534_add-unique-keys.cs" />
+    <Compile Include="Migrations\201802252118534_add-unique-keys.Designer.cs">
+      <DependentUpon>201802252118534_add-unique-keys.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -318,6 +322,7 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="img\avatars\3.png" />
     <Content Include="img\avatars\README.txt" />
     <Content Include="img\photos\README.txt" />
     <Content Include="References\Excel.dll" />
@@ -344,6 +349,8 @@
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="SampleData\WorldData_Simple.xlsx" />
     <Content Include="SampleData\WorldData.xlsx" />
+    <None Include="Properties\PublishProfiles\photokingdom-api - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\photokingdom-api - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -392,6 +399,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802181932429_remove-countryid-in-city.resx">
       <DependentUpon>201802181932429_remove-countryid-in-city.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802252118534_add-unique-keys.resx">
+      <DependentUpon>201802252118534_add-unique-keys.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

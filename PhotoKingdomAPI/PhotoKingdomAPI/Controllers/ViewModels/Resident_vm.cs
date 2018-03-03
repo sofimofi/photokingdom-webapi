@@ -57,7 +57,7 @@ namespace PhotoKingdomAPI.Controllers
 			ReceivedCountryPhotowarPhotorequests = new List<CountryPhotowarPhotorequestBase>();
 			RequestedContinentPhotowarPhotorequests = new List<ContinentPhotowarPhotorequestBase>();
 			ReceivedContinentPhotowarPhotorequests = new List<ContinentPhotowarPhotorequestBase>();
-		}
+        }
 		// the city the Resident belongs to
 		public String CityName { get; set; }
 		public String CityProvinceName { get; set; }
@@ -92,5 +92,7 @@ namespace PhotoKingdomAPI.Controllers
 
 		// the ContinentPhotowarPhotorequests this resident has received from the Emperor/Empress
 		public IEnumerable<ContinentPhotowarPhotorequestBase> ReceivedContinentPhotowarPhotorequests { get; set; }
-	}
+
+        public String Title { get; set; }
+    }
 }

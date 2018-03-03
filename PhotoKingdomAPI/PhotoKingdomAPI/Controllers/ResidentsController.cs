@@ -26,7 +26,10 @@ namespace PhotoKingdomAPI.Controllers
             if (!id.HasValue) { return NotFound(); }
 
             // Fetch the object, so that we can inspect its value
-            var o = m.ResidentGetById(id.Value);
+            var o = m.ResidentWithDetailsGetById(id.Value);
+
+            // display for now
+            o.Title = o.ResidentAttractionOwns.FirstOrDefault().Title;
 
             if (o == null)
             {
