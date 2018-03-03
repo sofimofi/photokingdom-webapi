@@ -71,6 +71,8 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.Queue, Controllers.QueueWithDetails>();
                 cfg.CreateMap<Controllers.QueueAdd, Models.Queue>();
                 cfg.CreateMap<Models.Resident, Controllers.ResidentBase>();
+                cfg.CreateMap<Models.Resident, Controllers.ResidentWithDetails>();
+
                 cfg.CreateMap<Controllers.ResidentAdd, Models.Resident>();
                 cfg.CreateMap<Models.ResidentAttractionOwn, Controllers.ResidentAttractionOwnBase>();
                 cfg.CreateMap<Models.ResidentAttractionOwn, Controllers.ResidentAttractionOwnWithDetails>();
@@ -254,7 +256,8 @@ namespace PhotoKingdomAPI.Controllers
                         Gender = "M",
                         IsActive = 1,
                         Password = "password",
-                        City = hamilton
+                        City = hamilton,
+                        AvatarImagePath = "img/avatars/3.png"
                     });
                     ds.SaveChanges();
                     count++;
@@ -375,6 +378,37 @@ namespace PhotoKingdomAPI.Controllers
                     {
                         Attraction = albionfalls,
                         Resident = wonho
+                    });
+                    ds.SaveChanges();
+                    count++;
+                }
+                else
+                {
+                    throw new Exception("Seed data problem!");
+                }
+            }
+
+            if (ds.ResidentAttractionOwns.Count() == 0)
+            {
+                var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
+                var albionfalls = ds.Attractions.SingleOrDefault(o => o.Name == "Albion Falls" && o.City.Name == "Hamilton");
+                var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
+                var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
+                var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
+
+                if (cntower != null && albionfalls != null && sofia != null && wonho != null && zhihao != null)
+                {
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lady of " + cntower.Name,
+                        Resident = sofia,
+                        Attraction = cntower
+                    });
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lord of " + albionfalls.Name,
+                        Resident = zhihao,
+                        Attraction = albionfalls
                     });
                     ds.SaveChanges();
                     count++;
@@ -640,6 +674,13 @@ namespace PhotoKingdomAPI.Controllers
         {
             var o = ds.Residents.Find(id);
             return (o == null) ? null : mapper.Map<ResidentBase>(o);
+        }
+
+        public ResidentWithDetails ResidentWithDetailsGetById(int id)
+        {
+            var o = ds.Residents.Include("City").Include("ResidentAttractionOwns")
+                .SingleOrDefault(i => i.Id == id);
+            return (o == null) ? null : mapper.Map<ResidentWithDetails>(o);
         }
 
         public ResidentBase ResidentAdd(ResidentAdd newItem)
