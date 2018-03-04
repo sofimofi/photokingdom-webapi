@@ -95,4 +95,15 @@ namespace PhotoKingdomAPI.Controllers
 
         public String Title { get; set; }
     }
+
+    public class ResidentLogin
+    {
+        [Required]
+        [StringLength(50)]
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(20)]
+        public string Password { get; set; }
+    }
 }

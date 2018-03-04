@@ -699,6 +699,21 @@ namespace PhotoKingdomAPI.Controllers
                 return mapper.Map<ResidentBase>(addedItem);
             }
         }
+
+        public ResidentWithDetails ResidentLogin(ResidentLogin info)
+        {
+            if (info == null)
+            {
+                return null;
+            }
+            else
+            {
+                var o = ds.Residents
+                    .SingleOrDefault(r => r.Email == info.Email && r.Password == info.Password);
+
+                return mapper.Map<ResidentWithDetails>(o);
+            }
+        }
         #endregion Resident
 
         #region City
