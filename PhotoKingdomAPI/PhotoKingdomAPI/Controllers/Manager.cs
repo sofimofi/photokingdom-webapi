@@ -257,7 +257,7 @@ namespace PhotoKingdomAPI.Controllers
                         IsActive = 1,
                         Password = "password",
                         City = hamilton,
-                        AvatarImagePath = "img/avatars/3.png"
+                        AvatarImagePath = "https://photokingdom-api.azurewebsites.net/img/avatars/3.png"
                     });
                     ds.SaveChanges();
                     count++;
@@ -709,6 +709,8 @@ namespace PhotoKingdomAPI.Controllers
             else
             {
                 var o = ds.Residents
+                    .Include("City")
+                    .Include("ResidentAttractionOwns")
                     .SingleOrDefault(r => r.Email == info.Email && r.Password == info.Password);
 
                 return mapper.Map<ResidentWithDetails>(o);
