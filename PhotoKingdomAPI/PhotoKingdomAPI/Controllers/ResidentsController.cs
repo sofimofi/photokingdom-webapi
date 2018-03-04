@@ -29,7 +29,8 @@ namespace PhotoKingdomAPI.Controllers
             var o = m.ResidentWithDetailsGetById(id.Value);
 
             // display for now
-            o.Title = o.ResidentAttractionOwns.FirstOrDefault().Title;
+            if (o.ResidentAttractionOwns.Count() != 0)
+                o.Title = o.ResidentAttractionOwns.FirstOrDefault().Title;
 
             if (o == null)
             {
