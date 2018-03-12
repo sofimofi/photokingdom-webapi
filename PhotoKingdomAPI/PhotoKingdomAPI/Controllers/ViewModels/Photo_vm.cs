@@ -13,10 +13,10 @@ namespace PhotoKingdomAPI.Controllers
         public string PhotoFilePath { get; set; }
 
         [Required]
-        public float Lat { get; set; }
+        public double Lat { get; set; }
 
         [Required]
-        public float Lng { get; set; }
+        public double Lng { get; set; }
 
         [Required]
         public int ResidentId { get; set; }

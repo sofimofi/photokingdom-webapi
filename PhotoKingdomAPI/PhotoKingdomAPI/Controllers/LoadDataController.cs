@@ -25,5 +25,12 @@ namespace PhotoKingdomAPI.Controllers
 				return View();
 			}
         }
+
+        public ActionResult DeleteSampleData()
+        {
+            m.DeleteSeedData();
+            ViewBag.msg = "Deleted sample seed data. Did not delete world data.";
+            return View();
+        }
     }
 }
