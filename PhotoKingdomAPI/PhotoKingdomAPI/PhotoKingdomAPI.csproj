@@ -280,6 +280,10 @@
     <Compile Include="Migrations\201802252118534_add-unique-keys.Designer.cs">
       <DependentUpon>201802252118534_add-unique-keys.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803112043329_google-place-id.cs" />
+    <Compile Include="Migrations\201803112043329_google-place-id.Designer.cs">
+      <DependentUpon>201803112043329_google-place-id.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -378,6 +382,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\LoadData\Index.cshtml" />
+    <Content Include="Views\LoadData\DeleteSampleData.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -402,6 +407,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201802252118534_add-unique-keys.resx">
       <DependentUpon>201802252118534_add-unique-keys.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803112043329_google-place-id.resx">
+      <DependentUpon>201803112043329_google-place-id.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

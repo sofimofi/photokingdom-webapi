@@ -9,14 +9,17 @@ namespace PhotoKingdomAPI.Controllers
     public class AttractionAdd
     {
         [Required]
+        public string googlePlaceId { get; set; }
+
+        [Required]
         [StringLength(50)]
         public string Name { get; set; }
 
         [Required]
-        public float Lat { get; set; }
+        public double Lat { get; set; }
 
         [Required]
-        public float Lng { get; set; }
+        public double Lng { get; set; }
 
         [Required]
         public int IsActive { get; set; }
@@ -40,7 +43,7 @@ namespace PhotoKingdomAPI.Controllers
 		}
 
 		public String CityName { get; set; }
-		public String CityCountryName { get; set; }
+		public String CityProvinceCountryName { get; set; }
 
 		// the queued photo uploads for this Attraction
 		public IEnumerable<QueueBase> QueuedUploads { get; set; }
@@ -49,4 +52,27 @@ namespace PhotoKingdomAPI.Controllers
 		// all the residents that owned this Attraction
 		public IEnumerable<ResidentAttractionOwnBase> Owners { get; set; }
 	}
+
+    // Class to be posted from Android app when City Id is not known - need to provide City Name and Country
+    public class AttractionAddForm
+    {
+        [Required]
+        public string googlePlaceId { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; }
+
+        [Required]
+        public double Lat { get; set; }
+
+        [Required]
+        public double Lng { get; set; }
+
+        [Required]
+        public String CityName { get; set; }
+
+        [Required]
+        public String CountryName { get; set; }
+    }
 }
