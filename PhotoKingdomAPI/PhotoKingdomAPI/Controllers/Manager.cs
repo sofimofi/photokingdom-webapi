@@ -302,7 +302,7 @@ namespace PhotoKingdomAPI.Controllers
                         IsActive = 1,
                         Password = "password",
                         City = hamilton,
-                        AvatarImagePath = "https://photokingdom-api.azurewebsites.net/img/avatars/3.png"
+                        AvatarImagePath = "img/3.png"
                     });
                     ds.SaveChanges();
                     count++;

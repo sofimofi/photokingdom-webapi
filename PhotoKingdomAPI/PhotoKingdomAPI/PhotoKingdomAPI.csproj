@@ -327,9 +327,8 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="img\avatars\3.png" />
-    <Content Include="img\avatars\README.txt" />
-    <Content Include="img\photos\README.txt" />
+    <Content Include="img\3.png" />
+    <Content Include="img\README.txt" />
     <Content Include="References\Excel.dll" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

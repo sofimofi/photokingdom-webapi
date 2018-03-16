@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace PhotoKingdomAPI.Controllers
 {
     public class UploadManager
     {
-        public async Task<string> UploadAsync(HttpRequestMessage request, string path)
+        public async Task<string> UploadAsync(HttpRequestMessage request)
         {
             // Check if the request contains multipart / form - data.
             if (!request.Content.IsMimeMultipartContent())
@@ -23,7 +22,7 @@ namespace PhotoKingdomAPI.Controllers
             }
 
             // Path to save uploaded image files
-            string root = HttpContext.Current.Server.MapPath("~/img/" + path);
+            string root = HttpContext.Current.Server.MapPath("~/img");
             var provider = new FileDataStreamProvider(root);
 
             try
@@ -38,12 +37,7 @@ namespace PhotoKingdomAPI.Controllers
                 {
                     FileInfo fileInfo = new FileInfo(file.LocalFileName);
                     UploadedFileInfo uploadedFileInfo = new UploadedFileInfo();
-
-                    uploadedFileInfo.Path = string.Format("{0}://{1}/img/{2}/{3}",
-                        HttpContext.Current.Request.Url.Scheme,
-                        HttpContext.Current.Request.Url.Authority,
-                        path,
-                        fileInfo.Name); ;
+                    uploadedFileInfo.Path = string.Format("img/{0}", fileInfo.Name);
 
                     // Return data to Json
                     result = JsonConvert.SerializeObject(uploadedFileInfo);
