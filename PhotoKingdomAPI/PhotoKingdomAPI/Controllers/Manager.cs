@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using PhotoKingdomAPI.Models;
@@ -28,6 +29,7 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.Attraction, Controllers.AttractionBase>();
                 cfg.CreateMap<Controllers.AttractionAdd, Models.Attraction>();
                 cfg.CreateMap<Models.Attraction, Controllers.AttractionWithDetails>();
+                cfg.CreateMap<Models.Attraction, Controllers.AttractionForMapView>();
                 cfg.CreateMap<Models.AttractionPhotowar, Controllers.AttractionPhotowarBase>();
                 cfg.CreateMap<Models.AttractionPhotowar, Controllers.AttractionPhotowarWithDetails>();
                 cfg.CreateMap<Controllers.AttractionPhotowarAdd, Models.AttractionPhotowar>();
@@ -684,6 +686,25 @@ namespace PhotoKingdomAPI.Controllers
         public IEnumerable<AttractionBase> AttractionGetAll()
         {
             return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionBase>>(ds.Attractions);
+        }
+
+        public IEnumerable<AttractionForMapView> AttractionGetAllForMapViewRegion(LatLngBoundaries latLng)
+        {
+            //TODO : Need to modify so that not all of Resident's info gets returned (email and password)
+            //var o = ds.Attractions.Include(a => a.Owners.Select(w => w.Resident)).Where(a => a.Lat <= latLng.maxLat && a.Lat >= latLng.minLat && a.Lng <= latLng.maxLng && a.Lng >= latLng.minLng);
+            var o = ds.Attractions.Include("Owners.Resident").Where(a => a.Lat <= latLng.maxLat && a.Lat >= latLng.minLat && a.Lng <= latLng.maxLng && a.Lng >= latLng.minLng).ToList().Select(a => new Attraction
+            {
+                Id = a.Id,
+                googlePlaceId = a.googlePlaceId,
+                Name = a.Name,
+                Lat = a.Lat,
+                Lng = a.Lng,
+                IsActive = a.IsActive,
+                CityId = a.CityId,
+                Owners = a.Owners.Where(owner => owner.EndOfOwn == null).ToList() // filter Owner to current owner only
+            });
+
+            return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionForMapView>>(o);
         }
 
         public AttractionBase AttractionGetById(int? id)

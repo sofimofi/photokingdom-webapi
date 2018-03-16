@@ -222,6 +222,7 @@
     <Compile Include="Controllers\ContinentsController.cs" />
     <Compile Include="Controllers\CountriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LatLngBoundaries.cs" />
     <Compile Include="Controllers\LoadDataController.cs" />
     <Compile Include="Controllers\Manager.cs" />
     <Compile Include="Controllers\OwnsController.cs" />

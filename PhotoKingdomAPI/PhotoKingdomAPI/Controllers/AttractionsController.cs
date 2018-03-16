@@ -18,6 +18,15 @@ namespace PhotoKingdomAPI.Controllers
             return Ok(m.AttractionGetAll());
         }
 
+        // GET: api/Attractions/mapview
+        [HttpGet]
+        [Route("mapview")]
+        public IHttpActionResult GetAllForMapViewRegion([FromUri]LatLngBoundaries latLngBoundaries)
+        {
+            var o = m.AttractionGetAllForMapViewRegion(latLngBoundaries);
+            return Ok(o);
+        }
+
         // GET: api/Attractions/5
         [Route("{id:int}")]
         public IHttpActionResult GetAttraction(int? id)
