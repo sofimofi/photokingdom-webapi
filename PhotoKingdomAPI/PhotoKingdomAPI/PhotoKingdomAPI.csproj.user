@@ -18,6 +18,11 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
+<<<<<<< Updated upstream
+=======
+    <WebStackScaffolding_ViewDialogWidth>600</WebStackScaffolding_ViewDialogWidth>
+    <NameOfLastUsedPublishProfile>photokingdom-api - Web Deploy</NameOfLastUsedPublishProfile>
+>>>>>>> Stashed changes
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

@@ -18,7 +18,14 @@ namespace PhotoKingdomAPI.Models
         public int Id { get; set; }
 
         [Required]
+<<<<<<< Updated upstream
         [StringLength(50)]
+=======
+        public string googlePlaceId { get; set; }
+
+        [Required]
+        [StringLength(50)]  
+>>>>>>> Stashed changes
         public string Name { get; set; }
 
         [Required]

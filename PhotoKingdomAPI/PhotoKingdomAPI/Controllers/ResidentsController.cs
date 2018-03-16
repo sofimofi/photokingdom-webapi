@@ -28,18 +28,16 @@ namespace PhotoKingdomAPI.Controllers
             // Fetch the object, so that we can inspect its value
             var o = m.ResidentWithDetailsGetById(id.Value);
 
+            if(o == null)
+            {
+                return NotFound();
+            }
+
             // display for now
             if (o.ResidentAttractionOwns.Count() != 0)
                 o.Title = o.ResidentAttractionOwns.FirstOrDefault().Title;
 
-            if (o == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(o);
-            }
+            return Ok(o);
         }
 
         // Get all photos for a resident

@@ -49,4 +49,40 @@ namespace PhotoKingdomAPI.Controllers
 		// all the residents that owned this Attraction
 		public IEnumerable<ResidentAttractionOwnBase> Owners { get; set; }
 	}
+<<<<<<< Updated upstream
+=======
+
+    public class AttractionForMapView : AttractionBase
+    {
+        public AttractionForMapView()
+        {
+            Owners = new List<ResidentAttractionOwnWithDetails>();
+        }
+        // current owner
+        public IEnumerable<ResidentAttractionOwnWithDetails> Owners { get; set; }
+    }
+
+    // Class to be posted from Android app when City Id is not known - need to provide City Name and Country
+    public class AttractionAddForm
+    {
+        [Required]
+        public string googlePlaceId { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string Name { get; set; }
+
+        [Required]
+        public double Lat { get; set; }
+
+        [Required]
+        public double Lng { get; set; }
+
+        [Required]
+        public String CityName { get; set; }
+
+        [Required]
+        public String CountryName { get; set; }
+    }
+>>>>>>> Stashed changes
 }
