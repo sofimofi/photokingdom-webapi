@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -13,15 +11,15 @@ namespace PhotoKingdomAPI.Controllers
     {
         private UploadManager um = new UploadManager();
 
-        // POST: /Upload/Avatar
-        [Route("Avatar")]
+        // POST: /Upload/Images
+        [Route("Images")]
         public async Task<HttpResponseMessage> Post()
         {
             string path = string.Empty;
 
             try
             {
-                path = await um.UploadAsync(Request, "avatars");
+                path = await um.UploadAsync(Request);
             }
             catch (HttpResponseException e)
             {
@@ -37,13 +35,6 @@ namespace PhotoKingdomAPI.Controllers
             {
                 Content = new StringContent(path)
             };
-        }
-
-        // TODO: Need to implements to upload images for Photo
-        // POST: /Upload/Photo
-        [Route("Photo")]
-        public void Post([FromBody]string value)
-        {
         }
     }
 }

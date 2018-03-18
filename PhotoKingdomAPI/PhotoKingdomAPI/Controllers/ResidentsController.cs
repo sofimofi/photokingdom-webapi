@@ -26,16 +26,18 @@ namespace PhotoKingdomAPI.Controllers
             if (!id.HasValue) { return NotFound(); }
 
             // Fetch the object, so that we can inspect its value
-            var o = m.ResidentGetById(id.Value);
+            var o = m.ResidentWithDetailsGetById(id.Value);
 
-            if (o == null)
+            if(o == null)
             {
                 return NotFound();
             }
-            else
-            {
-                return Ok(o);
-            }
+
+            // display for now
+            if (o.ResidentAttractionOwns.Count() != 0)
+                o.Title = o.ResidentAttractionOwns.FirstOrDefault().Title;
+
+            return Ok(o);
         }
 
         // Get all photos for a resident
@@ -123,16 +125,33 @@ namespace PhotoKingdomAPI.Controllers
                 return BadRequest(ModelState);
             }
         }
-        /*
-        // PUT: api/Residents/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
 
-        // DELETE: api/Residents/5
-        public void Delete(int id)
+        // POST: api/Residents/Login
+        [Route("Login")]
+        public IHttpActionResult PostLogin([FromBody]ResidentLogin info)
         {
+            if (info == null)
+            {
+                return BadRequest("Must send an entity body with the request");
+            }
+
+            if (ModelState.IsValid)
+            {
+                var o = m.ResidentLogin(info);
+                if (o == null)
+                {
+                    return BadRequest("Resident not found");
+                }
+                else
+                {
+                    // Return a resident logged in           
+                    return Ok(o);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
         }
-        */
     }
 }

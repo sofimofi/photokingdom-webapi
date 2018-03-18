@@ -18,14 +18,17 @@ namespace PhotoKingdomAPI.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50)]
+        public string googlePlaceId { get; set; }
+
+        [Required]
+        [StringLength(50)]  
         public string Name { get; set; }
 
         [Required]
-        public float Lat { get; set; }
+        public double Lat { get; set; }
 
         [Required]
-        public float Lng { get; set; }
+        public double Lng { get; set; }
 
         [Required]
         public int IsActive { get; set; }

@@ -1,0 +1,2 @@
+﻿Uploaded images folder
+~/img

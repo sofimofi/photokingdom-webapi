@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using PhotoKingdomAPI.Models;
@@ -28,6 +29,7 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.Attraction, Controllers.AttractionBase>();
                 cfg.CreateMap<Controllers.AttractionAdd, Models.Attraction>();
                 cfg.CreateMap<Models.Attraction, Controllers.AttractionWithDetails>();
+                cfg.CreateMap<Models.Attraction, Controllers.AttractionForMapView>();
                 cfg.CreateMap<Models.AttractionPhotowar, Controllers.AttractionPhotowarBase>();
                 cfg.CreateMap<Models.AttractionPhotowar, Controllers.AttractionPhotowarWithDetails>();
                 cfg.CreateMap<Controllers.AttractionPhotowarAdd, Models.AttractionPhotowar>();
@@ -71,6 +73,8 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.Queue, Controllers.QueueWithDetails>();
                 cfg.CreateMap<Controllers.QueueAdd, Models.Queue>();
                 cfg.CreateMap<Models.Resident, Controllers.ResidentBase>();
+                cfg.CreateMap<Models.Resident, Controllers.ResidentWithDetails>();
+
                 cfg.CreateMap<Controllers.ResidentAdd, Models.Resident>();
                 cfg.CreateMap<Models.ResidentAttractionOwn, Controllers.ResidentAttractionOwnBase>();
                 cfg.CreateMap<Models.ResidentAttractionOwn, Controllers.ResidentAttractionOwnWithDetails>();
@@ -174,7 +178,10 @@ namespace PhotoKingdomAPI.Controllers
 
             // Load world data for testing
             // If this is for loading all data, call this method with "false" parameter
-            LoadWorldData(true);
+            if (ds.Continents.Count() == 0)
+            {
+                LoadWorldData(true);
+            }
 
             // attractions
             if (ds.Attractions.Count() == 0)
@@ -188,27 +195,70 @@ namespace PhotoKingdomAPI.Controllers
                 {
                     var cnTower = ds.Attractions.Add(new Attraction
                     {
+                        googlePlaceId = "ChIJmzrzi9Y0K4gRgXUc3sTY7RU",
                         Name = "CN Tower",
-                        Lat = 43.6426F,
-                        Lng = -79.3871F,
+                        Lat = 43.6425662,
+                        Lng = -79.3870568,
                         IsActive = 1,
                         City = toronto
                     });
 
                     var casaloma = ds.Attractions.Add(new Attraction
                     {
+                        googlePlaceId = "ChIJs6Elz500K4gRT1jWAsHIfGE",
                         Name = "Casa Loma",
-                        Lat = 43.6781F,
-                        Lng = -79.4095F,
+                        Lat = 43.67803709999999,
+                        Lng = -79.4094439,
+                        IsActive = 1,
+                        City = toronto
+                    });
+
+                    var boyerWoodlot = ds.Attractions.Add(new Attraction
+                    {
+                        googlePlaceId = "ChIJayuRaDAuK4gRp_DQLDA40x4",
+                        Name = "Boywer Woodlot",
+                        Lat = 43.77585490000001,
+                        Lng = -79.50518649999999,
+                        IsActive = 1,
+                        City = toronto
+                    });
+
+                    var danIannuzziPark = ds.Attractions.Add(new Attraction
+                    {
+                        googlePlaceId = "ChIJKXjaUSguK4gRgvTrZyaK6_4",
+                        Name = "Dan Iannuzzi Park",
+                        Lat = 43.7668115,
+                        Lng = -79.5065087,
+                        IsActive = 1,
+                        City = toronto
+                    });
+
+                    var shorehamPark = ds.Attractions.Add(new Attraction
+                    {
+                        googlePlaceId = "ChIJJ4p-dtQvK4gR35Y1pY2iulI",
+                        Name = "Shoreham Park",
+                        Lat = 43.7685742,
+                        Lng = -79.5178353,
+                        IsActive = 1,
+                        City = toronto
+                    });
+
+                    var edgeleyPark = ds.Attractions.Add(new Attraction
+                    {
+                        googlePlaceId = "ChIJsT_iuCowK4gRoRQDo0cKQL8",
+                        Name = "Edgeley Park",
+                        Lat = 43.7652519,
+                        Lng = -79.5185398,
                         IsActive = 1,
                         City = toronto
                     });
 
                     var albionFalls = ds.Attractions.Add(new Attraction
                     {
+                        googlePlaceId = "ChIJYfLnmo2ZLIgRWmwJTr1WtQc",
                         Name = "Albion Falls",
-                        Lat = 43.2003F,
-                        Lng = -79.8199F,
+                        Lat = 43.2003789,
+                        Lng = -79.8196464,
                         IsActive = 1,
                         City = hamilton
                     });
@@ -251,7 +301,18 @@ namespace PhotoKingdomAPI.Controllers
                         Gender = "M",
                         IsActive = 1,
                         Password = "password",
-                        City = hamilton
+                        City = hamilton,
+                        AvatarImagePath = "img/3.png"
+                    });
+                    var testAccount = ds.Residents.Add(new Resident
+                    {
+                        UserName = "Test",
+                        Email = "test@example.com",
+                        Gender = "M",
+                        IsActive = 1,
+                        Password = "password",
+                        City = toronto,
+                        AvatarImagePath = "img/canada.png"
                     });
                     ds.SaveChanges();
                     count++;
@@ -273,28 +334,28 @@ namespace PhotoKingdomAPI.Controllers
                         Lat = 43.7426F,
                         Lng = -79.4871F,
                         Resident = sofia,
-                        PhotoFilePath = "path/path"
+                        PhotoFilePath = "img/cntower1.jpg"
                     });
                     var cntowerPhoto2 = ds.Photos.Add(new Photo
                     {
                         Lat = 43.7336F,
                         Lng = -79.4221F,
                         Resident = wonho,
-                        PhotoFilePath = "path/path2"
+                        PhotoFilePath = "img/cntower2.jpg"
                     });
                     var casalomaPhoto = ds.Photos.Add(new Photo
                     {
                         Lat = 43.2181F,
                         Lng = -79.9895F,
                         Resident = wonho,
-                        PhotoFilePath = "path/path3"
+                        PhotoFilePath = "img/casaloma1.jpg"
                     });
                     var casalomaPhoto2 = ds.Photos.Add(new Photo
                     {
                         Lat = 43.2181F,
                         Lng = -79.9895F,
                         Resident = zhihao,
-                        PhotoFilePath = "path/path4"
+                        PhotoFilePath = "img/casaloma2.jpg"
                     });
                     ds.SaveChanges();
 
@@ -346,6 +407,7 @@ namespace PhotoKingdomAPI.Controllers
                 var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
                 var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
                 var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
+                var testAccount = ds.Residents.SingleOrDefault(o => o.UserName == "Test");
                 if (cntower != null && albionfalls != null && sofia != null && wonho != null && zhihao != null)
                 {
                     ds.Pings.Add(new Ping
@@ -373,6 +435,75 @@ namespace PhotoKingdomAPI.Controllers
                         Attraction = albionfalls,
                         Resident = wonho
                     });
+                    ds.Pings.Add(new Ping
+                    {
+                        Attraction = cntower,
+                        Resident = testAccount
+                    });
+                    ds.Pings.Add(new Ping
+                    {
+                        Attraction = albionfalls,
+                        Resident = testAccount
+                    });
+                    ds.SaveChanges();
+                    count++;
+                }
+                else
+                {
+                    throw new Exception("Seed data problem!");
+                }
+            }
+
+            if (ds.ResidentAttractionOwns.Count() == 0)
+            {
+                var boyerWoodlot = ds.Attractions.SingleOrDefault(o => o.Name == "Boywer Woodlot" && o.City.Name == "Toronto");
+                var danIannuzziPark = ds.Attractions.SingleOrDefault(o => o.Name == "Dan Iannuzzi Park" && o.City.Name == "Toronto");
+                var shorehamPark = ds.Attractions.SingleOrDefault(o => o.Name == "Shoreham Park" && o.City.Name == "Toronto");
+                var edgeleyPark = ds.Attractions.SingleOrDefault(o => o.Name == "Edgeley Park" && o.City.Name == "Toronto");
+                var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
+                var albionfalls = ds.Attractions.SingleOrDefault(o => o.Name == "Albion Falls" && o.City.Name == "Hamilton");
+                var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
+                var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
+                var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
+
+                if (boyerWoodlot != null && danIannuzziPark != null && shorehamPark != null && edgeleyPark != null && cntower != null && albionfalls != null && sofia != null && wonho != null && zhihao != null)
+                {
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lady of " + boyerWoodlot.Name,
+                        Resident = sofia,
+                        Attraction = boyerWoodlot
+                    });
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lord of " + danIannuzziPark.Name,
+                        Resident = wonho,
+                        Attraction = danIannuzziPark
+                    });
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lord of " + shorehamPark.Name,
+                        Resident = wonho,
+                        Attraction = shorehamPark
+                    });
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lord of " + edgeleyPark.Name,
+                        Resident = zhihao,
+                        Attraction = edgeleyPark
+                    });
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lady of " + cntower.Name,
+                        Resident = sofia,
+                        Attraction = cntower
+                    });
+                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    {
+                        Title = "Lord of " + albionfalls.Name,
+                        Resident = zhihao,
+                        Attraction = albionfalls
+                    });
                     ds.SaveChanges();
                     count++;
                 }
@@ -383,6 +514,52 @@ namespace PhotoKingdomAPI.Controllers
             }
 
             return count;
+        }
+
+        // Delete All Sample Data (Does not delete world data)
+        public void DeleteSeedData()
+        {
+            foreach (var e in ds.ResidentAttractionOwns)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
+
+            foreach (var e in ds.Pings)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
+
+            foreach (var e in ds.AttractionPhotowarUploads)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
+
+            foreach (var e in ds.AttractionPhotowars)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
+
+            foreach (var e in ds.Photos)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
+
+            foreach (var e in ds.Residents)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
+
+            foreach (var e in ds.Attractions)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
         }
 
         /// <summary>
@@ -399,7 +576,8 @@ namespace PhotoKingdomAPI.Controllers
         public void LoadWorldData(bool isTesting)
         {
             // File system path to the data file (in this project's App_Data folder)
-            string path = HttpContext.Current.Server.MapPath("~/App_Data/WorldData.xlsx");
+            string path = HttpContext.Current.Server.MapPath(
+                isTesting == true ? "~/SampleData/WorldData_Simple.xlsx" : "~/SampleData/WorldData.xlsx");
 
             // Get or open the workbook
             var wb = Workbook.Worksheets(path);
@@ -444,7 +622,7 @@ namespace PhotoKingdomAPI.Controllers
                         ds.Countries.Add(new Country
                         {
                             Name = c[1].Text,
-                            ContinentId = (int)c[2].Amount,
+                            ContinentId = (int)c[2].Amount
                         });
                     }
 
@@ -488,7 +666,7 @@ namespace PhotoKingdomAPI.Controllers
 
                         // isTesting: for testing data
                         // j > 2: always insert "Toronto" and "Hamilton" in "Ontario"
-                        if (isTesting && j > 2)
+                        if (!isTesting && j > 2)
                         {
                             // Add only 1 row in each province to reduce time
                             // Be careful add all sample data for testing
@@ -531,9 +709,34 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionBase>>(ds.Attractions);
         }
 
+        public IEnumerable<AttractionForMapView> AttractionGetAllForMapViewRegion(LatLngBoundaries latLng)
+        {
+            //TODO : Need to modify so that not all of Resident's info gets returned (email and password)
+            //var o = ds.Attractions.Include(a => a.Owners.Select(w => w.Resident)).Where(a => a.Lat <= latLng.maxLat && a.Lat >= latLng.minLat && a.Lng <= latLng.maxLng && a.Lng >= latLng.minLng);
+            var o = ds.Attractions.Include("Owners.Resident").Where(a => a.Lat <= latLng.maxLat && a.Lat >= latLng.minLat && a.Lng <= latLng.maxLng && a.Lng >= latLng.minLng).ToList().Select(a => new Attraction
+            {
+                Id = a.Id,
+                googlePlaceId = a.googlePlaceId,
+                Name = a.Name,
+                Lat = a.Lat,
+                Lng = a.Lng,
+                IsActive = a.IsActive,
+                CityId = a.CityId,
+                Owners = a.Owners.Where(owner => owner.EndOfOwn == null).ToList() // filter Owner to current owner only
+            });
+
+            return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionForMapView>>(o);
+        }
+
         public AttractionBase AttractionGetById(int? id)
         {
             var a = ds.Attractions.Find(id);
+            return (a == null) ? null : mapper.Map<AttractionBase>(a);
+        }
+
+        public AttractionBase AttractionGetByGooglePlaceId(string googlePlaceId)
+        {
+            var a = ds.Attractions.SingleOrDefault(o => o.googlePlaceId == googlePlaceId);
             return (a == null) ? null : mapper.Map<AttractionBase>(a);
         }
 
@@ -541,6 +744,48 @@ namespace PhotoKingdomAPI.Controllers
         {
             var a = ds.Attractions.Include("City").Include("QueuedUploads").Include("AttractionPhotoWars").Include("Owners").SingleOrDefault(o => o.Id == id);
             return (a == null) ? null : mapper.Map<AttractionWithDetails>(a);
+        }
+
+        public AttractionWithDetails AttractionGetByGooglePlaceIdWithDetails(string googlePlaceId)
+        {
+            var a = ds.Attractions.Include("City").Include("QueuedUploads").Include("AttractionPhotoWars").Include("Owners").SingleOrDefault(o => o.googlePlaceId == googlePlaceId);
+            return (a == null) ? null : mapper.Map<AttractionWithDetails>(a);
+        }
+
+        public AttractionBase AttractionAdd(AttractionAddForm newItem)
+        {
+            if (newItem == null)
+            {
+                return null;
+            }
+            else
+            {
+                // find out the city Id
+                var city = ds.Cities.SingleOrDefault(o => o.Name == newItem.CityName && o.Province.Country.Name == newItem.CountryName);
+                
+                if (city == null)
+                {
+                    // city doesn't exist
+                    return null;
+                }
+
+                AttractionAdd attractionAdd = new AttractionAdd
+                {
+                    googlePlaceId = newItem.googlePlaceId,
+                    Name = newItem.Name,
+                    Lat = newItem.Lat,
+                    Lng = newItem.Lng,
+                    CityId = city.Id,
+                    IsActive = 1
+                };
+
+                var addedItem = mapper.Map<Attraction>(attractionAdd);
+
+                ds.Attractions.Add(addedItem);
+                ds.SaveChanges();
+
+                return mapper.Map<AttractionBase>(addedItem);
+            }
         }
         #endregion Attraction
 
@@ -638,6 +883,13 @@ namespace PhotoKingdomAPI.Controllers
             return (o == null) ? null : mapper.Map<ResidentBase>(o);
         }
 
+        public ResidentWithDetails ResidentWithDetailsGetById(int id)
+        {
+            var o = ds.Residents.Include("City").Include("ResidentAttractionOwns")
+                .SingleOrDefault(i => i.Id == id);
+            return (o == null) ? null : mapper.Map<ResidentWithDetails>(o);
+        }
+
         public ResidentBase ResidentAdd(ResidentAdd newItem)
         {
             if (newItem == null)
@@ -652,6 +904,23 @@ namespace PhotoKingdomAPI.Controllers
                 ds.SaveChanges();
 
                 return mapper.Map<ResidentBase>(addedItem);
+            }
+        }
+
+        public ResidentWithDetails ResidentLogin(ResidentLogin info)
+        {
+            if (info == null)
+            {
+                return null;
+            }
+            else
+            {
+                var o = ds.Residents
+                    .Include("City")
+                    .Include("ResidentAttractionOwns")
+                    .SingleOrDefault(r => r.Email == info.Email && r.Password == info.Password);
+
+                return mapper.Map<ResidentWithDetails>(o);
             }
         }
         #endregion Resident
