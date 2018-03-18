@@ -304,6 +304,16 @@ namespace PhotoKingdomAPI.Controllers
                         City = hamilton,
                         AvatarImagePath = "img/3.png"
                     });
+                    var testAccount = ds.Residents.Add(new Resident
+                    {
+                        UserName = "Test",
+                        Email = "test@example.com",
+                        Gender = "M",
+                        IsActive = 1,
+                        Password = "password",
+                        City = toronto,
+                        AvatarImagePath = "img/canada.png"
+                    });
                     ds.SaveChanges();
                     count++;
                 }
@@ -324,28 +334,28 @@ namespace PhotoKingdomAPI.Controllers
                         Lat = 43.7426F,
                         Lng = -79.4871F,
                         Resident = sofia,
-                        PhotoFilePath = "path/path"
+                        PhotoFilePath = "img/cntower1.jpg"
                     });
                     var cntowerPhoto2 = ds.Photos.Add(new Photo
                     {
                         Lat = 43.7336F,
                         Lng = -79.4221F,
                         Resident = wonho,
-                        PhotoFilePath = "path/path2"
+                        PhotoFilePath = "img/cntower2.jpg"
                     });
                     var casalomaPhoto = ds.Photos.Add(new Photo
                     {
                         Lat = 43.2181F,
                         Lng = -79.9895F,
                         Resident = wonho,
-                        PhotoFilePath = "path/path3"
+                        PhotoFilePath = "img/casaloma1.jpg"
                     });
                     var casalomaPhoto2 = ds.Photos.Add(new Photo
                     {
                         Lat = 43.2181F,
                         Lng = -79.9895F,
                         Resident = zhihao,
-                        PhotoFilePath = "path/path4"
+                        PhotoFilePath = "img/casaloma2.jpg"
                     });
                     ds.SaveChanges();
 
@@ -397,6 +407,7 @@ namespace PhotoKingdomAPI.Controllers
                 var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
                 var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
                 var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
+                var testAccount = ds.Residents.SingleOrDefault(o => o.UserName == "Test");
                 if (cntower != null && albionfalls != null && sofia != null && wonho != null && zhihao != null)
                 {
                     ds.Pings.Add(new Ping
@@ -423,6 +434,16 @@ namespace PhotoKingdomAPI.Controllers
                     {
                         Attraction = albionfalls,
                         Resident = wonho
+                    });
+                    ds.Pings.Add(new Ping
+                    {
+                        Attraction = cntower,
+                        Resident = testAccount
+                    });
+                    ds.Pings.Add(new Ping
+                    {
+                        Attraction = albionfalls,
+                        Resident = testAccount
                     });
                     ds.SaveChanges();
                     count++;
