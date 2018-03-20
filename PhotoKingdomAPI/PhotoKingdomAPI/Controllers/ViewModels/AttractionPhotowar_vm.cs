@@ -33,10 +33,10 @@ namespace PhotoKingdomAPI.Controllers
 	{
 		public AttractionPhotowarWithDetails()
 		{
-			AttractionPhotowarUploads = new List<AttractionPhotowarUploadBase>();
+			AttractionPhotowarUploads = new List<AttractionPhotowarUploadForPhotowar>();
 		}
 		public AttractionBase Attraction { get; set; }
 		// the two photos uploaded for this PhotoWar
-		public IEnumerable<AttractionPhotowarUploadBase> AttractionPhotowarUploads { get; set; }
+		public IEnumerable<AttractionPhotowarUploadForPhotowar> AttractionPhotowarUploads { get; set; }
 	}
 }
