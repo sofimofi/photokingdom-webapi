@@ -35,6 +35,7 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Controllers.AttractionPhotowarAdd, Models.AttractionPhotowar>();
                 cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadBase>();
                 cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadWithDetails>();
+                cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadForPhotowar>();
                 cfg.CreateMap<Controllers.AttractionPhotowarUploadAdd, Models.AttractionPhotowarUpload>();
                 cfg.CreateMap<Models.City, Controllers.CityBase>();
                 cfg.CreateMap<Models.Continent, Controllers.ContinentBase>();
@@ -283,7 +284,8 @@ namespace PhotoKingdomAPI.Controllers
                         Gender = "F",
                         IsActive = 1,
                         Password = "password",
-                        City = toronto
+                        City = toronto,
+                        AvatarImagePath = "img/girl.png"
                     });
                     var wonho = ds.Residents.Add(new Resident
                     {
@@ -292,7 +294,8 @@ namespace PhotoKingdomAPI.Controllers
                         Gender = "M",
                         IsActive = 1,
                         Password = "password",
-                        City = toronto
+                        City = toronto,
+                        AvatarImagePath = "img/boy.png"
                     });
                     var zhihao = ds.Residents.Add(new Resident
                     {
@@ -319,7 +322,7 @@ namespace PhotoKingdomAPI.Controllers
                 }
             }
 
-            // attractionphotowars & attractionphotowaruploads & photos
+            // attractionphotowars & attractionphotowaruploads & photos & votes
             if (ds.AttractionPhotowars.Count() == 0)
             {
                 var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
@@ -327,8 +330,10 @@ namespace PhotoKingdomAPI.Controllers
                 var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
                 var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
                 var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
-                if (cntower != null && casaloma != null && sofia != null && wonho != null && zhihao != null)
+                var testuser = ds.Residents.SingleOrDefault(o => o.UserName == "Test");
+                if (cntower != null && casaloma != null && sofia != null && wonho != null && zhihao != null && testuser != null)
                 {
+                    // Photos
                     var cntowerPhoto1 = ds.Photos.Add(new Photo
                     {
                         Lat = 43.7426F,
@@ -359,6 +364,7 @@ namespace PhotoKingdomAPI.Controllers
                     });
                     ds.SaveChanges();
 
+                    // AttractionPhotowars
                     var photowar1 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = cntower.Id
@@ -369,7 +375,7 @@ namespace PhotoKingdomAPI.Controllers
                     });
                     ds.SaveChanges();
 
-
+                    // AttractionPhotowarUploads
                     var upload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                     {
                         Photo = cntowerPhoto1,
@@ -391,7 +397,15 @@ namespace PhotoKingdomAPI.Controllers
                         AttractionPhotoWar = photowar2
                     });
                     ds.SaveChanges();
-                    count++;
+
+                    //Votes
+                    upload1.ResidentVotes.Add(testuser);
+                    upload2.ResidentVotes.Add(zhihao);
+                    upload3.ResidentVotes.Add(sofia);
+                    upload3.ResidentVotes.Add(testuser);
+                    ds.SaveChanges();
+
+                    count += 4;
                 }
                 else
                 {
@@ -823,7 +837,7 @@ namespace PhotoKingdomAPI.Controllers
 
         public AttractionPhotowarWithDetails AttractionPhotowarGetByIdWithDetails(int id)
         {
-            var a = ds.AttractionPhotowars.Include("Attraction").Include("AttractionPhotowarUploads").SingleOrDefault(o => o.Id == id);
+            var a = ds.AttractionPhotowars.Include("Attraction").Include("AttractionPhotowarUploads.ResidentVotes").Include("AttractionPhotowarUploads.Photo.Resident").SingleOrDefault(o => o.Id == id);
             return (a == null) ? null : mapper.Map<AttractionPhotowarWithDetails>(a);
         }
         #endregion AttractionPhotowar

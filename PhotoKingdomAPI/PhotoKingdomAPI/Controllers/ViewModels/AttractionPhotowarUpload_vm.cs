@@ -35,4 +35,12 @@ namespace PhotoKingdomAPI.Controllers
 		// all the votes for this Photo
 		public IEnumerable<ResidentBase> ResidentVotes { get; set; }
 	}
+
+    public class AttractionPhotowarUploadForPhotowar : AttractionPhotowarUploadBase
+    {
+        public PhotoBase Photo { get; set; }
+        public string PhotoResidentUserName { get; set; }
+        public string PhotoResidentAvatarImagePath { get; set; }
+        public int ResidentVotesCount { get; set; }
+    }
 }
