@@ -57,10 +57,14 @@ namespace PhotoKingdomAPI.Controllers
     {
         public AttractionForMapView()
         {
-            Owners = new List<ResidentAttractionOwnWithDetails>();
+            Owners = new List<ResidentAttractionOwnForMapView>();
+            AttractionPhotowars = new List<AttractionPhotowarBase>();
         }
         // current owner
-        public IEnumerable<ResidentAttractionOwnWithDetails> Owners { get; set; }
+        public IEnumerable<ResidentAttractionOwnForMapView> Owners { get; set; }
+
+        // current attractionphotowar, if any
+        public IEnumerable<AttractionPhotowarBase> AttractionPhotowars { get; set; }
     }
 
     // Class to be posted from Android app when City Id is not known - need to provide City Name and Country

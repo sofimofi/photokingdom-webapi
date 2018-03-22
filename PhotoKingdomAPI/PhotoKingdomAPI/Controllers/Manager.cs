@@ -75,10 +75,10 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Controllers.QueueAdd, Models.Queue>();
                 cfg.CreateMap<Models.Resident, Controllers.ResidentBase>();
                 cfg.CreateMap<Models.Resident, Controllers.ResidentWithDetails>();
-
                 cfg.CreateMap<Controllers.ResidentAdd, Models.Resident>();
                 cfg.CreateMap<Models.ResidentAttractionOwn, Controllers.ResidentAttractionOwnBase>();
                 cfg.CreateMap<Models.ResidentAttractionOwn, Controllers.ResidentAttractionOwnWithDetails>();
+                cfg.CreateMap<Models.ResidentAttractionOwn, Controllers.ResidentAttractionOwnForMapView>();
                 cfg.CreateMap<Controllers.ResidentAttractionOwnAdd, Models.ResidentAttractionOwn>();
                 cfg.CreateMap<Models.ResidentCityOwn, Controllers.ResidentCityOwnBase>();
                 cfg.CreateMap<Models.ResidentCityOwn, Controllers.ResidentCityOwnWithDetails>();
@@ -727,7 +727,7 @@ namespace PhotoKingdomAPI.Controllers
         {
             //TODO : Need to modify so that not all of Resident's info gets returned (email and password)
             //var o = ds.Attractions.Include(a => a.Owners.Select(w => w.Resident)).Where(a => a.Lat <= latLng.maxLat && a.Lat >= latLng.minLat && a.Lng <= latLng.maxLng && a.Lng >= latLng.minLng);
-            var o = ds.Attractions.Include("Owners.Resident").Where(a => a.Lat <= latLng.maxLat && a.Lat >= latLng.minLat && a.Lng <= latLng.maxLng && a.Lng >= latLng.minLng).ToList().Select(a => new Attraction
+            var o = ds.Attractions.Include("Owners.Resident").Include("AttractionPhotowars").Where(a => a.Lat <= latLng.maxLat && a.Lat >= latLng.minLat && a.Lng <= latLng.maxLng && a.Lng >= latLng.minLng).ToList().Select(a => new Attraction
             {
                 Id = a.Id,
                 googlePlaceId = a.googlePlaceId,
@@ -736,7 +736,8 @@ namespace PhotoKingdomAPI.Controllers
                 Lng = a.Lng,
                 IsActive = a.IsActive,
                 CityId = a.CityId,
-                Owners = a.Owners.Where(owner => owner.EndOfOwn == null).ToList() // filter Owner to current owner only
+                Owners = a.Owners.Where(owner => owner.EndOfOwn == null).ToList(), // filter Owner to current owner only
+                AttractionPhotowars = a.AttractionPhotowars.Where(pw => pw.EndDate > DateTime.Now).ToList() // filter only current attractionphotowar
             });
 
             return mapper.Map<IEnumerable<Attraction>, IEnumerable<AttractionForMapView>>(o);
