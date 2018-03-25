@@ -38,9 +38,16 @@ namespace PhotoKingdomAPI.Controllers
 
     public class AttractionPhotowarUploadForPhotowar : AttractionPhotowarUploadBase
     {
+        public AttractionPhotowarUploadForPhotowar()
+        {
+            residentHasVoted = -1; // null
+        }
         public PhotoBase Photo { get; set; }
         public string PhotoResidentUserName { get; set; }
         public string PhotoResidentAvatarImagePath { get; set; }
         public int ResidentVotesCount { get; set; }
+
+        // flag indicating whether signed-in Resident has already voted for this photo
+        public int residentHasVoted;
     }
 }

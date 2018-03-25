@@ -34,9 +34,16 @@ namespace PhotoKingdomAPI.Controllers
 		public AttractionPhotowarWithDetails()
 		{
 			AttractionPhotowarUploads = new List<AttractionPhotowarUploadForPhotowar>();
+            residentInPhotowar = -1; // default null
 		}
 		public AttractionBase Attraction { get; set; }
 		// the two photos uploaded for this PhotoWar
 		public IEnumerable<AttractionPhotowarUploadForPhotowar> AttractionPhotowarUploads { get; set; }
+
+        // Additional information for Voting
+
+        // whether Resident's own photo is in this photowar
+        public int residentInPhotowar;
 	}
+
 }
