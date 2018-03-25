@@ -40,13 +40,13 @@ namespace PhotoKingdomAPI.Controllers
 
         // GET: api/AttractionPhotowars/{id}/details
         [Route("{id:int}/details")]
-        public IHttpActionResult GetAttractionPhotowarDetails(int? id)
+        public IHttpActionResult GetAttractionPhotowarDetails(int? id, int? residentId = null)
         {
             // Determine whether we can continue
             if (!id.HasValue) { return NotFound(); }
 
             // Fetch the object, so that we can inspect its value
-            var o = m.AttractionPhotowarGetByIdWithDetails(id.Value);
+            var o = m.AttractionPhotowarGetByIdWithDetails(id.Value, residentId);
 
             if (o == null)
             {

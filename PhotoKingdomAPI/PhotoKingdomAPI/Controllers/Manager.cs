@@ -836,10 +836,54 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
-        public AttractionPhotowarWithDetails AttractionPhotowarGetByIdWithDetails(int id)
+        // Gets AttractionPhotowarWithDetails by Id, and if residentId passed in, identifies whether Resident has voted or is part of the photowar
+        public AttractionPhotowarWithDetails AttractionPhotowarGetByIdWithDetails(int id, int? residentId)
         {
             var a = ds.AttractionPhotowars.Include("Attraction").Include("AttractionPhotowarUploads.ResidentVotes").Include("AttractionPhotowarUploads.Photo.Resident").SingleOrDefault(o => o.Id == id);
-            return (a == null) ? null : mapper.Map<AttractionPhotowarWithDetails>(a);
+            var attraction_vm = mapper.Map<AttractionPhotowarWithDetails>(a);
+
+            if (residentId.HasValue)
+            {
+                var resident = ds.Residents.Find(residentId.Value);
+                if(resident != null)
+                {
+                    var uploads = a.AttractionPhotowarUploads;
+                    foreach(var upload in uploads)
+                    {
+                        if(upload.Photo.ResidentId == residentId.Value)
+                        {
+                            // photo belongs to Resident - set flag true
+                            attraction_vm.residentInPhotowar = 1;
+                            break; // break out of loop - Resident not allowed to vote because Resident part of photowar
+                        } else
+                        {
+                            var votes = upload.ResidentVotes;
+                            var upload_vm = attraction_vm.AttractionPhotowarUploads.Single(u => u.Id == upload.Id);
+                            if (votes.Contains(resident))
+                            {
+                                // Resident has voted for this photo - set flag true
+                                upload_vm.residentHasVoted = 1;
+                                continue;
+                            } else
+                            {
+                                // Resident hasn't voted for this photo - set flag from null to false
+                                upload_vm.residentHasVoted = 0;
+                            }
+                        }
+                    }
+
+                    // if Resident doesn't own any photos, set flag from null to false
+                    if(attraction_vm.residentInPhotowar != 1)
+                    {
+                        attraction_vm.residentInPhotowar = 0;
+                    }
+                } else
+                {
+                    throw new Exception("Resident with Id " + residentId.Value + " not found!");
+                }
+            }
+            
+            return attraction_vm;
         }
         #endregion AttractionPhotowar
 
