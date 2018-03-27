@@ -36,6 +36,7 @@ namespace PhotoKingdomAPI.Controllers
 		public IEnumerable<ResidentBase> ResidentVotes { get; set; }
 	}
 
+    // AttractionPhotowarUpload with details needed for AttractionPhotowar View
     public class AttractionPhotowarUploadForPhotowar : AttractionPhotowarUploadBase
     {
         public AttractionPhotowarUploadForPhotowar()
