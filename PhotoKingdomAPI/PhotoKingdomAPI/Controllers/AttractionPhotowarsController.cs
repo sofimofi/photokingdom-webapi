@@ -58,6 +58,49 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
+        // GET: api/AttractionPhotowars/{id}/AddVote
+        [HttpGet]
+        [Route("{id:int}/AddVote")]
+        public IHttpActionResult AttractionPhotowarPhotoVoteAdd(int? id, int? photoUploadId, int? residentId)
+        {
+            if (!id.HasValue || !photoUploadId.HasValue || !residentId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var o = m.AttractionPhotowarAddPhotoVote(id.Value, photoUploadId.Value, residentId.Value);
+
+            if (o != null)
+            {
+                return Ok(o);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        // GET: api/AttractionPhotowars/{id}/RemoveVote
+        [HttpGet]
+        [Route("{id:int}/RemoveVote")]
+        public IHttpActionResult AttractionPhotowarPhotoVoteRemove(int? id, int? photoUploadId, int? residentId)
+        {
+            if(!id.HasValue || !photoUploadId.HasValue || !residentId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var o = m.AttractionPhotowarRemovePhotoVote(id.Value, photoUploadId.Value, residentId.Value);
+
+            if (o != null)
+            {
+                return Ok(o);
+            } else
+            {
+                return NotFound();
+            }
+        }
+
         // POST: api/AttractionPhotowars
         public IHttpActionResult Post([FromBody]AttractionPhotowarAdd newItem)
         {

@@ -885,6 +885,84 @@ namespace PhotoKingdomAPI.Controllers
             
             return attraction_vm;
         }
+
+        // Adds a resident vote to a photo in an Attractionphotowar photoupload, and removes vote in the opponent photo if there was a vote
+        // Returns updated AttractionPhotowarWithDetails with resident's voting info
+        public AttractionPhotowarWithDetails AttractionPhotowarAddPhotoVote(int photowarId, int photoUploadId, int residentId)
+        {
+            var photowar = ds.AttractionPhotowars.Include("Attraction").Include("AttractionPhotowarUploads.ResidentVotes").Include("AttractionPhotowarUploads.Photo.Resident").SingleOrDefault(a => a.Id == photowarId);
+            if (photowar == null) { return null; }
+
+            var photoUpload = photowar.AttractionPhotowarUploads.SingleOrDefault(u => u.Id == photoUploadId);
+            if (photoUpload == null) { return null; }
+
+            var resident = ds.Residents.Find(residentId);
+            if (resident == null) { return null; }
+
+            // add vote to photoUpload
+            if (!photoUpload.ResidentVotes.Contains(resident))
+            {
+                photoUpload.ResidentVotes.Add(resident);
+            }
+
+            // get the opponent photo
+            var opposingPhoto = photowar.AttractionPhotowarUploads.SingleOrDefault(u => u.Id != photoUploadId);
+            if(opposingPhoto == null) { return null; }
+
+            // if resident had a previous vote on opponent photo, remove it
+            if (opposingPhoto.ResidentVotes.Contains(resident))
+            {
+                opposingPhoto.ResidentVotes.Remove(resident);
+            }
+            ds.SaveChanges();
+
+            // Update voting details for AttractionPhotowar
+            var attraction_vm = mapper.Map<AttractionPhotowarWithDetails>(photowar);
+            attraction_vm.residentInPhotowar = 0; // resident doesn't own any of these photos
+
+            // get the voted photo
+            var votedUpload = attraction_vm.AttractionPhotowarUploads.Single(u => u.Id == photoUploadId);
+            votedUpload.residentHasVoted = 1; // mark resident's vote
+
+            // get opponent photo
+            var opposingUpload = attraction_vm.AttractionPhotowarUploads.Single(u => u.Id != photoUploadId);
+            opposingUpload.residentHasVoted = 0; // mark resident non-vote
+
+            return attraction_vm;
+        }
+
+        // Removes a resident vote to a photo in an Attractionphotowar
+        // Returns updated AttractionPhotowarWithDetails with Resident's voting info
+        public AttractionPhotowarWithDetails AttractionPhotowarRemovePhotoVote(int photowarId, int photoUploadId, int residentId)
+        {
+            var photowar = ds.AttractionPhotowars.Include("Attraction").Include("AttractionPhotowarUploads.ResidentVotes").Include("AttractionPhotowarUploads.Photo.Resident").SingleOrDefault(a => a.Id == photowarId);
+            if(photowar == null) { return null; }
+
+            var photoUpload = photowar.AttractionPhotowarUploads.SingleOrDefault(u => u.Id == photoUploadId);
+            if(photoUpload == null) { return null; }
+
+            var resident = ds.Residents.Find(residentId);
+            if(resident == null) { return null; }
+
+            // remove vote from photoUpload
+            var removedResidentVote = photoUpload.ResidentVotes.Remove(resident);
+            if (!removedResidentVote) { return null; }
+            ds.SaveChanges();
+
+            // Update voting details for AttractionPhotowar
+            var attraction_vm = mapper.Map<AttractionPhotowarWithDetails>(photowar);
+            attraction_vm.residentInPhotowar = 0; // resident doesn't own any of these photos
+
+            // get the removed-vote photo
+            var unvotedUpload = attraction_vm.AttractionPhotowarUploads.Single(u => u.Id == photoUploadId);
+            unvotedUpload.residentHasVoted = 0; // mark resident non-vote
+
+            // get opponent photo
+            var opposingUpload = attraction_vm.AttractionPhotowarUploads.Single(u => u.Id != photoUploadId);
+            opposingUpload.residentHasVoted = 0; // mark resident non-vote
+
+            return attraction_vm;
+        }
         #endregion AttractionPhotowar
 
         #region AttractionPhotowarUpload
