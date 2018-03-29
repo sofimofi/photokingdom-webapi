@@ -31,17 +31,18 @@ namespace PhotoKingdomAPI.Controllers
 	{
 		public PhotoWithDetails()
 		{
-			AttractionPhotowarUploads = new List<AttractionPhotowarUploadBase>();
+			AttractionPhotowarUploads = new List<AttractionPhotowarUploadForPhotoView>();
 			CountryPhotowarUploads = new List<CountryPhotowarUploadBase>();
 			ContinentPhotowarUploads = new List<ContinentPhotowarUploadBase>();
 			CountryPhotowarRequestedphotoUploads = new List<CountryPhotowarRequestedphotoUploadBase>();
 			ContinentPhotowarRequestedphotoUploads = new List<ContinentPhotowarRequestedphotoUploadBase>();
 		}
 
-		public ResidentBase Resident { get; set; }
+        public String ResidentUserName { get; set; }
+        public String ResidentAvatarImagePath { get; set; }
 
 		// the Photowars this photo has participated in
-		public IEnumerable<AttractionPhotowarUploadBase> AttractionPhotowarUploads { get; set; }
+		public IEnumerable<AttractionPhotowarUploadForPhotoView> AttractionPhotowarUploads { get; set; }
 		public IEnumerable<CountryPhotowarUploadBase> CountryPhotowarUploads { get; set; }
 		public IEnumerable<ContinentPhotowarUploadBase> ContinentPhotowarUploads { get; set; }
 

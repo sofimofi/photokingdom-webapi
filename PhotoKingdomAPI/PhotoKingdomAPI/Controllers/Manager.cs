@@ -36,6 +36,7 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadBase>();
                 cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadWithDetails>();
                 cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadForPhotowar>();
+                cfg.CreateMap<Models.AttractionPhotowarUpload, Controllers.AttractionPhotowarUploadForPhotoView>();
                 cfg.CreateMap<Controllers.AttractionPhotowarUploadAdd, Models.AttractionPhotowarUpload>();
                 cfg.CreateMap<Models.City, Controllers.CityBase>();
                 cfg.CreateMap<Models.Continent, Controllers.ContinentBase>();
@@ -1174,7 +1175,7 @@ namespace PhotoKingdomAPI.Controllers
 
         public PhotoWithDetails PhotoGetByIdWithDetails(int id)
         {
-            var a = ds.Photos.Include("Resident").Include("AttractionPhotowarUploads").Include("CountryPhotowarUploads")
+            var a = ds.Photos.Include("Resident").Include("AttractionPhotowarUploads.AttractionPhotoWar").Include("AttractionPhotowarUploads.ResidentVotes").Include("CountryPhotowarUploads")
                 .Include("ContinentPhotowarUploads").Include("CountryPhotowarRequestedphotoUploads").Include("ContinentPhotowarRequestedphotoUploads").SingleOrDefault(o => o.Id == id);
             return (a == null) ? null : mapper.Map<PhotoWithDetails>(a);
         }
