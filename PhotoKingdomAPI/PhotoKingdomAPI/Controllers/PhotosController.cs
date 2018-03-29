@@ -7,13 +7,15 @@ using System.Web.Http;
 
 namespace PhotoKingdomAPI.Controllers
 {
+    [RoutePrefix("api/Photos")]
     public class PhotosController : ApiController
     {
         private Manager m = new Manager();
 
-        // Get photo by Id
-        // GET: api/Photos/5
-        public IHttpActionResult Get(int? id)
+        // Get photo by Id With Details
+        // GET: api/Photos/5/details
+        [Route("{id:int}/details")]
+        public IHttpActionResult GetPhotoWithDetails(int? id)
         {
             // Determine whether we can continue
             if (!id.HasValue) { return NotFound(); }

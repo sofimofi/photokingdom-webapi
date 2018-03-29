@@ -51,4 +51,11 @@ namespace PhotoKingdomAPI.Controllers
         // flag indicating whether signed-in Resident has already voted for this photo
         public int residentHasVoted;
     }
+
+    // AttractionPhotowarUpload with details needed for Photo View
+    public class AttractionPhotowarUploadForPhotoView : AttractionPhotowarUploadBase
+    {
+        public AttractionPhotowarBase AttractionPhotowar { get; set; }
+        public int ResidentVotesCount { get; set; }
+    }
 }
