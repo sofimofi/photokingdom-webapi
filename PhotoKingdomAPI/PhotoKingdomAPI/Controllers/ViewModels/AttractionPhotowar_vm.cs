@@ -43,7 +43,8 @@ namespace PhotoKingdomAPI.Controllers
         // Additional information for Voting
 
         // whether Resident's own photo is in this photowar
-        public int residentInPhotowar;
+        public int residentInPhotowar { get; set; }
 	}
+
 
 }

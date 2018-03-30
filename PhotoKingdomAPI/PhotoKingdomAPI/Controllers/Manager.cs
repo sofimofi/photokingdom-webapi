@@ -1175,7 +1175,7 @@ namespace PhotoKingdomAPI.Controllers
 
         public PhotoWithDetails PhotoGetByIdWithDetails(int id)
         {
-            var a = ds.Photos.Include("Resident").Include("AttractionPhotowarUploads.AttractionPhotoWar").Include("AttractionPhotowarUploads.ResidentVotes").Include("CountryPhotowarUploads")
+            var a = ds.Photos.Include("Resident").Include("AttractionPhotowarUploads.AttractionPhotoWar.Attraction").Include("AttractionPhotowarUploads.ResidentVotes").Include("CountryPhotowarUploads")
                 .Include("ContinentPhotowarUploads").Include("CountryPhotowarRequestedphotoUploads").Include("ContinentPhotowarRequestedphotoUploads").SingleOrDefault(o => o.Id == id);
             return (a == null) ? null : mapper.Map<PhotoWithDetails>(a);
         }
