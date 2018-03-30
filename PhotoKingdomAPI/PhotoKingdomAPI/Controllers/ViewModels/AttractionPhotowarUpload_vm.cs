@@ -24,17 +24,17 @@ namespace PhotoKingdomAPI.Controllers
         public int Id { get; set; }
     }
 
-	public class AttractionPhotowarUploadWithDetails : AttractionPhotowarUploadBase
-	{
-		public AttractionPhotowarUploadWithDetails()
-		{
-			ResidentVotes = new List<ResidentBase>();
-		}
-		public PhotoBase Photo { get; set; }
-		public AttractionPhotowarBase AttractionPhotoWar { get; set; }
-		// all the votes for this Photo
-		public IEnumerable<ResidentBase> ResidentVotes { get; set; }
-	}
+    public class AttractionPhotowarUploadWithDetails : AttractionPhotowarUploadBase
+    {
+        public AttractionPhotowarUploadWithDetails()
+        {
+            ResidentVotes = new List<ResidentBase>();
+        }
+        public PhotoBase Photo { get; set; }
+        public AttractionPhotowarBase AttractionPhotoWar { get; set; }
+        // all the votes for this Photo
+        public IEnumerable<ResidentBase> ResidentVotes { get; set; }
+    }
 
     // AttractionPhotowarUpload with details needed for AttractionPhotowar View
     public class AttractionPhotowarUploadForPhotowar : AttractionPhotowarUploadBase
@@ -49,7 +49,7 @@ namespace PhotoKingdomAPI.Controllers
         public int ResidentVotesCount { get; set; }
 
         // flag indicating whether signed-in Resident has already voted for this photo
-        public int residentHasVoted;
+        public int residentHasVoted { get; set; }
     }
 
     // AttractionPhotowarUpload with details needed for Photo View
@@ -57,5 +57,11 @@ namespace PhotoKingdomAPI.Controllers
     {
         public AttractionPhotowarBase AttractionPhotowar { get; set; }
         public int ResidentVotesCount { get; set; }
+
+        public string AttractionPhotowarAttractionName { get; set; }
     }
 }
+
+
+
+
