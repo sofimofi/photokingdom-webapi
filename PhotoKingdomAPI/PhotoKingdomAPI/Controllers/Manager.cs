@@ -748,6 +748,9 @@ namespace PhotoKingdomAPI.Controllers
             var newPhotowarEnds = ds.AttractionPhotowarUploads.Where(u => u.IsWinner == null).Select(u => u.AttractionPhotoWar).Include("AttractionPhotowarUploads.ResidentVotes")
                 .Where(p => p.EndDate < DateTime.Now).Distinct();
 
+            // keep Ids to return at the end
+            var newPhotowarIds = newPhotowarEnds.Select(p => p.Id).ToList();
+
             // declare the winner/loser for each of those photowars
             if (newPhotowarEnds != null)
             {
@@ -791,7 +794,9 @@ namespace PhotoKingdomAPI.Controllers
 
                 }
             }
-            return newPhotowarEnds == null ? null : mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(newPhotowarEnds);
+
+            var newPhotowars = ds.AttractionPhotowars.Where(a => newPhotowarIds.Contains(a.Id));
+            return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(newPhotowars);
         }
 
         public bool CreateAttractionOwnForPhotoUpload(int photoUploadId)
