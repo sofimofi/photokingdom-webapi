@@ -365,7 +365,7 @@ namespace PhotoKingdomAPI.Controllers
                     });
                     ds.SaveChanges();
 
-                    // AttractionPhotowars
+                    // AttractionPhotowars - new photowars
                     var photowar1 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = cntower.Id
@@ -375,6 +375,13 @@ namespace PhotoKingdomAPI.Controllers
                         AttractionId = casaloma.Id
                     });
                     ds.SaveChanges();
+                    // AttractionPhotowars - expired photowar
+                    var photowarExpired = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = cntower.Id,
+                        StartDate = new DateTime(2018, 3, 1),
+                        EndDate = new DateTime(2018, 3, 4)
+                    });
 
                     // AttractionPhotowarUploads
                     var upload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
@@ -390,13 +397,28 @@ namespace PhotoKingdomAPI.Controllers
                     var upload3 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                     {
                         Photo = casalomaPhoto,
-                        AttractionPhotoWar = photowar2
+                        AttractionPhotoWar = photowar2,
+                        IsWinner = 1 // TODO: Remove
                     });
                     var upload4 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                     {
                         Photo = casalomaPhoto2,
-                        AttractionPhotoWar = photowar2
+                        AttractionPhotoWar = photowar2,
+                        IsWinner = 0 // TODO: Remove
                     });
+
+                    // for the expired photowar
+                    var upload5 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = cntowerPhoto1,
+                        AttractionPhotoWar = photowarExpired
+                    });
+                    var upload6 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = cntowerPhoto2,
+                        AttractionPhotoWar = photowarExpired
+                    });
+
                     ds.SaveChanges();
 
                     //Votes
@@ -404,6 +426,10 @@ namespace PhotoKingdomAPI.Controllers
                     upload2.ResidentVotes.Add(zhihao);
                     upload3.ResidentVotes.Add(sofia);
                     upload3.ResidentVotes.Add(testuser);
+
+                    // add two votes for the same photo in the expired photowar
+                    upload6.ResidentVotes.Add(testuser);
+                    upload6.ResidentVotes.Add(zhihao);
                     ds.SaveChanges();
 
                     count += 4;
@@ -712,6 +738,712 @@ namespace PhotoKingdomAPI.Controllers
                     ds.SaveChanges();
                 }
             }
+        }
+
+        // Checks Photowars for new wins, updates all owns at all hiearchichal levels affected
+        // Returns Photowars that have been updated
+        public IEnumerable<AttractionPhotowarWithDetails> checkOwns()
+        {
+            // fetch the photowars that have just ended and have no winners declared yet
+            var newPhotowarEnds = ds.AttractionPhotowarUploads.Where(u => u.IsWinner == null).Select(u => u.AttractionPhotoWar).Include("AttractionPhotowarUploads.ResidentVotes")
+                .Where(p => p.EndDate < DateTime.Now).Distinct();
+
+            // declare the winner/loser for each of those photowars
+            if (newPhotowarEnds != null)
+            {
+                foreach (var photowar in newPhotowarEnds.ToArray())
+                {
+                    var firstUpload = photowar.AttractionPhotowarUploads.First();
+                    var secondUpload = photowar.AttractionPhotowarUploads.Last();
+                    if (firstUpload == null || secondUpload == null)
+                    {
+                        return null;
+                    }
+
+                    if (firstUpload.ResidentVotes.Count > secondUpload.ResidentVotes.Count)
+                    {
+                        // first photo is winner
+                        firstUpload.IsWinner = 1;
+                        firstUpload.IsLoser = 0;
+                        secondUpload.IsWinner = 0;
+                        secondUpload.IsLoser = 1;
+                        ds.SaveChanges();
+
+                        var addOwn = CreateAttractionOwnForPhotoUpload(firstUpload.Id);
+                        if (!addOwn) return null;
+                    } else if (secondUpload.ResidentVotes.Count > firstUpload.ResidentVotes.Count)
+                    {
+                        // second photo is winner
+                        secondUpload.IsWinner = 1;
+                        secondUpload.IsLoser = 0;
+                        firstUpload.IsWinner = 0;
+                        firstUpload.IsLoser = 1;
+                        ds.SaveChanges();
+
+                        var addOwn = CreateAttractionOwnForPhotoUpload(secondUpload.Id);
+                        if (!addOwn) return null;
+                    } else
+                    {
+                        // equal score - keep extend vote for another 3 days, and the next vote will determine winner
+                        photowar.ExtendedDate = DateTime.Now.AddDays(3);
+                        ds.SaveChanges();
+                    }
+
+                }
+            }
+            return newPhotowarEnds == null ? null : mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(newPhotowarEnds);
+        }
+
+        public bool CreateAttractionOwnForPhotoUpload(int photoUploadId)
+        {
+            var upload = ds.AttractionPhotowarUploads.Include("Photo.Resident").Include("AttractionPhotoWar.Attraction.Owners").SingleOrDefault(a => a.Id == photoUploadId);
+            if (upload == null) return false;
+
+            var resident = upload.Photo.Resident;
+            var attraction = upload.AttractionPhotoWar.Attraction;
+
+            // find out if someone previously owned the attraction
+            var previousOwner = attraction.Owners.SingleOrDefault(o => o.EndOfOwn == null);
+
+            if(previousOwner == null)
+            {
+                // no previous owners - make first owner
+                var addedOwn = addAttractionOwn(resident, attraction);
+                if (addedOwn == false) return false;
+
+                // check owns up hierarchy
+                recalibrateOwnsHierarchy(attraction.Id);
+            } else if (previousOwner != null && previousOwner.ResidentId != resident.Id)
+            {
+                // update new owner if it's a different owner
+ 
+                // put expiry date to previous own
+                previousOwner.EndOfOwn = DateTime.Now;
+                ds.SaveChanges();
+
+                var addedOwn = addAttractionOwn(resident, attraction);
+                if (addedOwn == false) return false;
+
+                // check owns up whole hierarchy
+                var emperor = recalibrateOwnsHierarchy(attraction.Id);
+                if (emperor == null) return false; // unable to create all the owns in the hierarchy
+            }
+            return true;
+        }
+
+        public bool addAttractionOwn(Resident resident, Attraction attraction)
+        {
+            // create title
+            string title = "";
+            if (resident.Gender == "M")
+            {
+                title += "Lord of ";
+            }
+            else
+            {
+                title += "Lady of ";
+            }
+            title += attraction.Name;
+
+            var addedOwn = ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+            {
+                Title = title,
+                Resident = resident,
+                Attraction = attraction
+            });
+
+            ds.SaveChanges();
+
+            return addedOwn == null ? false : true;
+        }
+
+        // Re-checks highest attraction-owner at city, province, country, and continent level, and creates new owns as necessary
+        // Returns Resident that is owner of the continent that the attraction belongs to
+        public ResidentBase recalibrateOwnsHierarchy(int attractionId)
+        {
+            var attraction = ds.Attractions.Find(attractionId);
+
+
+            /* City */
+
+            // 1) find out the City of the Attraction
+            var city = ds.Cities.Find(attraction.CityId);
+
+            // 2) get all attraction in City
+            var attractionsInCity = ds.Attractions.Where(a => a.CityId == city.Id).Select(a => a.Id);
+
+            // 3) get all attraction owns in city, grouped by residentId, ordered by highest count
+            var ownsInCity = ds.ResidentAttractionOwns.Where(a => attractionsInCity.Contains(a.AttractionId)).GroupBy(a => a.ResidentId)
+                .Select(a => new { residentKey = a.Key, count = a.Count()}).OrderByDescending(o => o.count).ToList();
+
+            // 4) determine the top resident(s) in the city
+            List<int> topResidentsInCity = new List<int>();
+            int topOwnCount = 0;
+            foreach(var own in ownsInCity)
+            {
+                if(topOwnCount == 0) // first loop
+                {
+                    topOwnCount = own.count; // update count
+                    topResidentsInCity.Add(own.residentKey); // add resident
+                } else
+                {
+                    // subsequent loops
+                    if(topOwnCount == own.count) // residents have same count
+                    {
+                        topResidentsInCity.Add(own.residentKey);
+                    } else
+                    {
+                        // current resident count is less than last resident - stop loop
+                        break;
+                    }
+                }  
+            }
+
+            int topResidentInCity = -1;
+
+            if(topResidentsInCity.Count() == 1)
+            {
+                // only 1 top owner - becomes owner of City
+                topResidentInCity = topResidentsInCity[0];
+            } else if(topResidentsInCity.Count() > 1)
+            {
+                // some tied owns - need to determine winner by points
+                topResidentInCity = getHighestOwnerByPointsInCity(topResidentsInCity, city.Id);
+            }
+
+            Resident residentCity = ds.Residents.Find(topResidentInCity);
+            if (residentCity == null) return null;
+
+            // 5) create City Own
+            var addedCityOwn = generateCityOwn(residentCity, city);
+            if (addedCityOwn == false) return null;
+
+
+            /* Province */
+
+            // 1) find out the province of the attraction
+            var province = ds.Provinces.Find(city.ProvinceId);
+
+            // 2) get all attractions in the province
+            var attractionsInProvince = ds.Attractions.Where(a => a.City.ProvinceId == province.Id).Select(a => a.Id);
+
+            // 3) get all attraction owns in province, grouped by Resident Id, ordered by highest count
+            var ownsInProvince = ds.ResidentAttractionOwns.Where(a => attractionsInProvince.Contains(a.AttractionId)).GroupBy(a => a.ResidentId)
+                .Select(a => new { residentKey = a.Key, count = a.Count() }).OrderByDescending(o => o.count).ToList();
+
+            // 4) determine the top resident(s) in the province
+            List<int> topResidentsInProvince = new List<int>();
+            topOwnCount = 0; // reset
+            foreach (var own in ownsInProvince)
+            {
+                if (topOwnCount == 0) // first loop
+                {
+                    topOwnCount = own.count; // update count
+                    topResidentsInProvince.Add(own.residentKey); // add resident
+                }
+                else
+                {
+                    // subsequent loops
+                    if (topOwnCount == own.count) // residents have same count
+                    {
+                        topResidentsInProvince.Add(own.residentKey);
+                    }
+                    else
+                    {
+                        // current resident count is less than last resident - stop loop
+                        break;
+                    }
+                }
+            }
+
+            int topResidentInProvince = -1;
+
+            if (topResidentsInProvince.Count() == 1)
+            {
+                // only 1 top owner - becomes owner of Province
+                topResidentInProvince = topResidentsInProvince[0];
+            }
+            else if (topResidentsInProvince.Count() > 1)
+            {
+                // some tied owns - need to determine winner by points
+                topResidentInProvince = getHighestOwnerByPointsInProvince(topResidentsInProvince, province.Id);
+            }
+
+            Resident residentProvince = ds.Residents.Find(topResidentInProvince);
+            if (residentProvince == null) return null;
+
+            // 5) create Province Own
+            var addedProvinceOwn = generateProvinceOwn(residentProvince, province);
+            if (addedProvinceOwn == false) return null;
+
+
+            /* Country */
+
+            // 1) find out the country of the attraction
+            var country = ds.Countries.Find(province.CountryId);
+
+            // 2) get all attractions in the province
+            var attractionsInCountry = ds.Attractions.Where(a => a.City.Province.CountryId == country.Id).Select(a => a.Id);
+
+            // 3) get all attraction owns in country, grouped by Resident Id, ordered by highest count
+            var ownsInCountry = ds.ResidentAttractionOwns.Where(a => attractionsInCountry.Contains(a.AttractionId)).GroupBy(a => a.ResidentId)
+                .Select(a => new { residentKey = a.Key, count = a.Count() }).OrderByDescending(o => o.count).ToList();
+
+            // 4) determine the top resident(s) in the country
+            List<int> topResidentsInCountry = new List<int>();
+            topOwnCount = 0; // reset
+            foreach (var own in ownsInCountry)
+            {
+                if (topOwnCount == 0) // first loop
+                {
+                    topOwnCount = own.count; // update count
+                    topResidentsInCountry.Add(own.residentKey); // add resident
+                }
+                else
+                {
+                    // subsequent loops
+                    if (topOwnCount == own.count) // residents have same count
+                    {
+                        topResidentsInCountry.Add(own.residentKey);
+                    }
+                    else
+                    {
+                        // current resident count is less than last resident - stop loop
+                        break;
+                    }
+                }
+            }
+
+            int topResidentInCountry = -1;
+
+            if (topResidentsInCountry.Count() == 1)
+            {
+                // only 1 top owner - becomes owner of Country
+                topResidentInCountry = topResidentsInCountry[0];
+            }
+            else if (topResidentsInCountry.Count() > 1)
+            {
+                // some tied owns - need to determine winner by points
+                topResidentInCountry = getHighestOwnerByPointsInCountry(topResidentsInCountry, country.Id);
+            }
+
+            Resident residentCountry = ds.Residents.Find(topResidentInCountry);
+            if (residentCountry == null) return null;
+
+            // 5) create Country Own
+            var addedCountryOwn = generateCountryOwn(residentCountry, country);
+            if (addedCountryOwn == false) return null;
+
+
+            /* Continent */
+
+            // 1) find out the continent of the attraction
+            var continent = ds.Continents.Find(country.ContinentId);
+
+            // 2) get all attractions in the province
+            var attractionsInContinent = ds.Attractions.Where(a => a.City.Province.Country.ContinentId == continent.Id).Select(a => a.Id);
+
+            // 3) get all attraction owns in country, grouped by Resident Id
+            var ownsInContinent = ds.ResidentAttractionOwns.Where(a => attractionsInContinent.Contains(a.AttractionId)).GroupBy(a => a.ResidentId)
+                .Select(a => new { residentKey = a.Key, count = a.Count() }).OrderByDescending(o => o.count).ToList();
+
+
+            // 4) determine the top resident(s) in the continent
+            List<int> topResidentsInContinent = new List<int>();
+            topOwnCount = 0; // reset
+            foreach (var own in ownsInContinent)
+            {
+                if (topOwnCount == 0) // first loop
+                {
+                    topOwnCount = own.count; // update count
+                    topResidentsInContinent.Add(own.residentKey); // add resident
+                }
+                else
+                {
+                    // subsequent loops
+                    if (topOwnCount == own.count) // residents have same count
+                    {
+                        topResidentsInContinent.Add(own.residentKey);
+                    }
+                    else
+                    {
+                        // current resident count is less than last resident - stop loop
+                        break;
+                    }
+                }
+            }
+
+            int topResidentInContinent = -1;
+
+            if (topResidentsInContinent.Count() == 1)
+            {
+                // only 1 top owner - becomes owner of Country
+                topResidentInContinent = topResidentsInContinent[0];
+            }
+            else if (topResidentsInContinent.Count() > 1)
+            {
+                // some tied owns - need to determine winner by points
+                topResidentInContinent = getHighestOwnerByPointsInContinent(topResidentsInContinent, continent.Id);
+            }
+
+            Resident residentContinent = ds.Residents.Find(topResidentInContinent);
+            if (residentContinent == null) return null;
+
+            // 5) create Continent Own
+            var addedContinentOwn = generateContinentOwn(residentContinent, continent);
+            if (addedContinentOwn == false) return null;
+
+            return mapper.Map<ResidentBase>(residentContinent);
+        }
+
+        // Returns ID of the owner with the most points in the city
+        public int getHighestOwnerByPointsInCity(List<int> residentIdList, int cityId)
+        {
+            // winning resident
+            int winningResidentId = -1;
+
+            // keep track of highest votes count
+            int highestVotesCount = 0;
+
+            foreach(int residentId in residentIdList)
+            {
+                var uploads = ds.AttractionPhotowarUploads.Include("ResidentVotes")
+                    .Where(u => u.AttractionPhotoWar.Attraction.CityId == cityId && u.Photo.ResidentId == residentId);
+
+                // calculate all the votes
+                int totalVotes = 0;
+                foreach(var upload in uploads)
+                {
+                    totalVotes += upload.ResidentVotes.Count();
+                }
+
+                if(totalVotes > highestVotesCount)
+                {
+                    highestVotesCount = totalVotes;
+                    winningResidentId = residentId;
+                } else if(totalVotes == highestVotesCount)
+                {
+                    // TODO: handle same vote count situations
+                }
+            }
+
+            return winningResidentId;
+        }
+        public bool generateCityOwn(Resident resident, City city)
+        {
+            // find out if previous City owner is same person
+            var previousOwn = ds.ResidentCityOwns.SingleOrDefault(o => o.EndOfOwn == null && o.CityId == city.Id);
+
+            if(previousOwn == null)
+            {
+                // brand new own
+
+                var addedOwn = addCityOwn(resident, city);
+                if (addedOwn == false) return false;
+            } else if (previousOwn != null && previousOwn.ResidentId != resident.Id)
+            {
+                // different owner
+
+                // put expiry date to previous own
+                previousOwn.EndOfOwn = DateTime.Now;
+                ds.SaveChanges();
+
+                var addedOwn = addCityOwn(resident, city);
+                if (addedOwn == false) return false;
+
+            } 
+            return true;
+        }
+
+        public bool addCityOwn(Resident resident, City city)
+        {
+            // create title
+            string title = "";
+            if (resident.Gender == "M")
+            {
+                title += "Duke of ";
+            }
+            else
+            {
+                title += "Duchess of ";
+            }
+            title += city.Name;
+
+            var addedOwn = ds.ResidentCityOwns.Add(new ResidentCityOwn
+            {
+                Title = title,
+                Resident = resident,
+                City = city
+            });
+
+            ds.SaveChanges();
+
+            return addedOwn == null ? false : true;
+            //return true;
+        }
+
+        // Returns ID of the owner with the most points in the province
+        public int getHighestOwnerByPointsInProvince(List<int> residentIdList, int provinceId)
+        {
+            // winning resident
+            int winningResidentId = -1;
+
+            // keep track of highest votes count
+            int highestVotesCount = 0;
+
+            foreach (int residentId in residentIdList)
+            {
+                var uploads = ds.AttractionPhotowarUploads.Include("ResidentVotes")
+                    .Where(u => u.AttractionPhotoWar.Attraction.City.ProvinceId == provinceId && u.Photo.ResidentId == residentId);
+
+                // calculate all the votes
+                int totalVotes = 0;
+                foreach (var upload in uploads)
+                {
+                    totalVotes += upload.ResidentVotes.Count();
+                }
+
+                if (totalVotes > highestVotesCount)
+                {
+                    highestVotesCount = totalVotes;
+                    winningResidentId = residentId;
+                }
+                else if (totalVotes == highestVotesCount)
+                {
+                    // TODO: handle same vote count situations
+                }
+            }
+
+            return winningResidentId;
+        }
+
+        public bool generateProvinceOwn(Resident resident, Province province)
+        {
+            // find out if previous Province owner is same person
+            var previousOwn = ds.ResidentProvinceOwns.SingleOrDefault(o => o.EndOfOwn == null && o.ProvinceId == province.Id);
+
+            if (previousOwn == null)
+            {
+                // brand new own
+
+                var addedOwn = addProvinceOwn(resident, province);
+                if (addedOwn == false) return false;
+            }
+            else if (previousOwn != null && previousOwn.ResidentId != resident.Id)
+            {
+                // different owner
+
+                // put expiry date to previous own
+                previousOwn.EndOfOwn = DateTime.Now;
+                ds.SaveChanges();
+
+                var addedOwn = addProvinceOwn(resident, province);
+                if (addedOwn == false) return false;
+
+            }
+            return true;
+        }
+
+        public bool addProvinceOwn(Resident resident, Province province)
+        {
+            // create title
+            string title = "";
+            if (resident.Gender == "M")
+            {
+                title += "Prince of ";
+            }
+            else
+            {
+                title += "Princess of ";
+            }
+            title += province.Name;
+
+            var addedOwn = ds.ResidentProvinceOwns.Add(new ResidentProvinceOwn
+            {
+                Title = title,
+                Resident = resident,
+                Province = province
+            });
+
+            ds.SaveChanges();
+
+            return addedOwn == null ? false : true;
+        }
+
+        // Returns ID of the owner with the most points in the country
+        public int getHighestOwnerByPointsInCountry(List<int> residentIdList, int countryId)
+        {
+            // winning resident
+            int winningResidentId = -1;
+
+            // keep track of highest votes count
+            int highestVotesCount = 0;
+
+            foreach (int residentId in residentIdList)
+            {
+                var uploads = ds.AttractionPhotowarUploads.Include("ResidentVotes")
+                    .Where(u => u.AttractionPhotoWar.Attraction.City.Province.CountryId == countryId && u.Photo.ResidentId == residentId);
+
+                // calculate all the votes
+                int totalVotes = 0;
+                foreach (var upload in uploads)
+                {
+                    totalVotes += upload.ResidentVotes.Count();
+                }
+
+                if (totalVotes > highestVotesCount)
+                {
+                    highestVotesCount = totalVotes;
+                    winningResidentId = residentId;
+                }
+                else if (totalVotes == highestVotesCount)
+                {
+                    // TODO: handle same vote count situations
+                }
+            }
+
+            return winningResidentId;
+        }
+
+        public bool generateCountryOwn(Resident resident, Country country)
+        {
+            // find out if previous Country owner is same person
+            var previousOwn = ds.ResidentCountryOwns.SingleOrDefault(o => o.EndOfOwn == null && o.CountryId == country.Id);
+
+            if (previousOwn == null)
+            {
+                // brand new own
+
+                var addedOwn = addCountryOwn(resident, country);
+                if (addedOwn == false) return false;
+            }
+            else if (previousOwn != null && previousOwn.ResidentId != resident.Id)
+            {
+                // different owner
+
+                // put expiry date to previous own
+                previousOwn.EndOfOwn = DateTime.Now;
+                ds.SaveChanges();
+
+                var addedOwn = addCountryOwn(resident, country);
+                if (addedOwn == false) return false;
+
+            }
+            return true;
+        }
+
+        public bool addCountryOwn(Resident resident, Country country)
+        {
+            // create title
+            string title = "";
+            if (resident.Gender == "M")
+            {
+                title += "King of ";
+            }
+            else
+            {
+                title += "Queen of ";
+            }
+            title += country.Name;
+
+            var addedOwn = ds.ResidentCountryOwns.Add(new ResidentCountryOwn
+            {
+                Title = title,
+                Resident = resident,
+                Country = country
+            });
+
+            ds.SaveChanges();
+
+            return addedOwn == null ? false : true;
+        }
+
+        // Returns ID of the owner with the most points in the continent
+        public int getHighestOwnerByPointsInContinent(List<int> residentIdList, int continentId)
+        {
+            // winning resident
+            int winningResidentId = -1;
+
+            // keep track of highest votes count
+            int highestVotesCount = 0;
+
+            foreach (int residentId in residentIdList)
+            {
+                var uploads = ds.AttractionPhotowarUploads.Include("ResidentVotes")
+                    .Where(u => u.AttractionPhotoWar.Attraction.City.Province.Country.ContinentId == continentId && u.Photo.ResidentId == residentId);
+
+                // calculate all the votes
+                int totalVotes = 0;
+                foreach (var upload in uploads)
+                {
+                    totalVotes += upload.ResidentVotes.Count();
+                }
+
+                if (totalVotes > highestVotesCount)
+                {
+                    highestVotesCount = totalVotes;
+                    winningResidentId = residentId;
+                }
+                else if (totalVotes == highestVotesCount)
+                {
+                    // TODO: handle same vote count situations
+                }
+            }
+
+            return winningResidentId;
+        }
+
+        public bool generateContinentOwn(Resident resident, Continent continent)
+        {
+            // find out if previous Country owner is same person
+            var previousOwn = ds.ResidentContinentOwns.SingleOrDefault(o => o.EndOfOwn == null && o.ContinentId == continent.Id);
+
+            if (previousOwn == null)
+            {
+                // brand new own
+
+                var addedOwn = addContinentOwn(resident, continent);
+                if (addedOwn == false) return false;
+            }
+            else if (previousOwn != null && previousOwn.ResidentId != resident.Id)
+            {
+                // different owner
+
+                // put expiry date to previous own
+                previousOwn.EndOfOwn = DateTime.Now;
+                ds.SaveChanges();
+
+                var addedOwn = addContinentOwn(resident, continent);
+                if (addedOwn == false) return false;
+
+            }
+            return true;
+        }
+
+        public bool addContinentOwn(Resident resident, Continent continent)
+        {
+            // create title
+            string title = "";
+            if (resident.Gender == "M")
+            {
+                title += "Emperor of ";
+            }
+            else
+            {
+                title += "Empress of ";
+            }
+            title += continent.Name;
+
+            var addedOwn = ds.ResidentContinentOwns.Add(new ResidentContinentOwn
+            {
+                Title = title,
+                Resident = resident,
+                Continent = continent
+            });
+
+            ds.SaveChanges();
+
+            return addedOwn == null ? false : true;
         }
 
         #region Attraction
@@ -1023,8 +1755,8 @@ namespace PhotoKingdomAPI.Controllers
 
         public ResidentWithDetails ResidentWithDetailsGetById(int id)
         {
-            var o = ds.Residents.Include("City").Include("ResidentAttractionOwns")
-                .SingleOrDefault(i => i.Id == id);
+            var o = ds.Residents.Include("City.Province.Country.Continent").Include("ResidentAttractionOwns").Include("ResidentCityOwns").Include("ResidentProvinceOwns")
+                .Include("ResidentCountryOwns").Include("ResidentContinentOwns").SingleOrDefault(i => i.Id == id);
             return (o == null) ? null : mapper.Map<ResidentWithDetails>(o);
         }
 
