@@ -218,6 +218,7 @@
     <Compile Include="Controllers\AttractionPhotowarsController.cs" />
     <Compile Include="Controllers\AttractionPhotowarUploadsController.cs" />
     <Compile Include="Controllers\AttractionsController.cs" />
+    <Compile Include="Controllers\CheckOwnsController.cs" />
     <Compile Include="Controllers\CitiesController.cs" />
     <Compile Include="Controllers\ContinentsController.cs" />
     <Compile Include="Controllers\CountriesController.cs" />
@@ -284,6 +285,10 @@
     <Compile Include="Migrations\201803112043329_google-place-id.cs" />
     <Compile Include="Migrations\201803112043329_google-place-id.Designer.cs">
       <DependentUpon>201803112043329_google-place-id.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803302227226_attractionphotowar-extension-date.cs" />
+    <Compile Include="Migrations\201803302227226_attractionphotowar-extension-date.Designer.cs">
+      <DependentUpon>201803302227226_attractionphotowar-extension-date.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -417,6 +422,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803112043329_google-place-id.resx">
       <DependentUpon>201803112043329_google-place-id.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803302227226_attractionphotowar-extension-date.resx">
+      <DependentUpon>201803302227226_attractionphotowar-extension-date.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

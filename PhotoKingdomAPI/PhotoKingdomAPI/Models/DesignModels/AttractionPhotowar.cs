@@ -23,6 +23,9 @@ namespace PhotoKingdomAPI.Models
         [Required]
         public DateTime EndDate { get; set; }
 
+        // Extension Date in case vote is tied by enddate
+        public DateTime? ExtendedDate { get; set; }
+
         [Required]
         public int AttractionId { get; set; }
 

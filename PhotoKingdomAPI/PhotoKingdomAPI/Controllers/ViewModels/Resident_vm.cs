@@ -62,6 +62,7 @@ namespace PhotoKingdomAPI.Controllers
 		public String CityName { get; set; }
 		public String CityProvinceName { get; set; }
 		public String CityProvinceCountryName { get; set; }
+        public String CityProvinceCountryContinentName { get; set; }
 
 		// Resident's photos
 		public IEnumerable<PhotoBase> Photos { get; set; }
