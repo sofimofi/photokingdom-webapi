@@ -144,6 +144,27 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
+        // Get all attractionphotowars for the attraction
+        // GET: api/Attractions/5/Photowars
+        [Route("{id:int}/Photowars")]
+        public IHttpActionResult GetAttractionPhotowars(int? id)
+        {
+            // Determine whether we can continue
+            if (!id.HasValue) { return NotFound(); }
+
+            // Fetch the object, so that we can inspect its value
+            var o = m.AttractionPhotowarGetAllForAttraction(id.Value);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
         // POST: api/Attractions
         public IHttpActionResult Post([FromBody]AttractionAddForm newItem)
         {
