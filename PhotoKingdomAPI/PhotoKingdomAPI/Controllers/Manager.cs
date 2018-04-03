@@ -1559,6 +1559,14 @@ namespace PhotoKingdomAPI.Controllers
             return (a == null) ? null : mapper.Map<AttractionPhotowarBase>(a);
         }
 
+        public IEnumerable<AttractionPhotowarWithDetails> AttractionPhotowarGetAllForAttraction(int id)
+        {
+            var photowars = ds.AttractionPhotowars.Include("AttractionPhotowarUploads.ResidentVotes").Include("AttractionPhotowarUploads.Photo.Resident")
+                .Where(a => a.AttractionId == id).OrderByDescending(a => a.StartDate);
+
+            return mapper.Map<IEnumerable<AttractionPhotowar>, IEnumerable<AttractionPhotowarWithDetails>>(photowars);
+        }
+
         public AttractionPhotowarBase AttractionPhotowarAdd(AttractionPhotowarAdd newItem)
         {
             if (newItem == null)
