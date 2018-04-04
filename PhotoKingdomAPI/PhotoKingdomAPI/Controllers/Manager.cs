@@ -365,6 +365,14 @@ namespace PhotoKingdomAPI.Controllers
                     });
                     ds.SaveChanges();
 
+                    // AttractionPhotowars - expired photowar
+                    var photowarExpired = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = cntower.Id,
+                        StartDate = new DateTime(2018, 3, 1),
+                        EndDate = new DateTime(2018, 3, 4)
+                    });
+
                     // AttractionPhotowars - new photowars
                     var photowar1 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
@@ -374,14 +382,7 @@ namespace PhotoKingdomAPI.Controllers
                     {
                         AttractionId = casaloma.Id
                     });
-                    ds.SaveChanges();
-                    // AttractionPhotowars - expired photowar
-                    var photowarExpired = ds.AttractionPhotowars.Add(new AttractionPhotowar
-                    {
-                        AttractionId = cntower.Id,
-                        StartDate = new DateTime(2018, 3, 1),
-                        EndDate = new DateTime(2018, 3, 4)
-                    });
+                    ds.SaveChanges();   
 
                     // AttractionPhotowarUploads
                     var upload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
