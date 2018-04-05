@@ -20,6 +20,9 @@ namespace PhotoKingdomAPI.Controllers
         [Required]
         public DateTime EndDate { get; set; }
 
+        // Extension Date in case vote is tied by enddate
+        public DateTime? ExtendedDate { get; set; }
+
         [Required]
         public int AttractionId { get; set; }
     }
@@ -43,7 +46,8 @@ namespace PhotoKingdomAPI.Controllers
         // Additional information for Voting
 
         // whether Resident's own photo is in this photowar
-        public int residentInPhotowar;
+        public int residentInPhotowar { get; set; }
 	}
+
 
 }
