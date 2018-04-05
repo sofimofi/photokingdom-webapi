@@ -45,8 +45,14 @@ namespace PhotoKingdomAPI.Controllers
 		public String CityName { get; set; }
 		public String CityProvinceCountryName { get; set; }
 
-		// the queued photo uploads for this Attraction
-		public IEnumerable<QueueBase> QueuedUploads { get; set; }
+        // Winning photo
+        public String PhotoImagePath { get; set; }
+
+        // Attraction owner
+        public String OwnerName { get; set; }
+
+        // the queued photo uploads for this Attraction
+        public IEnumerable<QueueBase> QueuedUploads { get; set; }
 		// all the AttractionPhotowars for this Attraction
 		public IEnumerable<AttractionPhotowarBase> AttractionPhotowars { get; set; }
 		// all the residents that owned this Attraction
