@@ -165,6 +165,27 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
+        // Get all winningphotos for the attraction
+        // GET: api/Attractions/5/WinningPhotos
+        [Route("{id:int}/WinningPhotos")]
+        public IHttpActionResult GetAttractionWinningPhotos(int? id)
+        {
+            // Determine whether we can continue
+            if (!id.HasValue) { return NotFound(); }
+
+            // Fetch the object, so that we can inspect its value
+            var o = m.PhotosWinningGetAllForAttraction(id.Value);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
         // POST: api/Attractions
         public IHttpActionResult Post([FromBody]AttractionAddForm newItem)
         {
