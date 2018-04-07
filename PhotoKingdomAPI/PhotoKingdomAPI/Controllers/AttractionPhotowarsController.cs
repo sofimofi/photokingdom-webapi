@@ -15,7 +15,7 @@ namespace PhotoKingdomAPI.Controllers
         // GET: api/AttractionPhotowars
         public IHttpActionResult Get()
         {
-            return Ok(m.AttractionPhotowarGetAll());
+            return Ok(m.AttractionPhotowarGetAllWithDetails());
         }
 
         // GET: api/AttractionPhotowars/5
