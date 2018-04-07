@@ -1724,6 +1724,16 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<AttractionPhotowarBase>>(a);
         }
 
+        public IEnumerable<AttractionPhotowarWithDetails> AttractionPhotowarGetAllWithDetails()
+        {
+            var a = ds.AttractionPhotowars
+                .Include("Attraction")
+                .Include("AttractionPhotowarUploads.Photo.Resident")
+                .OrderByDescending(o => o.StartDate);
+
+            return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(a);
+        }
+
         public AttractionPhotowarBase AttractionPhotowarGetById(int id)
         {
             var a = ds.AttractionPhotowars.Find(id);
