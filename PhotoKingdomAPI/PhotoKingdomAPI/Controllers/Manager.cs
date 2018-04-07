@@ -426,13 +426,95 @@ namespace PhotoKingdomAPI.Controllers
 
                     ds.SaveChanges();
 
-                    // AttractionPhotowars - expired photowar
+                    // AttractionPhotowars - expired photowars
                     var photowarExpired = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = cntower.Id,
                         StartDate = new DateTime(2018, 3, 1),
                         EndDate = new DateTime(2018, 3, 4)
                     });
+                    var photowar3 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = boyerwoodlot.Id,
+                        StartDate = new DateTime(2018, 3, 1),
+                        EndDate = new DateTime(2018, 3, 4)
+                    });
+                    var photowar4 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = danIannuzziPark.Id,
+                        StartDate = new DateTime(2018, 3, 1),
+                        EndDate = new DateTime(2018, 3, 4)
+                    });
+                    var photowar5 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = shorehamPark.Id,
+                        StartDate = new DateTime(2018, 3, 1),
+                        EndDate = new DateTime(2018, 3, 4)
+                    });
+                    var photowar6 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = edgeleyPark.Id,
+                        StartDate = new DateTime(2018, 3, 1),
+                        EndDate = new DateTime(2018, 3, 4)
+                    });
+                    ds.SaveChanges();
+
+                    // uploads for the expired photowars
+                    var upload5 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = cntowerPhoto1,
+                        AttractionPhotoWar = photowarExpired
+                    });
+                    var upload6 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = cntowerPhoto2,
+                        AttractionPhotoWar = photowarExpired
+                    });
+                    var upload7 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = boyerwoodlotPhoto1,
+                        AttractionPhotoWar = photowar3//,
+                        //IsWinner = 1
+                    });
+                    var upload8 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = boyerwoodlotPhoto2,
+                        AttractionPhotoWar = photowar3
+                    });
+                    var upload9 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = danIannuzziPark1,
+                        AttractionPhotoWar = photowar4
+                    });
+                    var upload10 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = danIannuzziPark2,
+                        AttractionPhotoWar = photowar4//,
+                        //IsWinner = 1
+                    });
+                    var upload11 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = shorehamPark1,
+                        AttractionPhotoWar = photowar5//,
+                        //IsWinner = 1
+                    });
+                    var upload12 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = shorehamPark2,
+                        AttractionPhotoWar = photowar5
+                    });
+                    var upload13 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = edgeleyPark1,
+                        AttractionPhotoWar = photowar6
+                    });
+                    var upload14 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = edgeleyPark2,
+                        AttractionPhotoWar = photowar6//,
+                        //IsWinner = 1
+                    });
+
 
                     // AttractionPhotowars - new photowars
                     var photowar1 = ds.AttractionPhotowars.Add(new AttractionPhotowar
@@ -443,23 +525,6 @@ namespace PhotoKingdomAPI.Controllers
                     {
                         AttractionId = casaloma.Id
                     });
-                    var photowar3 = ds.AttractionPhotowars.Add(new AttractionPhotowar
-                    {
-                        AttractionId = boyerwoodlot.Id
-                    });
-                    var photowar4 = ds.AttractionPhotowars.Add(new AttractionPhotowar
-                    {
-                        AttractionId = danIannuzziPark.Id
-                    });
-                    var photowar5 = ds.AttractionPhotowars.Add(new AttractionPhotowar
-                    {
-                        AttractionId = shorehamPark.Id
-                    });
-                    var photowar6 = ds.AttractionPhotowars.Add(new AttractionPhotowar
-                    {
-                        AttractionId = edgeleyPark.Id
-                    });
-                    ds.SaveChanges();   
 
                     // AttractionPhotowarUploads
                     var upload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
@@ -475,72 +540,15 @@ namespace PhotoKingdomAPI.Controllers
                     var upload3 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                     {
                         Photo = casalomaPhoto,
-                        AttractionPhotoWar = photowar2,
-                        IsWinner = 1 // TODO: Remove
+                        AttractionPhotoWar = photowar2
                     });
                     var upload4 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                     {
                         Photo = casalomaPhoto2,
-                        AttractionPhotoWar = photowar2,
-                        IsWinner = 0 // TODO: Remove
+                        AttractionPhotoWar = photowar2
                     });
 
-                    var upload7 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = boyerwoodlotPhoto1,
-                        AttractionPhotoWar = photowar3,
-                        IsWinner = 1
-                    });
-                    var upload8 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = boyerwoodlotPhoto2,
-                        AttractionPhotoWar = photowar3
-                    });
-                    var upload9 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = danIannuzziPark1,
-                        AttractionPhotoWar = photowar4
-                    });
-                    var upload10 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = danIannuzziPark2,
-                        AttractionPhotoWar = photowar4,
-                        IsWinner = 1
-                    });
-                    var upload11 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = shorehamPark1,
-                        AttractionPhotoWar = photowar5,
-                        IsWinner = 1
-                    });
-                    var upload12 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = shorehamPark2,
-                        AttractionPhotoWar = photowar5
-                    });
-                    var upload13 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = edgeleyPark1,
-                        AttractionPhotoWar = photowar6
-                    });
-                    var upload14 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = edgeleyPark2,
-                        AttractionPhotoWar = photowar6,
-                        IsWinner = 1
-                    });
-
-                    // for the expired photowar
-                    var upload5 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = cntowerPhoto1,
-                        AttractionPhotoWar = photowarExpired
-                    });
-                    var upload6 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = cntowerPhoto2,
-                        AttractionPhotoWar = photowarExpired
-                    });
+                    
                     ds.SaveChanges();
 
                     //Votes
