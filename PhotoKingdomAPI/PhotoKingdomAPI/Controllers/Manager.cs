@@ -433,6 +433,12 @@ namespace PhotoKingdomAPI.Controllers
                         StartDate = new DateTime(2018, 3, 1),
                         EndDate = new DateTime(2018, 3, 4)
                     });
+                    var photowarExpired2 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = cntower.Id,
+                        StartDate = new DateTime(2018, 3, 6),
+                        EndDate = new DateTime(2018, 3, 9)
+                    });
                     var photowar3 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = boyerwoodlot.Id,
@@ -514,6 +520,16 @@ namespace PhotoKingdomAPI.Controllers
                         AttractionPhotoWar = photowar6//,
                         //IsWinner = 1
                     });
+                    var upload15 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = cntowerPhoto1,
+                        AttractionPhotoWar = photowarExpired2
+                    });
+                    var upload16 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = cntowerPhoto2,
+                        AttractionPhotoWar = photowarExpired2
+                    });
 
 
                     // AttractionPhotowars - new photowars
@@ -551,19 +567,22 @@ namespace PhotoKingdomAPI.Controllers
                     
                     ds.SaveChanges();
 
-                    //Votes
-                    upload1.ResidentVotes.Add(testuser);
-                    upload2.ResidentVotes.Add(zhihao);
-                    upload3.ResidentVotes.Add(sofia);
-                    upload3.ResidentVotes.Add(testuser);
+                    // Votes for the expired photowar
                     upload7.ResidentVotes.Add(testuser);
                     upload10.ResidentVotes.Add(zhihao);
                     upload11.ResidentVotes.Add(sofia);
                     upload14.ResidentVotes.Add(wonho);
-
-                    // add two votes for the same photo in the expired photowar
                     upload6.ResidentVotes.Add(testuser);
                     upload6.ResidentVotes.Add(zhihao);
+                    upload15.ResidentVotes.Add(testuser);
+                    upload15.ResidentVotes.Add(zhihao);
+
+                    //Votes - new photowars
+                    upload1.ResidentVotes.Add(testuser);
+                    upload2.ResidentVotes.Add(zhihao);
+                    upload3.ResidentVotes.Add(sofia);
+                    upload3.ResidentVotes.Add(testuser);
+
                     ds.SaveChanges();
 
                     count += 4;
@@ -2094,6 +2113,32 @@ namespace PhotoKingdomAPI.Controllers
             var a = ds.Photos.Include("Resident").Include("AttractionPhotowarUploads.AttractionPhotoWar.Attraction").Include("AttractionPhotowarUploads.ResidentVotes").Include("CountryPhotowarUploads")
                 .Include("ContinentPhotowarUploads").Include("CountryPhotowarRequestedphotoUploads").Include("ContinentPhotowarRequestedphotoUploads").SingleOrDefault(o => o.Id == id);
             return (a == null) ? null : mapper.Map<PhotoWithDetails>(a);
+        }
+
+        public List<PhotoWinning> PhotosWinningGetAllForAttraction(int id)
+        {
+            var photowars = ds.AttractionPhotowars.Include("AttractionPhotowarUploads.Photo.Resident").Include("AttractionPhotowarUploads.ResidentVotes")
+                .Where(p => p.AttractionId == id && p.EndDate < DateTime.Now).OrderByDescending(p => p.EndDate);
+
+            List<PhotoWinning> winningPhotos = new List<PhotoWinning>();
+
+            foreach(AttractionPhotowar photowar in photowars){
+                var winningUpload = photowar.AttractionPhotowarUploads.Single(u => u.IsWinner == 1);
+                var winningPhoto = winningUpload.Photo;
+                winningPhotos.Add(new PhotoWinning
+                {
+                    Id = winningPhoto.Id,
+                    PhotoFilePath = winningPhoto.PhotoFilePath,
+                    Lat = winningPhoto.Lat,
+                    Lng = winningPhoto.Lng,
+                    ResidentId = winningPhoto.ResidentId,
+                    ResidentUserName = winningPhoto.Resident.UserName,
+                    ResidentAvatarImagePath = winningPhoto.Resident.AvatarImagePath,
+                    Votes = winningUpload.ResidentVotes.Count(),
+                    WinningDate = photowar.EndDate
+                });
+            }
+            return winningPhotos;
         }
 
         public PhotoBase PhotoAdd(PhotoAdd newItem)
