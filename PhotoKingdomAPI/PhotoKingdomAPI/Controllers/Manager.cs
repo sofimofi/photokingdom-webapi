@@ -316,7 +316,7 @@ namespace PhotoKingdomAPI.Controllers
                         IsActive = 1,
                         Password = "password",
                         City = toronto,
-                        AvatarImagePath = "img/canada.png"
+                        AvatarImagePath = "img/boy.png"
                     });
                     ds.SaveChanges();
                     count++;
@@ -328,6 +328,10 @@ namespace PhotoKingdomAPI.Controllers
             {
                 var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
                 var casaloma = ds.Attractions.SingleOrDefault(o => o.Name == "Casa Loma" && o.City.Name == "Toronto");
+                var boyerwoodlot = ds.Attractions.SingleOrDefault(o => o.Name == "Boywer Woodlot" && o.City.Name == "Toronto");
+                var danIannuzziPark = ds.Attractions.SingleOrDefault(o => o.Name == "Dan Iannuzzi Park" && o.City.Name == "Toronto");
+                var shorehamPark = ds.Attractions.SingleOrDefault(o => o.Name == "Shoreham Park" && o.City.Name == "Toronto");
+                var edgeleyPark = ds.Attractions.SingleOrDefault(o => o.Name == "Edgeley Park" && o.City.Name == "Toronto");
                 var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
                 var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
                 var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
@@ -363,6 +367,63 @@ namespace PhotoKingdomAPI.Controllers
                         Resident = zhihao,
                         PhotoFilePath = "img/casaloma2.jpg"
                     });
+                    var boyerwoodlotPhoto1 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.77585490000001,
+                        Lng = -79.50518649999999,
+                        Resident = sofia,
+                        PhotoFilePath = "img/boyerwoodlot1.jpg"
+                    });
+                    var boyerwoodlotPhoto2 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.77585490000001,
+                        Lng = -79.50518649999999,
+                        Resident = wonho,
+                        PhotoFilePath = "img/boyerwoodlot2.jpg"
+                    });
+                    var danIannuzziPark1 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7668115,
+                        Lng = -79.5065087,
+                        Resident = sofia,
+                        PhotoFilePath = "img/daniannuzzipark1.png"
+                    });
+                    var danIannuzziPark2 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7668115,
+                        Lng = -79.5065087,
+                        Resident = wonho,
+                        PhotoFilePath = "img/daniannuzzipark2.jpg"
+                    });
+                    var shorehamPark1 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7685742,
+                        Lng = -79.5178353,
+                        Resident = wonho,
+                        PhotoFilePath = "img/shorehampark1.jpg"
+                    });
+                    var shorehamPark2 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7685742,
+                        Lng = -79.5178353,
+                        Resident = zhihao,
+                        PhotoFilePath = "img/shorehampark2.jpg"
+                    });
+                    var edgeleyPark1 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7652519,
+                        Lng = -79.5185398,
+                        Resident = sofia,
+                        PhotoFilePath = "img/edgeleypark1.jpg"
+                    });
+                    var edgeleyPark2 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7652519,
+                        Lng = -79.5185398,
+                        Resident = zhihao,
+                        PhotoFilePath = "img/edgeleypark2.png"
+                    });
+
                     ds.SaveChanges();
 
                     // AttractionPhotowars - expired photowar
@@ -381,6 +442,22 @@ namespace PhotoKingdomAPI.Controllers
                     var photowar2 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = casaloma.Id
+                    });
+                    var photowar3 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = boyerwoodlot.Id
+                    });
+                    var photowar4 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = danIannuzziPark.Id
+                    });
+                    var photowar5 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = shorehamPark.Id
+                    });
+                    var photowar6 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    {
+                        AttractionId = edgeleyPark.Id
                     });
                     ds.SaveChanges();   
 
@@ -408,6 +485,51 @@ namespace PhotoKingdomAPI.Controllers
                         IsWinner = 0 // TODO: Remove
                     });
 
+                    var upload7 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = boyerwoodlotPhoto1,
+                        AttractionPhotoWar = photowar3,
+                        IsWinner = 1
+                    });
+                    var upload8 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = boyerwoodlotPhoto2,
+                        AttractionPhotoWar = photowar3
+                    });
+                    var upload9 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = danIannuzziPark1,
+                        AttractionPhotoWar = photowar4
+                    });
+                    var upload10 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = danIannuzziPark2,
+                        AttractionPhotoWar = photowar4,
+                        IsWinner = 1
+                    });
+                    var upload11 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = shorehamPark1,
+                        AttractionPhotoWar = photowar5,
+                        IsWinner = 1
+                    });
+                    var upload12 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = shorehamPark2,
+                        AttractionPhotoWar = photowar5
+                    });
+                    var upload13 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = edgeleyPark1,
+                        AttractionPhotoWar = photowar6
+                    });
+                    var upload14 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        Photo = edgeleyPark2,
+                        AttractionPhotoWar = photowar6,
+                        IsWinner = 1
+                    });
+
                     // for the expired photowar
                     var upload5 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                     {
@@ -419,7 +541,6 @@ namespace PhotoKingdomAPI.Controllers
                         Photo = cntowerPhoto2,
                         AttractionPhotoWar = photowarExpired
                     });
-
                     ds.SaveChanges();
 
                     //Votes
@@ -427,6 +548,10 @@ namespace PhotoKingdomAPI.Controllers
                     upload2.ResidentVotes.Add(zhihao);
                     upload3.ResidentVotes.Add(sofia);
                     upload3.ResidentVotes.Add(testuser);
+                    upload7.ResidentVotes.Add(testuser);
+                    upload10.ResidentVotes.Add(zhihao);
+                    upload11.ResidentVotes.Add(sofia);
+                    upload14.ResidentVotes.Add(wonho);
 
                     // add two votes for the same photo in the expired photowar
                     upload6.ResidentVotes.Add(testuser);
@@ -1496,14 +1621,51 @@ namespace PhotoKingdomAPI.Controllers
 
         public AttractionWithDetails AttractionGetByIdWithDetails(int id)
         {
-            var a = ds.Attractions.Include("City").Include("QueuedUploads").Include("AttractionPhotoWars").Include("Owners").SingleOrDefault(o => o.Id == id);
+            var a = ds.Attractions
+                .Include("City")
+                .Include("QueuedUploads")
+                .Include("AttractionPhotoWars")
+                .Include("Owners")
+                .SingleOrDefault(o => o.Id == id);
+
             return (a == null) ? null : mapper.Map<AttractionWithDetails>(a);
         }
 
         public AttractionWithDetails AttractionGetByGooglePlaceIdWithDetails(string googlePlaceId)
         {
-            var a = ds.Attractions.Include("City").Include("QueuedUploads").Include("AttractionPhotoWars").Include("Owners").SingleOrDefault(o => o.googlePlaceId == googlePlaceId);
-            return (a == null) ? null : mapper.Map<AttractionWithDetails>(a);
+            var a = ds.Attractions
+                .Include("City")
+                .Include("QueuedUploads")
+                .Include("AttractionPhotoWars.AttractionPhotowarUploads.Photo")
+                .Include("Owners.Resident")
+                .SingleOrDefault(o => o.googlePlaceId == googlePlaceId);
+
+            if (a == null)
+            {
+                return null;
+            }
+
+            var attraction = mapper.Map<AttractionWithDetails>(a);
+
+            var photowars = a.AttractionPhotowars.OrderByDescending(p => p.EndDate).ToArray();
+            if (photowars.Length > 0)
+            {
+                var winningUpload = photowars[0].AttractionPhotowarUploads.SingleOrDefault(u => u.IsWinner == 1);
+                if (winningUpload != null)
+                {
+                    var path = winningUpload.Photo.PhotoFilePath;
+                    attraction.PhotoImagePath = path;
+                }
+            }
+
+            var owners = a.Owners.OrderByDescending(o => o.StartOfOwn).ToArray();
+            if (owners.Length > 0)
+            {
+                var ownerName = owners[0].Resident.UserName;
+                attraction.OwnerName = ownerName;
+            }
+
+            return attraction;
         }
 
         public AttractionBase AttractionAdd(AttractionAddForm newItem)
