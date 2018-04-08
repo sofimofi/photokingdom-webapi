@@ -83,15 +83,19 @@ namespace PhotoKingdomAPI.Controllers
                 cfg.CreateMap<Controllers.ResidentAttractionOwnAdd, Models.ResidentAttractionOwn>();
                 cfg.CreateMap<Models.ResidentCityOwn, Controllers.ResidentCityOwnBase>();
                 cfg.CreateMap<Models.ResidentCityOwn, Controllers.ResidentCityOwnWithDetails>();
+                cfg.CreateMap<Models.ResidentCityOwn, Controllers.ResidentCityOwnForMapView>();
                 cfg.CreateMap<Controllers.ResidentCityOwnAdd, Models.ResidentCityOwn>();
                 cfg.CreateMap<Models.ResidentContinentOwn, Controllers.ResidentContinentOwnBase>();
                 cfg.CreateMap<Models.ResidentContinentOwn, Controllers.ResidentContinentOwnWithDetails>();
+                cfg.CreateMap<Models.ResidentContinentOwn, Controllers.ResidentContinentOwnForMapView>();
                 cfg.CreateMap<Controllers.ResidentContinentOwnAdd, Models.ResidentContinentOwn>();
                 cfg.CreateMap<Models.ResidentCountryOwn, Controllers.ResidentCountryOwnBase>();
                 cfg.CreateMap<Models.ResidentCountryOwn, Controllers.ResidentCountryOwnWithDetails>();
+                cfg.CreateMap<Models.ResidentCountryOwn, Controllers.ResidentCountryOwnForMapView>();
                 cfg.CreateMap<Controllers.ResidentCountryOwnAdd, Models.ResidentCountryOwn>();
                 cfg.CreateMap<Models.ResidentProvinceOwn, Controllers.ResidentProvinceOwnBase>();
                 cfg.CreateMap<Models.ResidentProvinceOwn, Controllers.ResidentProvinceOwnWithDetails>();
+                cfg.CreateMap<Models.ResidentProvinceOwn, Controllers.ResidentProvinceOwnForMapView>();
                 cfg.CreateMap<Controllers.ResidentProvinceOwnAdd, Models.ResidentProvinceOwn>();
 
                 #endregion Define the mappings
@@ -2315,6 +2319,15 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<ResidentCityOwnWithDetails>>(r);
         }
 
+        public ResidentCityOwnForMapView ResidentOwnGetActiveForCityByCityName(string city, string province, string country)
+        {
+            var cityObj = ds.Cities.SingleOrDefault(c => c.Name == city && c.Province.Country.Name == country);
+            if (cityObj == null) return null;
+
+            var cityOwn = ds.ResidentCityOwns.Include("Resident").SingleOrDefault(o => o.EndOfOwn == null && o.CityId == cityObj.Id);
+
+            return cityOwn == null ? null : mapper.Map<ResidentCityOwnForMapView>(cityOwn);
+        }
         public ResidentCityOwnBase ResidentCityOwnAdd(ResidentCityOwnAdd newItem)
         {
             if (newItem == null)
@@ -2355,6 +2368,16 @@ namespace PhotoKingdomAPI.Controllers
         {
             var r = ds.ResidentProvinceOwns.Include("Resident").Where(o => o.ProvinceId == id && o.EndOfOwn == null).OrderBy(o => o.Id);
             return mapper.Map<IEnumerable<ResidentProvinceOwnWithDetails>>(r);
+        }
+
+        public ResidentProvinceOwnForMapView ResidentOwnGetActiveForProvinceByProvinceName(string province, string country)
+        {
+            var provinceObj = ds.Provinces.SingleOrDefault(p => p.Name == province && p.Country.Name == country);
+            if (provinceObj == null) return null;
+
+            var provinceOwn = ds.ResidentProvinceOwns.Include("Resident").SingleOrDefault(o => o.EndOfOwn == null && o.ProvinceId == provinceObj.Id);
+
+            return provinceOwn == null ? null : mapper.Map<ResidentProvinceOwnForMapView>(provinceOwn);
         }
 
         public ResidentProvinceOwnBase ResidentProvinceOwnAdd(ResidentProvinceOwnAdd newItem)
@@ -2399,6 +2422,16 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<ResidentCountryOwnWithDetails>>(r);
         }
 
+        public ResidentCountryOwnForMapView ResidentOwnGetActiveForCountryByCountryName(string country)
+        {
+            var countryObj = ds.Countries.SingleOrDefault(p => p.Name == country);
+            if (countryObj == null) return null;
+
+            var countryOwn = ds.ResidentCountryOwns.Include("Resident").SingleOrDefault(o => o.EndOfOwn == null && o.CountryId == countryObj.Id);
+
+            return countryOwn == null ? null : mapper.Map<ResidentCountryOwnForMapView>(countryOwn);
+        }
+
         public ResidentCountryOwnBase ResidentCountryOwnAdd(ResidentCountryOwnAdd newItem)
         {
             if (newItem == null)
@@ -2439,6 +2472,16 @@ namespace PhotoKingdomAPI.Controllers
         {
             var r = ds.ResidentContinentOwns.Include("Resident").Where(o => o.ContinentId == id && o.EndOfOwn == null).OrderBy(o => o.Id);
             return mapper.Map<IEnumerable<ResidentContinentOwnWithDetails>>(r);
+        }
+
+        public ResidentContinentOwnForMapView ResidentOwnGetActiveForContinentByCountryName(string country)
+        {
+            var countryObj = ds.Countries.SingleOrDefault(p => p.Name == country);
+            if (countryObj == null) return null;
+
+            var continentOwn = ds.ResidentContinentOwns.Include("Resident").SingleOrDefault(o => o.EndOfOwn == null && o.ContinentId == countryObj.ContinentId);
+
+            return continentOwn == null ? null : mapper.Map<ResidentContinentOwnForMapView>(continentOwn);
         }
 
         public ResidentContinentOwnBase ResidentContinentOwnAdd(ResidentContinentOwnAdd newItem)

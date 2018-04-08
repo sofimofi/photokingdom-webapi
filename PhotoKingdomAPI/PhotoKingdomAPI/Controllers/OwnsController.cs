@@ -75,6 +75,24 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
+        // Get a city's active own by city name
+        // GET: api/Owns/Active/City/
+        [Route("Active/City")]
+        public IHttpActionResult GetCityActiveOwnByCityName(string city, string province, string country)
+        {
+            // Fetch the object, so that we can inspect its value
+            var o = m.ResidentOwnGetActiveForCityByCityName(city, province, country);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
         // Get all active resident owns for a province
         // GET: api/Owns/Active/Province/5
         [Route("Active/Province/{id:int}")]
@@ -85,6 +103,24 @@ namespace PhotoKingdomAPI.Controllers
 
             // Fetch the object, so that we can inspect its value
             var o = m.ResidentOwnGetAllActiveForProvince(id.Value);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
+        // Get a province's active own by province name
+        // GET: api/Owns/Active/Province/
+        [Route("Active/Province")]
+        public IHttpActionResult GetProvinceActiveOwnByProvinceName(string province, string country)
+        {
+            // Fetch the object, so that we can inspect its value
+            var o = m.ResidentOwnGetActiveForProvinceByProvinceName(province, country);
 
             if (o == null)
             {
@@ -117,6 +153,24 @@ namespace PhotoKingdomAPI.Controllers
             }
         }
 
+        // Get a country's active own by country name
+        // GET: api/Owns/Active/Country/
+        [Route("Active/Country")]
+        public IHttpActionResult GetCountryActiveOwnByCountryName(string country)
+        {
+            // Fetch the object, so that we can inspect its value
+            var o = m.ResidentOwnGetActiveForCountryByCountryName(country);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
         // Get all active resident owns for a continent
         // GET: api/Owns/Active/Continent/5
         [Route("Active/Continent/{id:int}")]
@@ -127,6 +181,24 @@ namespace PhotoKingdomAPI.Controllers
 
             // Fetch the object, so that we can inspect its value
             var o = m.ResidentOwnGetAllActiveForContinent(id.Value);
+
+            if (o == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(o);
+            }
+        }
+
+        // Get a continent's active own by country name
+        // GET: api/Owns/Active/Continent/
+        [Route("Active/Continent")]
+        public IHttpActionResult GetContinentActiveOwnByCountryName(string country)
+        {
+            // Fetch the object, so that we can inspect its value
+            var o = m.ResidentOwnGetActiveForContinentByCountryName(country);
 
             if (o == null)
             {
