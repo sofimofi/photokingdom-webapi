@@ -14,6 +14,46 @@ namespace PhotoKingdomAPI.Controllers
 
         //************** Active Owns **************
 
+        // Get all active owns for attractions
+        // GET: api/Owns/Active/Attractions
+        [Route("Active/Attractions")]
+        public IHttpActionResult GetAttractionActiveOwns()
+        {
+            return Ok(m.ResidentAttractionOwnGetAllActiveWithDetails());
+        }
+
+        // Get all active owns for cities
+        // GET: api/Owns/Active/Cities
+        [Route("Active/Cities")]
+        public IHttpActionResult GetCityActiveOwns()
+        {
+            return Ok(m.ResidentCityOwnGetAllActiveWithDetails());
+        }
+
+        // Get all active owns for provinces
+        // GET: api/Owns/Active/Provinces
+        [Route("Active/Provinces")]
+        public IHttpActionResult GetProvinceActiveOwns()
+        {
+            return Ok(m.ResidentProvinceOwnGetAllActiveWithDetails());
+        }
+
+        // Get all active owns for countries
+        // GET: api/Owns/Active/Countries
+        [Route("Active/Countries")]
+        public IHttpActionResult GetCountryActiveOwns()
+        {
+            return Ok(m.ResidentCountryOwnGetAllActiveWithDetails());
+        }
+
+        // Get all active owns for continents
+        // GET: api/Owns/Active/Continents
+        [Route("Active/Continents")]
+        public IHttpActionResult GetContinentActiveOwns()
+        {
+            return Ok(m.ResidentContinentOwnGetAllActiveWithDetails());
+        }
+
         // Get all active resident owns for a city
         // GET: api/Owns/Active/City/5
         [Route("Active/City/{id:int}")]
