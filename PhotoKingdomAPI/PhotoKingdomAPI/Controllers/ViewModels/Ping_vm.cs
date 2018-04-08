@@ -14,17 +14,18 @@ namespace PhotoKingdomAPI.Controllers
             ExpiryDate = DateTime.Now.AddDays(7);
         }
 
-        [Required]
         public DateTime PingDate { get; set; }
 
-        [Required]
         public DateTime ExpiryDate { get; set; }
 
         [Required]
         public int ResidentId { get; set; }
 
         [Required]
-        public int AttractionId { get; set; }
+        public string AttractionName { get; set; }
+
+        [Required]
+        public string AttractionGooglePlaceId { get; set; }
     }
 
     public class PingBase : PingAdd

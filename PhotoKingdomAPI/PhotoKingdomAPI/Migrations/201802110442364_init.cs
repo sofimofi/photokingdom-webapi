@@ -316,7 +316,6 @@ namespace PhotoKingdomAPI.Migrations
                         AttractionId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Attractions", t => t.AttractionId, cascadeDelete: true)
                 .ForeignKey("dbo.Residents", t => t.ResidentId, cascadeDelete: true)
                 .Index(t => t.ResidentId)
                 .Index(t => t.AttractionId);

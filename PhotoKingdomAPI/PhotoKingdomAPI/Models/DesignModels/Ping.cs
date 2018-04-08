@@ -26,7 +26,10 @@ namespace PhotoKingdomAPI.Models
         public int ResidentId { get; set; }
 
         [Required]
-        public int AttractionId { get; set; }
+        public string AttractionName { get; set; }
+
+        [Required]
+        public string AttractionGooglePlaceId { get; set; }
 
         // navigations
         public Resident Resident { get; set; }

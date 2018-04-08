@@ -598,6 +598,7 @@ namespace PhotoKingdomAPI.Controllers
             {
                 var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
                 var albionfalls = ds.Attractions.SingleOrDefault(o => o.Name == "Albion Falls" && o.City.Name == "Hamilton");
+                var boyerwoodlot = ds.Attractions.SingleOrDefault(o => o.Name == "Boywer Woodlot" && o.City.Name == "Toronto");
                 var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
                 var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
                 var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
@@ -606,38 +607,51 @@ namespace PhotoKingdomAPI.Controllers
                 {
                     ds.Pings.Add(new Ping
                     {
-                        Attraction = cntower,
+                        AttractionGooglePlaceId = cntower.googlePlaceId,
+                        AttractionName = cntower.Name,
                         Resident = sofia
                     });
                     ds.Pings.Add(new Ping
                     {
-                        Attraction = cntower,
+                        AttractionGooglePlaceId = cntower.googlePlaceId,
+                        AttractionName = cntower.Name,
                         Resident = wonho
                     });
                     ds.Pings.Add(new Ping
                     {
-                        Attraction = albionfalls,
+                        AttractionGooglePlaceId = albionfalls.googlePlaceId,
+                        AttractionName = albionfalls.Name,
                         Resident = sofia
                     });
                     ds.Pings.Add(new Ping
                     {
-                        Attraction = albionfalls,
+                        AttractionGooglePlaceId = albionfalls.googlePlaceId,
+                        AttractionName = albionfalls.Name,
                         Resident = zhihao
                     });
                     ds.Pings.Add(new Ping
                     {
-                        Attraction = albionfalls,
+                        AttractionGooglePlaceId = albionfalls.googlePlaceId,
+                        AttractionName = albionfalls.Name,
                         Resident = wonho
                     });
                     ds.Pings.Add(new Ping
                     {
-                        Attraction = cntower,
+                        AttractionGooglePlaceId = cntower.googlePlaceId,
+                        AttractionName = cntower.Name,
                         Resident = testAccount
                     });
                     ds.Pings.Add(new Ping
                     {
-                        Attraction = albionfalls,
+                        AttractionGooglePlaceId = albionfalls.googlePlaceId,
+                        AttractionName = albionfalls.Name,
                         Resident = testAccount
+                    });
+                    ds.Pings.Add(new Ping
+                    {
+                        AttractionGooglePlaceId = boyerwoodlot.googlePlaceId,
+                        AttractionName = boyerwoodlot.Name,
+                        Resident = wonho
                     });
                     ds.SaveChanges();
                     count++;
@@ -2173,10 +2187,12 @@ namespace PhotoKingdomAPI.Controllers
         //                          Ping
         // **************************************************************
 
-        public IEnumerable<PingWithDetails> PingGetAllForResident(int id)
+        public IEnumerable<PingBase> PingGetAllForResident(int id)
         {
-            var p = ds.Pings.Include("Attraction").Where(o => o.ResidentId == id).OrderByDescending(o => o.Id);
-            return mapper.Map<IEnumerable<PingWithDetails>>(p);
+            var p = ds.Pings
+                .Where(o => o.ResidentId == id).OrderByDescending(o => o.Id);
+
+            return mapper.Map<IEnumerable<PingBase>>(p);
         }
 
         public PingBase PingAdd(PingAdd newItem)
