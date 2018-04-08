@@ -39,4 +39,10 @@ namespace PhotoKingdomAPI.Controllers
 		public ResidentBase Resident { get; set; }
 		public CityBase City { get; set; }
 	}
+
+    public class ResidentCityOwnForMapView : ResidentCityOwnBase
+    {
+        public String ResidentUserName { get; set; }
+        public String ResidentAvatarImagePath { get; set; }
+    }
 }
