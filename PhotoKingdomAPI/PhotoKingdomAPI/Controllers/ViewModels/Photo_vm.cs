@@ -50,4 +50,13 @@ namespace PhotoKingdomAPI.Controllers
 		public IEnumerable<CountryPhotowarRequestedphotoUploadBase> CountryPhotowarRequestedphotoUploads { get; set; }
 		public IEnumerable<ContinentPhotowarRequestedphotoUploadBase> ContinentPhotowarRequestedphotoUploads { get; set; }
 	}
+
+    // Photo with info needed for Winning Photos gallery for an attraction
+    public class PhotoWinning : PhotoBase
+    {
+        public String ResidentUserName { get; set; }
+        public String ResidentAvatarImagePath { get; set; }
+        public int Votes { get; set; }
+        public DateTime WinningDate { get; set; }
+    }
 }

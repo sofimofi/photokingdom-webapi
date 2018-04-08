@@ -1674,7 +1674,8 @@ namespace PhotoKingdomAPI.Controllers
 
             var attraction = mapper.Map<AttractionWithDetails>(a);
 
-            var photowars = a.AttractionPhotowars.OrderByDescending(p => p.EndDate).ToArray();
+            // get photowars that have ended already
+            var photowars = a.AttractionPhotowars.Where(p => p.EndDate < DateTime.Now).OrderByDescending(p => p.EndDate).ToArray();
             if (photowars.Length > 0)
             {
                 var winningUpload = photowars[0].AttractionPhotowarUploads.SingleOrDefault(u => u.IsWinner == 1);
