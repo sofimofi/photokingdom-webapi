@@ -290,6 +290,14 @@
     <Compile Include="Migrations\201803302227226_attractionphotowar-extension-date.Designer.cs">
       <DependentUpon>201803302227226_attractionphotowar-extension-date.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804080705447_add-place-id-to-ping.cs" />
+    <Compile Include="Migrations\201804080705447_add-place-id-to-ping.Designer.cs">
+      <DependentUpon>201804080705447_add-place-id-to-ping.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804080749187_add-attraction-name-to-ping.cs" />
+    <Compile Include="Migrations\201804080749187_add-attraction-name-to-ping.Designer.cs">
+      <DependentUpon>201804080749187_add-attraction-name-to-ping.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -437,6 +445,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803302227226_attractionphotowar-extension-date.resx">
       <DependentUpon>201803302227226_attractionphotowar-extension-date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804080705447_add-place-id-to-ping.resx">
+      <DependentUpon>201804080705447_add-place-id-to-ping.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804080749187_add-attraction-name-to-ping.resx">
+      <DependentUpon>201804080749187_add-attraction-name-to-ping.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
