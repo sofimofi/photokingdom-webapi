@@ -290,6 +290,14 @@
     <Compile Include="Migrations\201803302227226_attractionphotowar-extension-date.Designer.cs">
       <DependentUpon>201803302227226_attractionphotowar-extension-date.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804080705447_add-place-id-to-ping.cs" />
+    <Compile Include="Migrations\201804080705447_add-place-id-to-ping.Designer.cs">
+      <DependentUpon>201804080705447_add-place-id-to-ping.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804080749187_add-attraction-name-to-ping.cs" />
+    <Compile Include="Migrations\201804080749187_add-attraction-name-to-ping.Designer.cs">
+      <DependentUpon>201804080749187_add-attraction-name-to-ping.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -341,6 +349,10 @@
     <Content Include="img\casaloma2.jpg" />
     <Content Include="img\cntower1.jpg" />
     <Content Include="img\cntower2.jpg" />
+    <Content Include="img\cntower3.jpg" />
+    <Content Include="img\cntower4.jpg" />
+    <Content Include="img\cntower5.jpg" />
+    <Content Include="img\cntower6.jpg" />
     <Content Include="img\daniannuzzipark1.png" />
     <Content Include="img\daniannuzzipark2.jpg" />
     <Content Include="img\edgeleypark1.jpg" />
@@ -433,6 +445,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803302227226_attractionphotowar-extension-date.resx">
       <DependentUpon>201803302227226_attractionphotowar-extension-date.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804080705447_add-place-id-to-ping.resx">
+      <DependentUpon>201804080705447_add-place-id-to-ping.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804080749187_add-attraction-name-to-ping.resx">
+      <DependentUpon>201804080749187_add-attraction-name-to-ping.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -597,6 +597,114 @@ namespace PhotoKingdomAPI.Controllers
                 }
             }
 
+            // Photowar queues
+            if (ds.Queues.Count() == 0)
+            {
+                var cntower = ds.Attractions.SingleOrDefault(o => o.Name == "CN Tower" && o.City.Name == "Toronto");
+                var casaloma = ds.Attractions.SingleOrDefault(o => o.Name == "Casa Loma" && o.City.Name == "Toronto");
+                var boyerwoodlot = ds.Attractions.SingleOrDefault(o => o.Name == "Boywer Woodlot" && o.City.Name == "Toronto");
+                var danIannuzziPark = ds.Attractions.SingleOrDefault(o => o.Name == "Dan Iannuzzi Park" && o.City.Name == "Toronto");
+                var shorehamPark = ds.Attractions.SingleOrDefault(o => o.Name == "Shoreham Park" && o.City.Name == "Toronto");
+                var edgeleyPark = ds.Attractions.SingleOrDefault(o => o.Name == "Edgeley Park" && o.City.Name == "Toronto");
+                var sofia = ds.Residents.SingleOrDefault(o => o.UserName == "Sofia");
+                var wonho = ds.Residents.SingleOrDefault(o => o.UserName == "Wonho");
+                var zhihao = ds.Residents.SingleOrDefault(o => o.UserName == "Zhihao");
+                var testuser = ds.Residents.SingleOrDefault(o => o.UserName == "Test");
+                if (cntower != null && casaloma != null && sofia != null && wonho != null && zhihao != null && testuser != null)
+                {
+                    var cntowerPhotowar = ds.AttractionPhotowars.FirstOrDefault(o => o.AttractionId == cntower.Id && o.EndDate > DateTime.Now);
+                    if (cntowerPhotowar != null)
+                    {
+                        // CN Tower Queue 1
+                        var cntowerPhoto1 = ds.Photos.Add(new Photo
+                        {
+                            Lat = 43.7426F,
+                            Lng = -79.4871F,
+                            Resident = sofia,
+                            PhotoFilePath = "img/cntower3.jpg"
+                        });
+                        var cntowerUpload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                        {
+                            Photo = cntowerPhoto1,
+                            AttractionPhotoWar = cntowerPhotowar
+                        });
+                        var cntowerQueue = ds.Queues.Add(new Queue
+                        {
+                            Attraction = cntower,
+                            AttractionPhotowarUpload = cntowerUpload1,
+                            QueueDate = DateTime.Now
+                        });
+
+                        // CN Tower Queue 2
+                        var cntowerPhoto2 = ds.Photos.Add(new Photo
+                        {
+                            Lat = 43.7426F,
+                            Lng = -79.4871F,
+                            Resident = zhihao,
+                            PhotoFilePath = "img/cntower4.jpg"
+                        });
+                        var cntowerUpload2 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                        {
+                            Photo = cntowerPhoto2,
+                            AttractionPhotoWar = cntowerPhotowar
+                        });
+                        var cntowerQueue2 = ds.Queues.Add(new Queue
+                        {
+                            Attraction = cntower,
+                            AttractionPhotowarUpload = cntowerUpload2,
+                            QueueDate = DateTime.Now.AddDays(7)
+                        });
+
+                        // CN Tower Queue 3
+                        var cntowerPhoto3 = ds.Photos.Add(new Photo
+                        {
+                            Lat = 43.7426F,
+                            Lng = -79.4871F,
+                            Resident = wonho,
+                            PhotoFilePath = "img/cntower5.jpg"
+                        });
+                        var cntowerUpload3 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                        {
+                            Photo = cntowerPhoto3,
+                            AttractionPhotoWar = cntowerPhotowar
+                        });
+                        var cntowerQueue3 = ds.Queues.Add(new Queue
+                        {
+                            Attraction = cntower,
+                            AttractionPhotowarUpload = cntowerUpload3,
+                            QueueDate = DateTime.Now.AddDays(14)
+                        });
+
+                        // CN Tower Queue 4
+                        var cntowerPhoto4 = ds.Photos.Add(new Photo
+                        {
+                            Lat = 43.7426F,
+                            Lng = -79.4871F,
+                            Resident = testuser,
+                            PhotoFilePath = "img/cntower6.jpg"
+                        });
+                        var cntowerUpload4 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                        {
+                            Photo = cntowerPhoto4,
+                            AttractionPhotoWar = cntowerPhotowar
+                        });
+                        var cntowerQueue4 = ds.Queues.Add(new Queue
+                        {
+                            Attraction = cntower,
+                            AttractionPhotowarUpload = cntowerUpload4,
+                            QueueDate = DateTime.Now.AddDays(21)
+                        });
+
+                        ds.SaveChanges();
+                        count++;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Seed data problem!");
+                }
+            }
+
             // pings
             if (ds.Pings.Count() == 0)
             {
@@ -2220,6 +2328,11 @@ namespace PhotoKingdomAPI.Controllers
         //                          Queue
         // **************************************************************
 
+        public IEnumerable<QueueBase> QueueGetAll()
+        {
+            return mapper.Map<IEnumerable<QueueBase>>(ds.Queues.OrderBy(q => q.Id));
+        }
+
         // Get all queues for an attraction
         public IEnumerable<QueueBase> QueueGetAllForAttraction(int id)
         {
@@ -2230,7 +2343,10 @@ namespace PhotoKingdomAPI.Controllers
         // Get all queues with details for an attraction
         public IEnumerable<QueueWithDetails> QueueGetAllWithDetailsForAttraction(int id)
         {
-            var p = ds.Queues.Include("AttractionPhotowarUpload").Where(o => o.AttractionId == id).OrderBy(o => o.Id);
+            var p = ds.Queues
+                .Include("AttractionPhotowarUpload.Photo.Resident")
+                .Where(o => o.AttractionId == id).OrderBy(o => o.Id);
+
             return mapper.Map<IEnumerable<QueueWithDetails>>(p);
         }
 
