@@ -1857,6 +1857,77 @@ namespace PhotoKingdomAPI.Controllers
                 return mapper.Map<AttractionBase>(addedItem);
             }
         }
+
+        public AttractionWithDetails AttractionEditWin(AttractionWithWin item)
+        {
+            if (item == null)
+            {
+                return null;
+            }
+            else
+            {
+                var a = ds.Attractions
+                    .Include("City")
+                    .Include("QueuedUploads")
+                    .Include("AttractionPhotoWars")
+                    .Include("Owners")
+                    .SingleOrDefault(o => o.Id == item.AttractionId);
+
+                if (a != null && a.Owners.Count == 0 && a.AttractionPhotowars.Count == 0)
+                {
+                    var resident = ds.Residents.Find(item.OwnerId);
+
+                    if (resident != null)
+                    {
+                        var owner = ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                        {
+                            Title = "Lord of " + a.Name,
+                            StartOfOwn = DateTime.Now,
+                            ResidentId = resident.Id,
+                            AttractionId = a.Id
+                        });
+
+                        var winningPhoto = ds.Photos.Add(new Photo
+                        {
+                            PhotoFilePath = item.PhotoImagePath,
+                            Lat = item.PhotoLat,
+                            Lng = item.PhotoLng,
+                            ResidentId = resident.Id
+                        });
+
+                        var photowar = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                        {
+                            AttractionId = a.Id,
+                            StartDate = DateTime.Now,
+                            EndDate = DateTime.Now
+                        });
+
+                        var photowarUpload = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                        {
+                            PhotoId = winningPhoto.Id,
+                            AttractionPhotowarId = photowar.Id
+                        });
+                        ds.SaveChanges();
+
+                        
+                        var res = mapper.Map<AttractionWithDetails>(a);
+                        res.PhotoImagePath = a.AttractionPhotowars.FirstOrDefault().AttractionPhotowarUploads.FirstOrDefault().Photo.PhotoFilePath;
+                        res.OwnerName = a.Owners.FirstOrDefault().Resident.UserName;
+
+                        return res;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+        }
         #endregion Attraction
 
         #region AttractionPhotoWar

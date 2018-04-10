@@ -33,17 +33,17 @@ namespace PhotoKingdomAPI.Controllers
         public int Id { get; set; }
     }
 
-	public class AttractionWithDetails : AttractionBase
-	{
-		public AttractionWithDetails()
-		{
-			QueuedUploads = new List<QueueBase>();
-			AttractionPhotowars = new List<AttractionPhotowarBase>();
-			Owners = new List<ResidentAttractionOwnBase>();
-		}
+    public class AttractionWithDetails : AttractionBase
+    {
+        public AttractionWithDetails()
+        {
+            QueuedUploads = new List<QueueBase>();
+            AttractionPhotowars = new List<AttractionPhotowarBase>();
+            Owners = new List<ResidentAttractionOwnBase>();
+        }
 
-		public String CityName { get; set; }
-		public String CityProvinceCountryName { get; set; }
+        public String CityName { get; set; }
+        public String CityProvinceCountryName { get; set; }
 
         // Winning photo
         public String PhotoImagePath { get; set; }
@@ -53,11 +53,11 @@ namespace PhotoKingdomAPI.Controllers
 
         // the queued photo uploads for this Attraction
         public IEnumerable<QueueBase> QueuedUploads { get; set; }
-		// all the AttractionPhotowars for this Attraction
-		public IEnumerable<AttractionPhotowarBase> AttractionPhotowars { get; set; }
-		// all the residents that owned this Attraction
-		public IEnumerable<ResidentAttractionOwnBase> Owners { get; set; }
-	}
+        // all the AttractionPhotowars for this Attraction
+        public IEnumerable<AttractionPhotowarBase> AttractionPhotowars { get; set; }
+        // all the residents that owned this Attraction
+        public IEnumerable<ResidentAttractionOwnBase> Owners { get; set; }
+    }
 
     public class AttractionForMapView : AttractionBase
     {
@@ -96,4 +96,25 @@ namespace PhotoKingdomAPI.Controllers
         public String CountryName { get; set; }
     }
 
+    // for update newly added attraction
+    public class AttractionWithWin
+    {
+        [Required]
+        public int AttractionId { get; set; }
+
+        // Winning photo
+        [Required]
+        public String PhotoImagePath { get; set; }
+
+        [Required]
+        public double PhotoLat { get; set; }
+
+        [Required]
+        public double PhotoLng { get; set; }
+
+        // Attraction owner
+        [Required]
+        public int OwnerId { get; set; }
+
+    }
 }
