@@ -1879,14 +1879,7 @@ namespace PhotoKingdomAPI.Controllers
 
                     if (resident != null)
                     {
-                        var owner = ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
-                        {
-                            Title = "Lord of " + a.Name,
-                            StartOfOwn = DateTime.Now,
-                            ResidentId = resident.Id,
-                            AttractionId = a.Id
-                        });
-
+                        // set winning photo
                         var winningPhoto = ds.Photos.Add(new Photo
                         {
                             PhotoFilePath = item.PhotoImagePath,
@@ -1895,6 +1888,7 @@ namespace PhotoKingdomAPI.Controllers
                             ResidentId = resident.Id
                         });
 
+                        // photowar & photowar upload with winner
                         var photowar = ds.AttractionPhotowars.Add(new AttractionPhotowar
                         {
                             AttractionId = a.Id,
@@ -1904,16 +1898,17 @@ namespace PhotoKingdomAPI.Controllers
 
                         var photowarUpload = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                         {
+                            IsWinner = 1,
                             PhotoId = winningPhoto.Id,
                             AttractionPhotowarId = photowar.Id
                         });
                         ds.SaveChanges();
 
-                        
-                        var res = mapper.Map<AttractionWithDetails>(a);
-                        res.PhotoImagePath = a.AttractionPhotowars.FirstOrDefault().AttractionPhotowarUploads.FirstOrDefault().Photo.PhotoFilePath;
-                        res.OwnerName = a.Owners.FirstOrDefault().Resident.UserName;
+                        // set owner
+                        var owner = CreateAttractionOwnForPhotoUpload(photowarUpload.Id);
 
+                        // pass in place id, and return details
+                        var res = AttractionGetByGooglePlaceIdWithDetails(item.PlaceId);
                         return res;
                     }
                     else

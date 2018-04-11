@@ -42,6 +42,7 @@ namespace PhotoKingdomAPI.Controllers
             Owners = new List<ResidentAttractionOwnBase>();
         }
 
+        public int AttractionPhotowarsCount { get; set; }
         public String CityName { get; set; }
         public String CityProvinceCountryName { get; set; }
 
@@ -116,5 +117,8 @@ namespace PhotoKingdomAPI.Controllers
         [Required]
         public int OwnerId { get; set; }
 
+        // Google place Id
+        [Required]
+        public String PlaceId { get; set; }
     }
 }
