@@ -1809,6 +1809,7 @@ namespace PhotoKingdomAPI.Controllers
                 {
                     var path = winningUpload.Photo.PhotoFilePath;
                     attraction.PhotoImagePath = path;
+                    attraction.CurrentAttractionPhotowarUploadsCount = winningUpload.AttractionPhotoWar.AttractionPhotowarUploads.Count;
                 }
             }
 
@@ -1869,8 +1870,8 @@ namespace PhotoKingdomAPI.Controllers
                 var a = ds.Attractions
                     .Include("City")
                     .Include("QueuedUploads")
-                    .Include("AttractionPhotoWars")
-                    .Include("Owners")
+                    .Include("AttractionPhotoWars.AttractionPhotowarUploads.Photo")
+                    .Include("Owners.Resident")
                     .SingleOrDefault(o => o.Id == item.AttractionId);
 
                 if (a != null && a.Owners.Count == 0 && a.AttractionPhotowars.Count == 0)
@@ -1909,6 +1910,7 @@ namespace PhotoKingdomAPI.Controllers
 
                         // pass in place id, and return details
                         var res = AttractionGetByGooglePlaceIdWithDetails(item.PlaceId);
+                        
                         return res;
                     }
                     else
@@ -1960,7 +1962,7 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<AttractionPhotowar>, IEnumerable<AttractionPhotowarWithDetails>>(photowars);
         }
 
-        public AttractionPhotowarBase AttractionPhotowarAdd(AttractionPhotowarAdd newItem)
+        public AttractionPhotowarWithDetails AttractionPhotowarAdd(AttractionPhotoWarAddForm newItem)
         {
             if (newItem == null)
             {
@@ -1968,10 +1970,47 @@ namespace PhotoKingdomAPI.Controllers
             }
             else
             {
-                var addedItem = mapper.Map<AttractionPhotowar>(newItem);
-                ds.AttractionPhotowars.Add(addedItem);
-                ds.SaveChanges();
-                return mapper.Map<AttractionPhotowarBase>(addedItem);
+                // create new photowar
+                var war = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                {
+                    AttractionId = newItem.AttractionId
+                });
+
+                var attraction = AttractionGetByGooglePlaceIdWithDetails(newItem.PlaceId);
+                if (attraction != null)
+                {
+                    // get owner photo
+                    var ownerPhoto = ds.Photos.SingleOrDefault(o => o.PhotoFilePath == attraction.PhotoImagePath);
+
+                    // create new uploaded photo
+                    var competitorPhoto = ds.Photos.Add(new Photo
+                    {
+                        PhotoFilePath = newItem.PhotoImagePath,
+                        Lat = newItem.PhotoLat,
+                        Lng = newItem.PhotoLng,
+                        ResidentId = newItem.CompetitorId
+                    });
+
+                    // create photowar upload for owner and competitor
+                    var photoUpload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        AttractionPhotowarId = war.Id,
+                        PhotoId = ownerPhoto.Id
+                    });
+
+                    var photoUpload2 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    {
+                        AttractionPhotowarId = war.Id,
+                        PhotoId = competitorPhoto.Id
+                    });
+
+                    ds.SaveChanges();
+                    return mapper.Map<AttractionPhotowarWithDetails>(war);
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 

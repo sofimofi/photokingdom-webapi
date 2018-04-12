@@ -102,7 +102,7 @@ namespace PhotoKingdomAPI.Controllers
         }
 
         // POST: api/AttractionPhotowars
-        public IHttpActionResult Post([FromBody]AttractionPhotowarAdd newItem)
+        public IHttpActionResult Post([FromBody]AttractionPhotoWarAddForm newItem)
         {
             // Ensure that the URI is clean (and does not have an id parameter)
             if (Request.GetRouteData().Values["id"] != null)
@@ -134,7 +134,7 @@ namespace PhotoKingdomAPI.Controllers
                     // Notice how to create the URI for the Location header
 
                     var uri = Url.Link("DefaultApi", new { id = addedItem.Id });
-                    return Created<AttractionPhotowarBase>(uri, addedItem);
+                    return Created(uri, addedItem);
                 }
             }
             else

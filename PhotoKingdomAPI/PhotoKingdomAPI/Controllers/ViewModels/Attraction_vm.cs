@@ -42,7 +42,7 @@ namespace PhotoKingdomAPI.Controllers
             Owners = new List<ResidentAttractionOwnBase>();
         }
 
-        public int AttractionPhotowarsCount { get; set; }
+        public int CurrentAttractionPhotowarUploadsCount { get; set; }
         public String CityName { get; set; }
         public String CityProvinceCountryName { get; set; }
 
