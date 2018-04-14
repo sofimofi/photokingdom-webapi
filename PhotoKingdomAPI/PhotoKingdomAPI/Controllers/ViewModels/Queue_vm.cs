@@ -19,7 +19,7 @@ namespace PhotoKingdomAPI.Controllers
         public int AttractionId { get; set; }
 
         [Required]
-        public int AttractionPhotowarUploadId { get; set; }
+        public int PhotoId { get; set; }
     }
 
     public class QueueBase : QueueAdd
@@ -29,16 +29,10 @@ namespace PhotoKingdomAPI.Controllers
 
 	public class QueueWithDetails : QueueBase
 	{
-		public AttractionBase Attraction { get; set; }
-		// the photo uploaded
-		public AttractionPhotowarUploadBase AttractionPhotowarUpload { get; set; }
+        public string PhotoPhotoFilePath { get; set; }
 
-        public int AttractionPhotowarUploadPhotoId { get; set; }
+        public string PhotoResidentId { get; set; }
 
-        public string AttractionPhotowarUploadPhotoPhotoFilePath { get; set; }
-
-        public string AttractionPhotowarUploadPhotoResidentId { get; set; }
-
-        public string AttractionPhotowarUploadPhotoResidentUserName { get; set; }
+        public string PhotoResidentUserName { get; set; }
     }
 }

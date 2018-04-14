@@ -17,25 +17,6 @@ namespace PhotoKingdomAPI.Controllers
             return Ok(m.QueueGetAll());
         }
 
-        // GET: api/Queues/5
-        public IHttpActionResult Get(int? id)
-        {
-            // Determine whether we can continue
-            if (!id.HasValue) { return NotFound(); }
-
-            // Fetch the object, so that we can inspect its value
-            var o = m.QueueGetAllWithDetailsForAttraction(id.Value);
-
-            if (o == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(o);
-            }
-        }
-
         // POST: api/Queues
         public IHttpActionResult Post([FromBody]QueueAdd newItem)
         {
