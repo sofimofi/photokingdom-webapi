@@ -1005,9 +1005,9 @@ namespace PhotoKingdomAPI.Controllers
         // Returns Photowars that have been updated
         public IEnumerable<AttractionPhotowarWithDetails> checkOwns()
         {
-            // fetch the photowars that have just ended and have no winners declared yet
+            // fetch the photowars that have just ended or that have been extended, and have no winners declared yet
             var newPhotowarEnds = ds.AttractionPhotowarUploads.Where(u => u.IsWinner == null).Select(u => u.AttractionPhotoWar).Include("AttractionPhotowarUploads.ResidentVotes")
-                .Where(p => p.EndDate < DateTime.Now).Distinct();
+                .Where(p => p.EndDate < DateTime.Now || (p.ExtendedDate != null && p.ExtendedDate < DateTime.Now) ).Distinct();
 
             // keep Ids to return at the end
             var newPhotowarIds = newPhotowarEnds.Select(p => p.Id).ToList();
@@ -1036,16 +1036,13 @@ namespace PhotoKingdomAPI.Controllers
                         var addOwn = CreateAttractionOwnForPhotoUpload(firstUpload.Id);
                         if (!addOwn) return null;
 
-                        // Check Photowar queue if photowar ended before 3 days
-                        if (!checkCurrentPhotowar(photowar.AttractionId)
-                            && photowar.EndDate < DateTime.Now.AddDays(-3))
+                        // Check if there is a queue for this attraction
+                        var queue = checkPhotowarQueue(photowar.AttractionId);
+                        if (queue != null)
                         {
-                            var queue = checkPhotowarQuque(photowar.AttractionId);
-                            if (queue != null)
-                            {
-                                createPhotowarFromQueue(queue, firstUpload);
-                            }
+                            createPhotowarFromQueue(queue, firstUpload);
                         }
+
                     } else if (secondUpload.ResidentVotes.Count > firstUpload.ResidentVotes.Count)
                     {
                         // second photo is winner
@@ -1058,20 +1055,17 @@ namespace PhotoKingdomAPI.Controllers
                         var addOwn = CreateAttractionOwnForPhotoUpload(secondUpload.Id);
                         if (!addOwn) return null;
 
-                        // Check Photowar queue if photowar ended before 3 days
-                        if (!checkCurrentPhotowar(photowar.AttractionId) 
-                            && photowar.EndDate < DateTime.Now.AddDays(-3))
+                        // Check if there is a queue for this attraction
+                        var queue = checkPhotowarQueue(photowar.AttractionId);
+                        if (queue != null)
                         {
-                            var queue = checkPhotowarQuque(photowar.AttractionId);
-                            if (queue != null)
-                            {
-                                createPhotowarFromQueue(queue, secondUpload);
-                            }
+                            createPhotowarFromQueue(queue, secondUpload);
                         }
                     } else
                     {
                         // equal score - keep extend vote for another 3 days, and the next vote will determine winner
                         photowar.ExtendedDate = DateTime.Now.AddDays(3);
+
                         ds.SaveChanges();
                     }
 
@@ -1082,7 +1076,7 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(newPhotowars);
         }
 
-        public bool checkCurrentPhotowar(int attractionId)
+        /*public bool checkCurrentPhotowar(int attractionId)
         {
             var curPhotowar = ds.AttractionPhotowars
                 .Where(w => w.AttractionId == attractionId && w.EndDate > DateTime.Now)
@@ -1094,9 +1088,9 @@ namespace PhotoKingdomAPI.Controllers
             }
 
             return false;
-        }
+        }*/
 
-        public Queue checkPhotowarQuque(int attractionId)
+        public Queue checkPhotowarQueue(int attractionId)
         {
             var queue = ds.Queues.Include("Photo").Where(q => q.AttractionId == attractionId);
             if (queue == null)
@@ -1107,14 +1101,29 @@ namespace PhotoKingdomAPI.Controllers
             return queue.OrderBy(q => q.QueueDate).FirstOrDefault();
         }
 
+        // Creates photowar 3 days after the last photowar ended (or today's date if 3 days after is in the past) for an attraction
         public void createPhotowarFromQueue(Queue queue, AttractionPhotowarUpload upload)
         {
             int attractionId = upload.AttractionPhotoWar.AttractionId;
 
+            // get last attractionphotowar enddate
+            DateTime endDate = upload.AttractionPhotoWar.ExtendedDate != null ? (DateTime) upload.AttractionPhotoWar.ExtendedDate : upload.AttractionPhotoWar.EndDate;
+
+            DateTime startDate;
+            if(endDate < DateTime.Now.AddDays(-3))
+            {
+                startDate = DateTime.Now; // can't start a photowar in the past, so start it now
+            } else
+            {
+                startDate = endDate.AddDays(3);
+            }
+
             // New Photowar
             var photowar = ds.AttractionPhotowars.Add(new AttractionPhotowar
             {
-                AttractionId = attractionId
+                AttractionId = attractionId,
+                StartDate = startDate,
+                EndDate = startDate.AddDays(3)
             });
 
             // Upload from current winning photo
@@ -2001,6 +2010,7 @@ namespace PhotoKingdomAPI.Controllers
             var a = ds.AttractionPhotowars
                 .Include("Attraction")
                 .Include("AttractionPhotowarUploads.Photo.Resident")
+                .Include("AttractionPhotowarUploads.ResidentVotes")
                 .OrderByDescending(o => o.StartDate);
 
             return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(a);
@@ -2015,7 +2025,7 @@ namespace PhotoKingdomAPI.Controllers
         public IEnumerable<AttractionPhotowarWithDetails> AttractionPhotowarGetAllForAttraction(int id)
         {
             var photowars = ds.AttractionPhotowars.Include("AttractionPhotowarUploads.ResidentVotes").Include("AttractionPhotowarUploads.Photo.Resident")
-                .Where(a => a.AttractionId == id).OrderByDescending(a => a.StartDate);
+                .Where(a => a.AttractionId == id && a.AttractionPhotowarUploads.Count() == 2).OrderByDescending(a => a.StartDate);
 
             return mapper.Map<IEnumerable<AttractionPhotowar>, IEnumerable<AttractionPhotowarWithDetails>>(photowars);
         }
@@ -2135,10 +2145,14 @@ namespace PhotoKingdomAPI.Controllers
             var resident = ds.Residents.Find(residentId);
             if (resident == null) { return null; }
 
+            bool voteAdded = false; 
+
             // add vote to photoUpload
             if (!photoUpload.ResidentVotes.Contains(resident))
             {
                 photoUpload.ResidentVotes.Add(resident);
+
+                voteAdded = true;
             }
 
             // get the opponent photo
@@ -2151,6 +2165,16 @@ namespace PhotoKingdomAPI.Controllers
                 opposingPhoto.ResidentVotes.Remove(resident);
             }
             ds.SaveChanges();
+
+            if (voteAdded)
+            {
+                // if photowar was an extended photowar, it was just waiting for one more vote to declare the winner
+                if (photowar.ExtendedDate != null)
+                {
+                    photowar.ExtendedDate = DateTime.Now; // stop the war
+                    checkOwns(); // calculate all winners
+                }
+            }
 
             // Update voting details for AttractionPhotowar
             var attraction_vm = mapper.Map<AttractionPhotowarWithDetails>(photowar);
@@ -2184,6 +2208,13 @@ namespace PhotoKingdomAPI.Controllers
             var removedResidentVote = photoUpload.ResidentVotes.Remove(resident);
             if (!removedResidentVote) { return null; }
             ds.SaveChanges();
+
+            // if photowar was an extended photowar, it was just waiting for one more vote difference to declare the winner
+            if (photowar.ExtendedDate != null)
+            {
+                photowar.ExtendedDate = DateTime.Now; // stop the war
+                checkOwns(); // calculate all winners
+            }
 
             // Update voting details for AttractionPhotowar
             var attraction_vm = mapper.Map<AttractionPhotowarWithDetails>(photowar);
