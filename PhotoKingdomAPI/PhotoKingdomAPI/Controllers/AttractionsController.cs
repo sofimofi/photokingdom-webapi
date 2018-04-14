@@ -228,5 +228,43 @@ namespace PhotoKingdomAPI.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        // PUT: api/Attractions/5/details
+        [Route("{id:int}/details")]
+        public IHttpActionResult Put(int? id, [FromBody]AttractionWithWin item)
+        {
+            if (item == null)
+            {
+                return BadRequest("Must send an entity body with the request");
+            }
+
+            if (id.GetValueOrDefault() != item.AttractionId)
+            {
+                return BadRequest("Invalid data in the entity body");
+            }
+
+            // Ensure that we can use the incoming data
+            if (ModelState.IsValid)
+            {
+                // Attempt to add the new object
+                var editedItem = m.AttractionEditWin(item);
+
+                // Notice the ApiController convenience methods
+                if (editedItem == null)
+                {
+                    // HTTP 400
+                    return BadRequest("Cannot update the object");
+                }
+                else
+                {
+                    return Ok(editedItem);
+                }
+            }
+            else
+            {
+                // HTTP 400
+                return BadRequest(ModelState);
+            }
+        }
     }
 }

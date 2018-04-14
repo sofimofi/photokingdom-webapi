@@ -39,7 +39,8 @@ namespace PhotoKingdomAPI.Controllers
 			AttractionPhotowarUploads = new List<AttractionPhotowarUploadForPhotowar>();
             residentInPhotowar = -1; // default null
 		}
-		public AttractionBase Attraction { get; set; }
+
+        public AttractionBase Attraction { get; set; }
 		// the two photos uploaded for this PhotoWar
 		public IEnumerable<AttractionPhotowarUploadForPhotowar> AttractionPhotowarUploads { get; set; }
 
@@ -49,5 +50,29 @@ namespace PhotoKingdomAPI.Controllers
         public int residentInPhotowar { get; set; }
 	}
 
+    // Class to be posted from Android app to create photowar between current ownder and competitor
+    public class AttractionPhotoWarAddForm
+    {
+        [Required]
+        public int AttractionId { get; set; }
 
+        //[Required]
+        //public int OwnerId { get; set; }
+
+        [Required]
+        public int CompetitorId { get; set; }
+
+        // new uploaded photo info
+        [Required]
+        public String PhotoImagePath { get; set; }
+
+        [Required]
+        public double PhotoLat { get; set; }
+
+        [Required]
+        public double PhotoLng { get; set; }
+
+        [Required]
+        public String PlaceId { get; set; }
+    }
 }
