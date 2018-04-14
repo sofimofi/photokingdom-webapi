@@ -2011,6 +2011,7 @@ namespace PhotoKingdomAPI.Controllers
                 .Include("Attraction")
                 .Include("AttractionPhotowarUploads.Photo.Resident")
                 .Include("AttractionPhotowarUploads.ResidentVotes")
+                .Where(ap => ap.AttractionPhotowarUploads.Count() == 2)
                 .OrderByDescending(o => o.StartDate);
 
             return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(a);
