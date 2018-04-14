@@ -12,14 +12,24 @@ namespace PhotoKingdomAPI.Controllers
 		{
 			QueueDate = DateTime.Now;
 		}
-        [Required]
+
         public DateTime QueueDate { get; set; }
 
         [Required]
         public int AttractionId { get; set; }
 
-        [Required]
         public int PhotoId { get; set; }
+    }
+
+    public class QueueAddWithPhoto : QueueBase
+    {
+        public string PhotoPhotoFilePath { get; set; }
+
+        public double PhotoLat { get; set; }
+
+        public double PhotoLng { get; set; }
+
+        public int PhotoResidentId { get; set; }
     }
 
     public class QueueBase : QueueAdd
@@ -31,7 +41,11 @@ namespace PhotoKingdomAPI.Controllers
 	{
         public string PhotoPhotoFilePath { get; set; }
 
-        public string PhotoResidentId { get; set; }
+        public double PhotoLat { get; set; }
+
+        public double PhotoLng { get; set; }
+
+        public int PhotoResidentId { get; set; }
 
         public string PhotoResidentUserName { get; set; }
     }

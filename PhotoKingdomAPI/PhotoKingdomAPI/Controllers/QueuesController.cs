@@ -18,7 +18,7 @@ namespace PhotoKingdomAPI.Controllers
         }
 
         // POST: api/Queues
-        public IHttpActionResult Post([FromBody]QueueAdd newItem)
+        public IHttpActionResult Post([FromBody]QueueAddWithPhoto newItem)
         {
             // Ensure that the URI is clean (and does not have an id parameter)
             if (Request.GetRouteData().Values["id"] != null)

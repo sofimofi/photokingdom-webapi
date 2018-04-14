@@ -2514,7 +2514,7 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<QueueWithDetails>>(p);
         }
 
-        public QueueBase QueueAdd(QueueAdd newItem)
+        public QueueWithDetails QueueAdd(QueueAddWithPhoto newItem)
         {
             if (newItem == null)
             {
@@ -2522,10 +2522,19 @@ namespace PhotoKingdomAPI.Controllers
             }
             else
             {
+                var newPhoto = ds.Photos.Add(new Photo
+                {
+                    PhotoFilePath = newItem.PhotoPhotoFilePath,
+                    Lat = newItem.PhotoLat,
+                    Lng = newItem.PhotoLng,
+                    ResidentId = newItem.PhotoResidentId
+                });
+
                 var addedItem = mapper.Map<Queue>(newItem);
                 ds.Queues.Add(addedItem);
                 ds.SaveChanges();
-                return mapper.Map<QueueBase>(addedItem);
+
+                return mapper.Map<QueueWithDetails>(addedItem);
             }
         }
         #endregion Ping
