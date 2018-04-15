@@ -2290,9 +2290,80 @@ namespace PhotoKingdomAPI.Controllers
 
         public ResidentWithDetails ResidentWithDetailsGetById(int id)
         {
-            var o = ds.Residents.Include("City.Province.Country.Continent").Include("ResidentAttractionOwns").Include("ResidentCityOwns").Include("ResidentProvinceOwns")
-                .Include("ResidentCountryOwns").Include("ResidentContinentOwns").SingleOrDefault(i => i.Id == id);
-            return (o == null) ? null : mapper.Map<ResidentWithDetails>(o);
+            var o = ds.Residents.Include("City.Province.Country.Continent")
+                .Include("ResidentAttractionOwns")
+                .Include("ResidentCityOwns")
+                .Include("ResidentProvinceOwns")
+                .Include("ResidentCountryOwns")
+                .Include("ResidentContinentOwns")
+                .Include("Photos.AttractionPhotowarUploads.ResidentVotes")
+                .SingleOrDefault(i => i.Id == id);
+
+            // get total points of all photo uploads
+            long points = 0;
+            var photos = o.Photos;
+            foreach (var photo in photos)
+            {
+                var uploads = photo.AttractionPhotowarUploads;
+                foreach (var upload in uploads)
+                {
+                    points += upload.ResidentVotes.Count();
+                }
+            }
+
+            // get all current titles
+            String titles = "";
+
+            var continentOwns = o.ResidentContinentOwns.Where(own => own.EndOfOwn == null);
+            if (continentOwns != null)
+            {
+                foreach (var own in continentOwns)
+                {
+                    titles += own.Title + ", ";
+                }
+            }
+
+            var countryOwns = o.ResidentCountryOwns.Where(own => own.EndOfOwn == null);
+            if (countryOwns != null)
+            {
+                foreach (var own in countryOwns)
+                {
+                    titles += own.Title + ", ";
+                }
+            }
+
+            var provinceOwns = o.ResidentProvinceOwns.Where(own => own.EndOfOwn == null);
+            if (provinceOwns != null)
+            {
+                foreach (var own in provinceOwns)
+                {
+                    titles += own.Title + ", ";
+                }
+            }
+
+            var cityOwns = o.ResidentCityOwns.Where(own => own.EndOfOwn == null);
+            if (cityOwns != null)
+            {
+                foreach (var own in cityOwns)
+                {
+                    titles += own.Title + ", ";
+                }
+            }
+
+            var attractionOwns = o.ResidentAttractionOwns.Where(own => own.EndOfOwn == null);
+            foreach (var own in attractionOwns)
+            {
+                titles += own.Title + ", ";
+            }
+            if(titles != "")
+            {
+                titles = titles.Remove(titles.Length - 2); // remove the last comma and space
+            }
+            
+            ResidentWithDetails resident = mapper.Map<ResidentWithDetails>(o);
+            resident.Title = titles;
+            resident.totalPoints = points;
+            return (o == null) ? null : resident;
         }
 
         public ResidentBase ResidentAdd(ResidentAdd newItem)

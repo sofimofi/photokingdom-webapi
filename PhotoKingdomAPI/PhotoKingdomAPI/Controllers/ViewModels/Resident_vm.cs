@@ -95,6 +95,8 @@ namespace PhotoKingdomAPI.Controllers
 		public IEnumerable<ContinentPhotowarPhotorequestBase> ReceivedContinentPhotowarPhotorequests { get; set; }
 
         public String Title { get; set; }
+
+        public long totalPoints { get; set; }
     }
 
     public class ResidentLogin

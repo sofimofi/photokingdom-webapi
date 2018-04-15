@@ -34,8 +34,8 @@ namespace PhotoKingdomAPI.Controllers
             }
 
             // display for now
-            if (o.ResidentAttractionOwns.Count() != 0)
-                o.Title = o.ResidentAttractionOwns.FirstOrDefault().Title;
+            //if (o.ResidentAttractionOwns.Count() != 0)
+              //  o.Title = o.ResidentAttractionOwns.FirstOrDefault().Title;
 
             return Ok(o);
         }
