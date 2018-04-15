@@ -446,26 +446,26 @@ namespace PhotoKingdomAPI.Controllers
                     var photowar3 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = boyerwoodlot.Id,
-                        StartDate = new DateTime(2018, 3, 1),
-                        EndDate = new DateTime(2018, 3, 4)
+                        StartDate = new DateTime(2018, 3, 11),
+                        EndDate = new DateTime(2018, 3, 14)
                     });
                     var photowar4 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = danIannuzziPark.Id,
-                        StartDate = new DateTime(2018, 3, 1),
-                        EndDate = new DateTime(2018, 3, 4)
+                        StartDate = new DateTime(2018, 3, 17),
+                        EndDate = new DateTime(2018, 3, 20)
                     });
                     var photowar5 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = shorehamPark.Id,
-                        StartDate = new DateTime(2018, 3, 1),
-                        EndDate = new DateTime(2018, 3, 4)
+                        StartDate = new DateTime(2018, 3, 22),
+                        EndDate = new DateTime(2018, 3, 25)
                     });
                     var photowar6 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = edgeleyPark.Id,
-                        StartDate = new DateTime(2018, 3, 1),
-                        EndDate = new DateTime(2018, 3, 4)
+                        StartDate = new DateTime(2018, 3, 27),
+                        EndDate = new DateTime(2018, 3, 30)
                     });
                     ds.SaveChanges();
 
@@ -768,38 +768,44 @@ namespace PhotoKingdomAPI.Controllers
                     {
                         Title = "Lady of " + boyerWoodlot.Name,
                         Resident = sofia,
-                        Attraction = boyerWoodlot
+                        Attraction = boyerWoodlot,
+                        StartOfOwn = new DateTime(2018, 3, 14)
                     });
                     ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
                     {
                         Title = "Lord of " + danIannuzziPark.Name,
                         Resident = wonho,
-                        Attraction = danIannuzziPark
+                        Attraction = danIannuzziPark,
+                        StartOfOwn = new DateTime(2018, 3, 20)
                     });
                     ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
                     {
                         Title = "Lord of " + shorehamPark.Name,
                         Resident = wonho,
-                        Attraction = shorehamPark
+                        Attraction = shorehamPark,
+                        StartOfOwn = new DateTime(2018, 3, 25)
                     });
                     ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
                     {
                         Title = "Lord of " + edgeleyPark.Name,
                         Resident = zhihao,
-                        Attraction = edgeleyPark
+                        Attraction = edgeleyPark,
+                        StartOfOwn = new DateTime(2018, 3, 30)
                     });
                     ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
                     {
                         Title = "Lady of " + cntower.Name,
                         Resident = sofia,
-                        Attraction = cntower
+                        Attraction = cntower,
+                        StartOfOwn = new DateTime(2018, 3, 9)
                     });
-                    ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
-                    {
-                        Title = "Lord of " + albionfalls.Name,
-                        Resident = zhihao,
-                        Attraction = albionfalls
-                    });
+                    //ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
+                    //{
+                    //    Title = "Lord of " + albionfalls.Name,
+                    //    Resident = zhihao,
+                    //    Attraction = albionfalls,
+                    //    StartOfOwn = new DateTime(2018, 3, 10)
+                    //});
                     ds.SaveChanges();
                     count++;
                 }
@@ -1036,13 +1042,15 @@ namespace PhotoKingdomAPI.Controllers
                         var addOwn = CreateAttractionOwnForPhotoUpload(firstUpload.Id);
                         if (!addOwn) return null;
 
-                        // Check if there is a queue for this attraction
-                        var queue = checkPhotowarQueue(photowar.AttractionId);
-                        if (queue != null)
+                        if (!checkCurrentPhotowar(photowar.AttractionId))
                         {
-                            createPhotowarFromQueue(queue, firstUpload);
+                            // Check if there is a queue for this attraction
+                            var queue = checkPhotowarQueue(photowar.AttractionId);
+                            if (queue != null)
+                            {
+                                createPhotowarFromQueue(queue, firstUpload);
+                            }
                         }
-
                     } else if (secondUpload.ResidentVotes.Count > firstUpload.ResidentVotes.Count)
                     {
                         // second photo is winner
@@ -1055,11 +1063,14 @@ namespace PhotoKingdomAPI.Controllers
                         var addOwn = CreateAttractionOwnForPhotoUpload(secondUpload.Id);
                         if (!addOwn) return null;
 
-                        // Check if there is a queue for this attraction
-                        var queue = checkPhotowarQueue(photowar.AttractionId);
-                        if (queue != null)
+                        if (!checkCurrentPhotowar(photowar.AttractionId))
                         {
-                            createPhotowarFromQueue(queue, secondUpload);
+                            // Check if there is a queue for this attraction
+                            var queue = checkPhotowarQueue(photowar.AttractionId);
+                            if (queue != null)
+                            {
+                                createPhotowarFromQueue(queue, secondUpload);
+                            }
                         }
                     } else
                     {
@@ -1076,7 +1087,7 @@ namespace PhotoKingdomAPI.Controllers
             return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(newPhotowars);
         }
 
-        /*public bool checkCurrentPhotowar(int attractionId)
+        public bool checkCurrentPhotowar(int attractionId)
         {
             var curPhotowar = ds.AttractionPhotowars
                 .Where(w => w.AttractionId == attractionId && w.EndDate > DateTime.Now)
@@ -1088,7 +1099,7 @@ namespace PhotoKingdomAPI.Controllers
             }
 
             return false;
-        }*/
+        }
 
         public Queue checkPhotowarQueue(int attractionId)
         {
@@ -1149,7 +1160,7 @@ namespace PhotoKingdomAPI.Controllers
         {
             var upload = ds.AttractionPhotowarUploads.Include("Photo.Resident").Include("AttractionPhotoWar.Attraction.Owners").SingleOrDefault(a => a.Id == photoUploadId);
             if (upload == null) return false;
-
+            
             var resident = upload.Photo.Resident;
             var attraction = upload.AttractionPhotoWar.Attraction;
 
@@ -1159,7 +1170,7 @@ namespace PhotoKingdomAPI.Controllers
             if(previousOwner == null)
             {
                 // no previous owners - make first owner
-                var addedOwn = addAttractionOwn(resident, attraction);
+                var addedOwn = addAttractionOwn(resident, attraction, upload.AttractionPhotoWar.EndDate);
                 if (addedOwn == false) return false;
 
                 // check owns up hierarchy
@@ -1167,12 +1178,13 @@ namespace PhotoKingdomAPI.Controllers
             } else if (previousOwner != null && previousOwner.ResidentId != resident.Id)
             {
                 // update new owner if it's a different owner
- 
+
                 // put expiry date to previous own
-                previousOwner.EndOfOwn = DateTime.Now;
+                //previousOwner.EndOfOwn = DateTime.Now;
+                previousOwner.EndOfOwn = upload.AttractionPhotoWar.EndDate;
                 ds.SaveChanges();
 
-                var addedOwn = addAttractionOwn(resident, attraction);
+                var addedOwn = addAttractionOwn(resident, attraction, upload.AttractionPhotoWar.EndDate);
                 if (addedOwn == false) return false;
 
                 // check owns up whole hierarchy
@@ -1182,7 +1194,7 @@ namespace PhotoKingdomAPI.Controllers
             return true;
         }
 
-        public bool addAttractionOwn(Resident resident, Attraction attraction)
+        public bool addAttractionOwn(Resident resident, Attraction attraction, DateTime date)
         {
             // create title
             string title = "";
@@ -1195,12 +1207,13 @@ namespace PhotoKingdomAPI.Controllers
                 title += "Lady of ";
             }
             title += attraction.Name;
-
+                        
             var addedOwn = ds.ResidentAttractionOwns.Add(new ResidentAttractionOwn
             {
                 Title = title,
                 Resident = resident,
-                Attraction = attraction
+                Attraction = attraction,
+                StartOfOwn = date
             });
 
             ds.SaveChanges();
