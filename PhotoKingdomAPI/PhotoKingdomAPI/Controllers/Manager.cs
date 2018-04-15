@@ -537,26 +537,26 @@ namespace PhotoKingdomAPI.Controllers
 
 
                     // AttractionPhotowars - new photowars
-                    var photowar1 = ds.AttractionPhotowars.Add(new AttractionPhotowar
-                    {
-                        AttractionId = cntower.Id
-                    });
+                    //var photowar1 = ds.AttractionPhotowars.Add(new AttractionPhotowar
+                    //{
+                    //    AttractionId = cntower.Id
+                    //});
                     var photowar2 = ds.AttractionPhotowars.Add(new AttractionPhotowar
                     {
                         AttractionId = casaloma.Id
                     });
 
                     // AttractionPhotowarUploads
-                    var upload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = cntowerPhoto1,
-                        AttractionPhotoWar = photowar1
-                    });
-                    var upload2 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                    {
-                        Photo = cntowerPhoto2,
-                        AttractionPhotoWar = photowar1
-                    });
+                    //var upload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    //{
+                    //    Photo = cntowerPhoto1,
+                    //    AttractionPhotoWar = photowar1
+                    //});
+                    //var upload2 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+                    //{
+                    //    Photo = cntowerPhoto2,
+                    //    AttractionPhotoWar = photowar1
+                    //});
                     var upload3 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
                     {
                         Photo = casalomaPhoto,
@@ -582,8 +582,8 @@ namespace PhotoKingdomAPI.Controllers
                     upload15.ResidentVotes.Add(zhihao);
 
                     //Votes - new photowars
-                    upload1.ResidentVotes.Add(testuser);
-                    upload2.ResidentVotes.Add(zhihao);
+                    //upload1.ResidentVotes.Add(testuser);
+                    //upload2.ResidentVotes.Add(zhihao);
                     upload3.ResidentVotes.Add(sofia);
                     upload3.ResidentVotes.Add(testuser);
 
@@ -596,7 +596,7 @@ namespace PhotoKingdomAPI.Controllers
                     throw new Exception("Seed data problem!");
                 }
             }
-
+            
             // Photowar queues
             if (ds.Queues.Count() == 0)
             {
@@ -612,99 +612,75 @@ namespace PhotoKingdomAPI.Controllers
                 var testuser = ds.Residents.SingleOrDefault(o => o.UserName == "Test");
                 if (cntower != null && casaloma != null && sofia != null && wonho != null && zhihao != null && testuser != null)
                 {
-                    var cntowerPhotowar = ds.AttractionPhotowars.FirstOrDefault(o => o.AttractionId == cntower.Id && o.EndDate > DateTime.Now);
-                    if (cntowerPhotowar != null)
+                    // CN Tower Queue 1
+                    var cntowerPhoto1 = ds.Photos.Add(new Photo
                     {
-                        // CN Tower Queue 1
-                        var cntowerPhoto1 = ds.Photos.Add(new Photo
-                        {
-                            Lat = 43.7426F,
-                            Lng = -79.4871F,
-                            Resident = sofia,
-                            PhotoFilePath = "img/cntower3.jpg"
-                        });
-                        var cntowerUpload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                        {
-                            Photo = cntowerPhoto1,
-                            AttractionPhotoWar = cntowerPhotowar
-                        });
-                        var cntowerQueue = ds.Queues.Add(new Queue
-                        {
-                            Attraction = cntower,
-                            AttractionPhotowarUpload = cntowerUpload1,
-                            QueueDate = DateTime.Now
-                        });
+                        Lat = 43.7426F,
+                        Lng = -79.4871F,
+                        Resident = testuser,
+                        PhotoFilePath = "img/cntower3.jpg"
+                    });
+                    var cntowerQueue = ds.Queues.Add(new Queue
+                    {
+                        Attraction = cntower,
+                        Photo = cntowerPhoto1,
+                        QueueDate = DateTime.Now
+                    });
 
-                        // CN Tower Queue 2
-                        var cntowerPhoto2 = ds.Photos.Add(new Photo
-                        {
-                            Lat = 43.7426F,
-                            Lng = -79.4871F,
-                            Resident = zhihao,
-                            PhotoFilePath = "img/cntower4.jpg"
-                        });
-                        var cntowerUpload2 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                        {
-                            Photo = cntowerPhoto2,
-                            AttractionPhotoWar = cntowerPhotowar
-                        });
-                        var cntowerQueue2 = ds.Queues.Add(new Queue
-                        {
-                            Attraction = cntower,
-                            AttractionPhotowarUpload = cntowerUpload2,
-                            QueueDate = DateTime.Now.AddDays(7)
-                        });
+                    // CN Tower Queue 2
+                    var cntowerPhoto2 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7426F,
+                        Lng = -79.4871F,
+                        Resident = wonho,
+                        PhotoFilePath = "img/cntower4.jpg"
+                    });
+                    var cntowerQueue2 = ds.Queues.Add(new Queue
+                    {
+                        Attraction = cntower,
+                        Photo = cntowerPhoto2,
+                        QueueDate = DateTime.Now.AddDays(-3)
+                    });
+                    
+                    // CN Tower Queue 3
+                    var cntowerPhoto3 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7426F,
+                        Lng = -79.4871F,
+                        Resident = zhihao,
+                        PhotoFilePath = "img/cntower5.jpg"
+                    });
+                    var cntowerQueue3 = ds.Queues.Add(new Queue
+                    {
+                        Attraction = cntower,
+                        Photo = cntowerPhoto3,
+                        QueueDate = DateTime.Now.AddDays(-6)
+                    });
 
-                        // CN Tower Queue 3
-                        var cntowerPhoto3 = ds.Photos.Add(new Photo
-                        {
-                            Lat = 43.7426F,
-                            Lng = -79.4871F,
-                            Resident = wonho,
-                            PhotoFilePath = "img/cntower5.jpg"
-                        });
-                        var cntowerUpload3 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                        {
-                            Photo = cntowerPhoto3,
-                            AttractionPhotoWar = cntowerPhotowar
-                        });
-                        var cntowerQueue3 = ds.Queues.Add(new Queue
-                        {
-                            Attraction = cntower,
-                            AttractionPhotowarUpload = cntowerUpload3,
-                            QueueDate = DateTime.Now.AddDays(14)
-                        });
-
-                        // CN Tower Queue 4
-                        var cntowerPhoto4 = ds.Photos.Add(new Photo
-                        {
-                            Lat = 43.7426F,
-                            Lng = -79.4871F,
-                            Resident = testuser,
-                            PhotoFilePath = "img/cntower6.jpg"
-                        });
-                        var cntowerUpload4 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
-                        {
-                            Photo = cntowerPhoto4,
-                            AttractionPhotoWar = cntowerPhotowar
-                        });
-                        var cntowerQueue4 = ds.Queues.Add(new Queue
-                        {
-                            Attraction = cntower,
-                            AttractionPhotowarUpload = cntowerUpload4,
-                            QueueDate = DateTime.Now.AddDays(21)
-                        });
-
-                        ds.SaveChanges();
-                        count++;
-                    }
+                    // CN Tower Queue 4
+                    var cntowerPhoto4 = ds.Photos.Add(new Photo
+                    {
+                        Lat = 43.7426F,
+                        Lng = -79.4871F,
+                        Resident = sofia,
+                        PhotoFilePath = "img/cntower6.jpg"
+                    });
+                    var cntowerQueue4 = ds.Queues.Add(new Queue
+                    {
+                        Attraction = cntower,
+                        Photo = cntowerPhoto4,
+                        QueueDate = DateTime.Now.AddDays(-9)
+                    });
+                    
+                    ds.SaveChanges();
+                    count++;
                 }
                 else
                 {
                     throw new Exception("Seed data problem!");
                 }
             }
-
+            
             // pings
             if (ds.Pings.Count() == 0)
             {
@@ -839,6 +815,12 @@ namespace PhotoKingdomAPI.Controllers
         // Delete All Sample Data (Does not delete world data)
         public void DeleteSeedData()
         {
+            foreach (var e in ds.Queues)
+            {
+                ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
+            }
+            ds.SaveChanges();
+
             foreach (var e in ds.ResidentAttractionOwns)
             {
                 ds.Entry(e).State = System.Data.Entity.EntityState.Deleted;
@@ -1023,9 +1005,9 @@ namespace PhotoKingdomAPI.Controllers
         // Returns Photowars that have been updated
         public IEnumerable<AttractionPhotowarWithDetails> checkOwns()
         {
-            // fetch the photowars that have just ended and have no winners declared yet
+            // fetch the photowars that have just ended or that have been extended, and have no winners declared yet
             var newPhotowarEnds = ds.AttractionPhotowarUploads.Where(u => u.IsWinner == null).Select(u => u.AttractionPhotoWar).Include("AttractionPhotowarUploads.ResidentVotes")
-                .Where(p => p.EndDate < DateTime.Now).Distinct();
+                .Where(p => p.EndDate < DateTime.Now || (p.ExtendedDate != null && p.ExtendedDate < DateTime.Now) ).Distinct();
 
             // keep Ids to return at the end
             var newPhotowarIds = newPhotowarEnds.Select(p => p.Id).ToList();
@@ -1053,6 +1035,14 @@ namespace PhotoKingdomAPI.Controllers
 
                         var addOwn = CreateAttractionOwnForPhotoUpload(firstUpload.Id);
                         if (!addOwn) return null;
+
+                        // Check if there is a queue for this attraction
+                        var queue = checkPhotowarQueue(photowar.AttractionId);
+                        if (queue != null)
+                        {
+                            createPhotowarFromQueue(queue, firstUpload);
+                        }
+
                     } else if (secondUpload.ResidentVotes.Count > firstUpload.ResidentVotes.Count)
                     {
                         // second photo is winner
@@ -1064,10 +1054,18 @@ namespace PhotoKingdomAPI.Controllers
 
                         var addOwn = CreateAttractionOwnForPhotoUpload(secondUpload.Id);
                         if (!addOwn) return null;
+
+                        // Check if there is a queue for this attraction
+                        var queue = checkPhotowarQueue(photowar.AttractionId);
+                        if (queue != null)
+                        {
+                            createPhotowarFromQueue(queue, secondUpload);
+                        }
                     } else
                     {
                         // equal score - keep extend vote for another 3 days, and the next vote will determine winner
                         photowar.ExtendedDate = DateTime.Now.AddDays(3);
+
                         ds.SaveChanges();
                     }
 
@@ -1076,6 +1074,75 @@ namespace PhotoKingdomAPI.Controllers
 
             var newPhotowars = ds.AttractionPhotowars.Where(a => newPhotowarIds.Contains(a.Id));
             return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(newPhotowars);
+        }
+
+        /*public bool checkCurrentPhotowar(int attractionId)
+        {
+            var curPhotowar = ds.AttractionPhotowars
+                .Where(w => w.AttractionId == attractionId && w.EndDate > DateTime.Now)
+                .SingleOrDefault();
+
+            if (curPhotowar != null)
+            {
+                return true;
+            }
+
+            return false;
+        }*/
+
+        public Queue checkPhotowarQueue(int attractionId)
+        {
+            var queue = ds.Queues.Include("Photo").Where(q => q.AttractionId == attractionId);
+            if (queue == null)
+            {
+                return null;     
+            }
+
+            return queue.OrderBy(q => q.QueueDate).FirstOrDefault();
+        }
+
+        // Creates photowar 3 days after the last photowar ended (or today's date if 3 days after is in the past) for an attraction
+        public void createPhotowarFromQueue(Queue queue, AttractionPhotowarUpload upload)
+        {
+            int attractionId = upload.AttractionPhotoWar.AttractionId;
+
+            // get last attractionphotowar enddate
+            DateTime endDate = upload.AttractionPhotoWar.ExtendedDate != null ? (DateTime) upload.AttractionPhotoWar.ExtendedDate : upload.AttractionPhotoWar.EndDate;
+
+            DateTime startDate;
+            if(endDate < DateTime.Now.AddDays(-3))
+            {
+                startDate = DateTime.Now; // can't start a photowar in the past, so start it now
+            } else
+            {
+                startDate = endDate.AddDays(3);
+            }
+
+            // New Photowar
+            var photowar = ds.AttractionPhotowars.Add(new AttractionPhotowar
+            {
+                AttractionId = attractionId,
+                StartDate = startDate,
+                EndDate = startDate.AddDays(3)
+            });
+
+            // Upload from current winning photo
+            var upload1 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+            {
+                Photo = upload.Photo,
+                AttractionPhotoWar = photowar
+            });
+
+            // Upload from queue
+            var upload2 = ds.AttractionPhotowarUploads.Add(new AttractionPhotowarUpload
+            {
+                Photo = queue.Photo,
+                AttractionPhotoWar = photowar
+            });
+
+            // Delete queue created Photowar
+            ds.Queues.Remove(queue);
+            ds.SaveChanges();
         }
 
         public bool CreateAttractionOwnForPhotoUpload(int photoUploadId)
@@ -1943,6 +2010,8 @@ namespace PhotoKingdomAPI.Controllers
             var a = ds.AttractionPhotowars
                 .Include("Attraction")
                 .Include("AttractionPhotowarUploads.Photo.Resident")
+                .Include("AttractionPhotowarUploads.ResidentVotes")
+                .Where(ap => ap.AttractionPhotowarUploads.Count() == 2)
                 .OrderByDescending(o => o.StartDate);
 
             return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(a);
@@ -1957,7 +2026,7 @@ namespace PhotoKingdomAPI.Controllers
         public IEnumerable<AttractionPhotowarWithDetails> AttractionPhotowarGetAllForAttraction(int id)
         {
             var photowars = ds.AttractionPhotowars.Include("AttractionPhotowarUploads.ResidentVotes").Include("AttractionPhotowarUploads.Photo.Resident")
-                .Where(a => a.AttractionId == id).OrderByDescending(a => a.StartDate);
+                .Where(a => a.AttractionId == id && a.AttractionPhotowarUploads.Count() == 2).OrderByDescending(a => a.StartDate);
 
             return mapper.Map<IEnumerable<AttractionPhotowar>, IEnumerable<AttractionPhotowarWithDetails>>(photowars);
         }
@@ -2077,10 +2146,14 @@ namespace PhotoKingdomAPI.Controllers
             var resident = ds.Residents.Find(residentId);
             if (resident == null) { return null; }
 
+            bool voteAdded = false; 
+
             // add vote to photoUpload
             if (!photoUpload.ResidentVotes.Contains(resident))
             {
                 photoUpload.ResidentVotes.Add(resident);
+
+                voteAdded = true;
             }
 
             // get the opponent photo
@@ -2093,6 +2166,16 @@ namespace PhotoKingdomAPI.Controllers
                 opposingPhoto.ResidentVotes.Remove(resident);
             }
             ds.SaveChanges();
+
+            if (voteAdded)
+            {
+                // if photowar was an extended photowar, it was just waiting for one more vote to declare the winner
+                if (photowar.ExtendedDate != null)
+                {
+                    photowar.ExtendedDate = DateTime.Now; // stop the war
+                    checkOwns(); // calculate all winners
+                }
+            }
 
             // Update voting details for AttractionPhotowar
             var attraction_vm = mapper.Map<AttractionPhotowarWithDetails>(photowar);
@@ -2126,6 +2209,13 @@ namespace PhotoKingdomAPI.Controllers
             var removedResidentVote = photoUpload.ResidentVotes.Remove(resident);
             if (!removedResidentVote) { return null; }
             ds.SaveChanges();
+
+            // if photowar was an extended photowar, it was just waiting for one more vote difference to declare the winner
+            if (photowar.ExtendedDate != null)
+            {
+                photowar.ExtendedDate = DateTime.Now; // stop the war
+                checkOwns(); // calculate all winners
+            }
 
             // Update voting details for AttractionPhotowar
             var attraction_vm = mapper.Map<AttractionPhotowarWithDetails>(photowar);
@@ -2449,13 +2539,14 @@ namespace PhotoKingdomAPI.Controllers
         public IEnumerable<QueueWithDetails> QueueGetAllWithDetailsForAttraction(int id)
         {
             var p = ds.Queues
-                .Include("AttractionPhotowarUpload.Photo.Resident")
-                .Where(o => o.AttractionId == id).OrderBy(o => o.Id);
+                .Include("Photo.Resident")
+                .Where(o => o.AttractionId == id)
+                .OrderBy(o => o.QueueDate);
 
             return mapper.Map<IEnumerable<QueueWithDetails>>(p);
         }
 
-        public QueueBase QueueAdd(QueueAdd newItem)
+        public QueueWithDetails QueueAdd(QueueAddWithPhoto newItem)
         {
             if (newItem == null)
             {
@@ -2463,10 +2554,19 @@ namespace PhotoKingdomAPI.Controllers
             }
             else
             {
+                var newPhoto = ds.Photos.Add(new Photo
+                {
+                    PhotoFilePath = newItem.PhotoPhotoFilePath,
+                    Lat = newItem.PhotoLat,
+                    Lng = newItem.PhotoLng,
+                    ResidentId = newItem.PhotoResidentId
+                });
+
                 var addedItem = mapper.Map<Queue>(newItem);
                 ds.Queues.Add(addedItem);
                 ds.SaveChanges();
-                return mapper.Map<QueueBase>(addedItem);
+
+                return mapper.Map<QueueWithDetails>(addedItem);
             }
         }
         #endregion Ping

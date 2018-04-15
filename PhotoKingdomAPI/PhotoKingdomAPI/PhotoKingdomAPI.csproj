@@ -298,6 +298,10 @@
     <Compile Include="Migrations\201804080749187_add-attraction-name-to-ping.Designer.cs">
       <DependentUpon>201804080749187_add-attraction-name-to-ping.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804140254469_update-queue.cs" />
+    <Compile Include="Migrations\201804140254469_update-queue.Designer.cs">
+      <DependentUpon>201804140254469_update-queue.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -452,6 +456,12 @@
     <EmbeddedResource Include="Migrations\201804080749187_add-attraction-name-to-ping.resx">
       <DependentUpon>201804080749187_add-attraction-name-to-ping.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804140254469_update-queue.resx">
+      <DependentUpon>201804140254469_update-queue.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

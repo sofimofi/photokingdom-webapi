@@ -21,13 +21,13 @@ namespace PhotoKingdomAPI.Models
         [Required]
         public int AttractionId { get; set; }
 
-		//[Required] // removed constraint because EF won't allow because delete can cause multiple cascade paths
-		public int? AttractionPhotowarUploadId { get; set; }
-
+        [Required]
+        public int PhotoId { get; set; }
+        
         // navigations
 
         public Attraction Attraction { get; set; }
-        // the photo uploaded
-        public AttractionPhotowarUpload AttractionPhotowarUpload { get; set; }
+
+        public Photo Photo { get; set; }
     }
 }
