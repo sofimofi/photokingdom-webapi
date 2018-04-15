@@ -2434,10 +2434,18 @@ namespace PhotoKingdomAPI.Controllers
         //                          Photo
         // **************************************************************
 
-        public IEnumerable<PhotoBase> PhotoGetAllForResident(int id)
+        public IEnumerable<PhotoWithDetails> PhotoGetAllForResident(int id)
         {
-            var a = ds.Photos.Where(o => o.ResidentId == id).OrderByDescending(o => o.Id);
-            return mapper.Map<IEnumerable<PhotoBase>>(a);
+            var a = ds.Photos
+                .Include("Resident")
+                .Include("AttractionPhotowarUploads.AttractionPhotoWar.Attraction")
+                .Include("AttractionPhotowarUploads.ResidentVotes")
+                .Include("CountryPhotowarUploads")
+                .Include("ContinentPhotowarUploads")
+                .Include("CountryPhotowarRequestedphotoUploads")
+                .Include("ContinentPhotowarRequestedphotoUploads")
+                .Where(o => o.ResidentId == id).OrderByDescending(o => o.Id);
+            return mapper.Map<IEnumerable<PhotoWithDetails>>(a);
         }
 
         public PhotoWithDetails PhotoGetByIdWithDetails(int id)
