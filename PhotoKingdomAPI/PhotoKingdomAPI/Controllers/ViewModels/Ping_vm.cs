@@ -19,6 +19,12 @@ namespace PhotoKingdomAPI.Controllers
         public DateTime ExpiryDate { get; set; }
 
         [Required]
+        public double Lat { get; set; }
+
+        [Required]
+        public double Lng { get; set; }
+
+        [Required]
         public int ResidentId { get; set; }
 
         [Required]

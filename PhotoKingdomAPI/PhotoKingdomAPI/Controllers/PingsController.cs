@@ -53,5 +53,11 @@ namespace PhotoKingdomAPI.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        // DELETE: api/Pings/5
+        public void Delete(int id)
+        {
+            m.PingDelete(id);
+        }
     }
 }

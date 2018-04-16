@@ -697,48 +697,72 @@ namespace PhotoKingdomAPI.Controllers
                     {
                         AttractionGooglePlaceId = cntower.googlePlaceId,
                         AttractionName = cntower.Name,
+                        Lat = 43.7426F,
+                        Lng = -79.4871F,
                         Resident = sofia
                     });
                     ds.Pings.Add(new Ping
                     {
                         AttractionGooglePlaceId = cntower.googlePlaceId,
                         AttractionName = cntower.Name,
+                        Lat = 43.7426F,
+                        Lng = -79.4871F,
                         Resident = wonho
                     });
                     ds.Pings.Add(new Ping
                     {
                         AttractionGooglePlaceId = albionfalls.googlePlaceId,
                         AttractionName = albionfalls.Name,
+                        PingDate = DateTime.Now.AddDays(-2),
+                        ExpiryDate = DateTime.Now.AddDays(5),
+                        Lat = 43.201611,
+                        Lng = -79.819860,
                         Resident = sofia
                     });
                     ds.Pings.Add(new Ping
                     {
                         AttractionGooglePlaceId = albionfalls.googlePlaceId,
                         AttractionName = albionfalls.Name,
+                        Lat = 43.201611,
+                        Lng = -79.819860,
                         Resident = zhihao
                     });
                     ds.Pings.Add(new Ping
                     {
                         AttractionGooglePlaceId = albionfalls.googlePlaceId,
                         AttractionName = albionfalls.Name,
+                        PingDate = DateTime.Now.AddDays(-3),
+                        ExpiryDate = DateTime.Now.AddDays(4),
+                        Lat = 43.201611,
+                        Lng = -79.819860,
                         Resident = wonho
                     });
                     ds.Pings.Add(new Ping
                     {
                         AttractionGooglePlaceId = cntower.googlePlaceId,
                         AttractionName = cntower.Name,
+                        Lat = 43.7426F,
+                        Lng = -79.4871F,
                         Resident = testAccount
                     });
                     ds.Pings.Add(new Ping
                     {
                         AttractionGooglePlaceId = albionfalls.googlePlaceId,
                         AttractionName = albionfalls.Name,
+                        PingDate = DateTime.Now.AddDays(-4),
+                        ExpiryDate = DateTime.Now.AddDays(3),
+                        Lat = 43.201611,
+                        Lng = -79.819860,
                         Resident = testAccount
                     });
                     ds.Pings.Add(new Ping
                     {
                         AttractionGooglePlaceId = boyerwoodlot.googlePlaceId,
                         AttractionName = boyerwoodlot.Name,
+                        PingDate = DateTime.Now.AddDays(-7).AddHours(10),
+                        ExpiryDate = DateTime.Now.AddHours(10),
+                        Lat = 43.77585490000001,
+                        Lng = -79.50518649999999,
                         Resident = wonho
                     });
                     ds.SaveChanges();
@@ -1083,8 +1107,18 @@ namespace PhotoKingdomAPI.Controllers
                 }
             }
 
+            // Check expired pings
+            checkExpiredPings();
+
             var newPhotowars = ds.AttractionPhotowars.Where(a => newPhotowarIds.Contains(a.Id));
             return mapper.Map<IEnumerable<AttractionPhotowarWithDetails>>(newPhotowars);
+        }
+
+        public void checkExpiredPings()
+        {
+            var pings = ds.Pings.Where(p => p.ExpiryDate < DateTime.Now);
+            ds.Pings.RemoveRange(pings);
+            ds.SaveChanges();
         }
 
         public bool checkCurrentPhotowar(int attractionId)
@@ -2589,7 +2623,7 @@ namespace PhotoKingdomAPI.Controllers
         public IEnumerable<PingBase> PingGetAllForResident(int id)
         {
             var p = ds.Pings
-                .Where(o => o.ResidentId == id).OrderByDescending(o => o.Id);
+                .Where(o => o.ResidentId == id).OrderBy(o => o.PingDate);
 
             return mapper.Map<IEnumerable<PingBase>>(p);
         }
@@ -2606,6 +2640,19 @@ namespace PhotoKingdomAPI.Controllers
                 ds.Pings.Add(addedItem);
                 ds.SaveChanges();
                 return mapper.Map<PingBase>(addedItem);
+            }
+        }
+
+        public void PingDelete(int id)
+        {
+            // Attempt to fetch the existing item
+            var storedItem = ds.Pings.Find(id);
+
+            if (storedItem != null)
+            {
+                // Remove data
+                ds.Pings.Remove(storedItem);
+                ds.SaveChanges();
             }
         }
         #endregion Ping
