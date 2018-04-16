@@ -302,6 +302,10 @@
     <Compile Include="Migrations\201804140254469_update-queue.Designer.cs">
       <DependentUpon>201804140254469_update-queue.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804161432457_add-gps-coordinates-to-ping.cs" />
+    <Compile Include="Migrations\201804161432457_add-gps-coordinates-to-ping.Designer.cs">
+      <DependentUpon>201804161432457_add-gps-coordinates-to-ping.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -458,6 +462,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804140254469_update-queue.resx">
       <DependentUpon>201804140254469_update-queue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804161432457_add-gps-coordinates-to-ping.resx">
+      <DependentUpon>201804161432457_add-gps-coordinates-to-ping.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
