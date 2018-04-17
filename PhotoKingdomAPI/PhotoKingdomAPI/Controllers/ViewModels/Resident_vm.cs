@@ -109,4 +109,13 @@ namespace PhotoKingdomAPI.Controllers
         [StringLength(20)]
         public string Password { get; set; }
     }
+
+    public class ResidentAvatar
+    {
+        [Required]
+        public int Id { get; set; }
+
+        [StringLength(100)]
+        public string AvatarImagePath { get; set; }        
+    }
 }
