@@ -2446,6 +2446,25 @@ namespace PhotoKingdomAPI.Controllers
                 return mapper.Map<ResidentWithDetails>(o);
             }
         }
+
+        public ResidentBase ResidentUpdateAvatar(ResidentAvatar editedItem)
+        {
+            if (editedItem != null)
+            {
+                // Attempt to fetch the object
+                var storedItem = ds.Residents.Find(editedItem.Id);
+                if (storedItem != null)
+                {
+                    // Updata avatar
+                    storedItem.AvatarImagePath = editedItem.AvatarImagePath;
+                    ds.SaveChanges();
+
+                    return mapper.Map<ResidentBase>(storedItem);
+                }
+            }
+
+            return null;
+        }
         #endregion Resident
 
         #region City

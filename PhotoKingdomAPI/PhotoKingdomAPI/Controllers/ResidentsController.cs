@@ -153,5 +153,44 @@ namespace PhotoKingdomAPI.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        // PUT: api/Residents/5/Avatar
+        [Route("{id:int}/Avatar")]
+        public IHttpActionResult Put(int? id, [FromBody]ResidentAvatar editedItem)
+        {
+            // Ensure that an "editedItem" is in the entity body
+            if (editedItem == null)
+            {
+                return BadRequest("Must send an entity body with the request");
+            }
+
+            // Ensure that the id value in the URI matches the id value in the entity body
+            if (id.GetValueOrDefault() != editedItem.Id)
+            {
+                return BadRequest("Invalid data in the entity body");
+            }
+
+            // Ensure that we can use the incoming data
+            if (ModelState.IsValid)
+            {
+                // Attempt to update the item
+                var changedItem = m.ResidentUpdateAvatar(editedItem);
+
+                if (changedItem == null)
+                {
+                    // HTTP 400
+                    return BadRequest("Cannot edit the object");
+                }
+                else
+                {
+                    // HTTP 200 with the changed item in the entity body
+                    return Ok<ResidentBase>(changedItem);
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
+            }
+        }
     }
 }
